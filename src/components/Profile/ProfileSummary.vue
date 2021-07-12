@@ -56,7 +56,8 @@
       }),
       async getSubSections(section) {
         /* Store */
-        await this.setChildren(section);
+        // await this.setChildren(section);
+        this.$emit('section-selected', section)
       }
     }
   }
