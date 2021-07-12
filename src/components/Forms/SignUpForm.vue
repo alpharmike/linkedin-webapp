@@ -1,5 +1,5 @@
 <template>
-  <custom-card title="Registration">
+  <custom-card title="Registration" center-title>
     <template v-slot:body>
       <validation-observer ref="observer" v-slot="">
         <v-form @submit.prevent="submitForm">

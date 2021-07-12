@@ -2,9 +2,9 @@
   <custom-card title="Login" center-title>
     <template v-slot:body>
       <validation-observer ref="loginObserver" v-slot="">
-        <v-form>
+        <v-form @submit.prevent="submitLoginForm">
           <v-row>
-            <v-col cols="12" v-for="field in fields">
+            <v-col cols="12" v-for="(field, index) in fields" :key="index">
               <validation-provider
                 v-slot="{ errors }"
                 :name="field.name"
@@ -91,6 +91,23 @@
         loading: false,
       }
     },
+
+    methods: {
+      submitLoginForm() {
+        this.loading = true;
+
+        this.$refs.loginObserver.validate().then(result => {
+          if (result) { // if data is validated and has no problem
+            let payload = {
+              ...this.userInfo
+            }
+            // Add API Code
+          }
+        }).finally(() => {
+          this.loading = false;
+        })
+      }
+    }
   }
 </script>
 
