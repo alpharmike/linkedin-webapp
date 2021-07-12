@@ -1,6 +1,10 @@
 <template>
-  <v-container fluid>
-    <sign-up-form />
+  <v-container class="fill-height">
+    <v-row justify="center" align="center" class="fill-height">
+      <v-col cols="8">
+        <sign-up-form />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

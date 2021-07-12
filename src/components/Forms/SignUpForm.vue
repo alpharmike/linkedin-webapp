@@ -1,42 +1,79 @@
 <template>
-  <custom-card>
-    <v-form @submit.prevent="submitForm">
-      <v-row justify="space-between" v-for="fieldGroup in fieldGroups">
-        <v-col cols="6" v-for="field in fieldGroup">
-          <validation-provider
-            v-slot="{ errors }"
-            :name="field.name"
-            :rules="field.rules"
-            :vid="field.vid ? field.vid : ''"
-            :ref="field.ref ? field.ref : ''"
-          >
-            <v-text-field
-              v-model="userInfo[field.model]"
-              :error-messages="errors"
-              :label="field.name"
-              clearable
-              :type="field.type"
-              :required="field.required"
-            ></v-text-field>
-          </validation-provider>
-        </v-col>
-      </v-row>
+  <custom-card title="Registration">
+    <template v-slot:body>
+      <validation-observer ref="observer" v-slot="">
+        <v-form @submit.prevent="submitForm">
+          <v-row justify="space-between" v-for="(fieldGroup, index) in fieldGroups" :key="index">
+            <v-col cols="6" v-for="field in fieldGroup" :key="field.name">
+              <validation-provider
+                v-slot="{ errors }"
+                :name="field.name"
+                :rules="field.rules"
+                :vid="field.vid ? field.vid : ''"
+                :ref="field.ref ? field.ref : ''"
+              >
+                <vue-tel-input v-if="field.type === 'phone'" v-model="userInfo[field.model]" :error-messages="errors" />
+                <v-menu
+                  v-else-if="field.type === 'DOB'"
+                  v-model="datePickerMenu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="userInfo[field.model]"
+                      :label="field.name"
+                      :error-messages="errors"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      v-on="on"
+                      :required="field.required"
+                      dense
+                      clearable
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="userInfo[field.model]"
+                    @input="datePickerMenu = false"
+                  ></v-date-picker>
+                </v-menu>
+                <v-text-field
+                  v-else
+                  v-model="userInfo[field.model]"
+                  :error-messages="errors"
+                  :label="field.name"
+                  clearable
+                  outlined
+                  :type="field.type"
+                  :required="field.required"
+                  dense
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
 
-      <v-row class="justify-center">
-        <v-btn
-          class="mx-4 px-5"
-          large
-          color="primary"
-          rounded
-          width="150"
-          type="submit"
-          :loading="loading"
-        >
-          Register
-        </v-btn>
-      </v-row>
+          <v-row class="justify-center">
+            <v-btn
+              class="mx-4 px-5 my-1"
+              large
+              color="primary"
+              rounded
+              width="150"
+              type="submit"
+              :loading="loading"
+            >
+              Register
+            </v-btn>
+          </v-row>
 
-    </v-form>
+        </v-form>
+      </validation-observer>
+    </template>
+
   </custom-card>
 </template>
 
@@ -72,6 +109,14 @@
     ...min,
     message: '{_field_} must contain at least 5 characters',
   })
+
+  extend('match', { // this is for password matching
+    validate: (value,  [compare] ) => {
+      return compare && value === compare;
+    },
+
+    message: 'Passwords do not match'
+  });
 
   export default {
     name: "SignUpForm",
@@ -129,38 +174,38 @@
               model: "confirmPassword"
             },
           ],
-          // [
-          //   {
-          //     name: "Phone Number",
-          //     rules: "required|numeric",
-          //     required: true,
-          //     type: "phone",
-          //     model: "phoneNumber"
-          //   },
-          //   {
-          //     name: "Date of Birth",
-          //     rules: "required",
-          //     required: true,
-          //     type: "DOB",
-          //     model: "dateOfBirth"
-          //   },
-          // ],
-          // [
-          //   {
-          //     name: "Country",
-          //     rules: "required",
-          //     required: true,
-          //     type: "country",
-          //     model: "country"
-          //   },
-          //   {
-          //     name: "Region",
-          //     rules: "required",
-          //     required: true,
-          //     type: "region",
-          //     model: "region"
-          //   },
-          // ]
+          [
+            {
+              name: "Phone Number",
+              rules: "required|numeric",
+              required: true,
+              type: "phone",
+              model: "phoneNumber"
+            },
+            {
+              name: "Date of Birth",
+              rules: "required",
+              required: true,
+              type: "DOB",
+              model: "dateOfBirth"
+            },
+          ],
+          [
+            {
+              name: "Country",
+              rules: "required",
+              required: true,
+              type: "country",
+              model: "country"
+            },
+            {
+              name: "Region",
+              rules: "required",
+              required: true,
+              type: "region",
+              model: "region"
+            },
+          ]
         ]
       }
     },
@@ -179,6 +224,7 @@
           region: ""
         },
         loading: false,
+        datePickerMenu: false,
 
       }
     },
@@ -186,7 +232,7 @@
     methods: {
       submitForm() {
 
-      }
+      },
     }
   }
 </script>

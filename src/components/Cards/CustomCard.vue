@@ -1,8 +1,8 @@
 <template>
-  <v-card :loading="cardLoading" :disabled="disabled">
-    <v-card-title>
+  <v-card :loading="cardLoading" :disabled="disabled" elevation="5">
+    <v-card-title class="my-0 py-0">
       <v-row justify="space-between">
-        <v-col class="justify-start align-center my-2" cols="10">
+        <v-col class="justify-start align-center" cols="10">
           <slot name="header">
             <v-icon v-if="icon" class="flex-unset">{{ icon }}</v-icon>&nbsp;
             <p>
@@ -26,6 +26,7 @@
         </v-col>
       </v-row>
     </v-card-title>
+    <v-divider />
     <v-card-text>
       <slot name="body"/>
     </v-card-text>
