@@ -231,8 +231,19 @@
 
     methods: {
       submitForm() {
-
-      },
+        this.loading = true;
+        this.$refs.observer.validate().then(result => {
+          if (result) { // if data is validated and has no problem
+            let payload = {
+              ...this.userInfo
+            }
+            delete payload.confirmPassword
+            // Code for API
+          }
+        }).finally(() => {
+          this.loading = false;
+        })
+      }
     }
   }
 </script>

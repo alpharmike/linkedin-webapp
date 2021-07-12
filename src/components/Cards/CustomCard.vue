@@ -1,6 +1,6 @@
 <template>
   <v-card :loading="cardLoading" :disabled="disabled" elevation="5">
-    <v-card-title class="my-0 py-0">
+    <v-card-title class="my-0 py-0 font-weight-bold">
       <v-row justify="space-between">
         <v-col class="justify-start align-center" cols="10">
           <slot name="header">
