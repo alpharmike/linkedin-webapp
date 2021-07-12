@@ -9,7 +9,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        :value="date"
+        :value="value"
         :label="label"
         readonly
         outlined
@@ -22,7 +22,7 @@
       ></v-text-field>
     </template>
     <v-date-picker
-      :value="date"
+      :value="value"
       @input="updateDate"
     ></v-date-picker>
   </v-menu>
@@ -34,7 +34,7 @@
     props: {
       label: {type: String, default: ""},
       required: {type: Boolean, default: false},
-      date: {type: String, default: ""}
+      value: {type: String, default: ""}
     },
     data() {
       return {

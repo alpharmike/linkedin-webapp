@@ -15,20 +15,31 @@
                   :items="items"
                   :label="field.name"
                   v-model="backgroundInfo[field.model]"
+                  :value="backgroundInfo[field.model]"
                   dense
                   outlined
-                  :rules="field.rules"
                   clearable
                   :error-messages="errors"
                 ></v-select>
-                <custom-date-picker v-else-if="field.type === 'date'" v-model="backgroundInfo[field.model]" />
-                <v-text-field
-                  v-else
-                  v-model="backgroundInfo[field.model]"
+                <custom-date-picker v-else-if="field.type === 'date'" :label="field.name" :required="field.required" v-model="backgroundInfo[field.model]" />
+                <v-textarea
+                  v-else-if="field.type === 'textarea'"
                   :error-messages="errors"
                   :label="field.name"
+                  v-model="backgroundInfo[field.model]"
                   clearable
-                  required
+                  :required="field.required"
+                  outlined
+                  dense
+                  :type="field.type"
+                ></v-textarea>
+                <v-text-field
+                  v-else
+                  :error-messages="errors"
+                  :label="field.name"
+                  v-model="backgroundInfo[field.model]"
+                  clearable
+                  :required="field.required"
                   outlined
                   dense
                   :type="field.type"
@@ -45,10 +56,11 @@
         large
         color="primary"
         rounded
-        width="150"
         type="submit"
         :disabled="submitLoading"
         @click="$emit('close')"
+        small
+        outlined
 
       >
         Cancel
@@ -64,6 +76,7 @@
         :loading="submitLoading"
         :disabled="submitLoading"
         @click="submitBackgroundForm"
+        small
       >
         Submit
       </v-btn>
@@ -90,22 +103,20 @@
     computed: {
       fields() {
         return [
-          [
-            {
-              name: "Title",
-              rules: "required",
-              required: true,
-              type: "text",
-              model: "title"
-            },
-            {
-              name: "Background Type",
-              rules: "required",
-              required: true,
-              type: "select",
-              model: "type"
-            },
-          ],
+          {
+            name: "Title",
+            rules: "required",
+            required: true,
+            type: "text",
+            model: "title"
+          },
+          {
+            name: "Background Type",
+            rules: "required",
+            required: true,
+            type: "select",
+            model: "type"
+          },
           {
             name: "Start Date",
             rules: "required",

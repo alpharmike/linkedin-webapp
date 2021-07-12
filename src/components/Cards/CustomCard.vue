@@ -26,7 +26,7 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-divider v-if="title" />
+    <v-divider v-if="title" class="mb-2" />
     <v-card-text>
       <slot name="body"/>
     </v-card-text>
