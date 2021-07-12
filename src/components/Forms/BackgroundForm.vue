@@ -12,7 +12,7 @@
               >
                 <v-select
                   v-if="field.type === 'select'"
-                  :items="items"
+                  :items="field.items"
                   :label="field.name"
                   v-model="backgroundInfo[field.model]"
                   :value="backgroundInfo[field.model]"
@@ -89,6 +89,7 @@
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
   import CustomDatePicker from "../Inputs/CustomDatePicker";
+  import {mapGetters} from "vuex";
 
   setInteractionMode('eager');
 
@@ -101,6 +102,9 @@
     name: "BackgroundForm",
     components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
     computed: {
+      ...mapGetters({
+        backgroundSection: "sectionModule/backgroundSection"
+      }),
       fields() {
         return [
           {
@@ -115,6 +119,7 @@
             rules: "required",
             required: true,
             type: "select",
+            items: this.backgroundSection.children,
             model: "type"
           },
           {
@@ -151,6 +156,7 @@
           endDate: "",
           description: "",
         },
+        // Should come from store
         items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
         submitLoading: false,
       }

@@ -52,7 +52,19 @@ const actions = {
 const getters = {
   sections: (state) => {
     return state.sections
-  }
+  },
+  backgroundSection: (state) => {
+    const index = state.sections.findIndex(section => section.title.toLowerCase() === "background");
+    return state.sections[index];
+  },
+  accomplishmentsSection: (state) => {
+    const index = state.sections.findIndex(section => section.title.toLowerCase() === "accomplishments");
+    return state.sections[index];
+  },
+  skillsSection: (state) => {
+    const index = state.sections.findIndex(section => section.title.toLowerCase() === "skills");
+    return state.sections[index];
+  },
 };
 
 
