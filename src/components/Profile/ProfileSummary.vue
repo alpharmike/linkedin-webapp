@@ -9,19 +9,19 @@
               {{ profile.firstName + " " + profile.lastName }}
             </span>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="profile.headline">
             <span class="text-body-1">
               {{ profile.headline }}
             </span>
             </v-col>
             <v-col cols="12">
             <span class="text-subtitle-2">
-              {{ profile.location }}
+              {{ profile.locationInCountry }}
             </span>
             </v-col>
             <v-col cols="12">
               <a href="/register" style="text-decoration: none;">
-                <span class="text-subtitle-2 text--lighten-5">{{ profile.connections + " Connections" }}</span>
+                <span class="text-subtitle-2 text--lighten-5">{{ /*profile.industry +*/ " Connections" }}</span>
               </a>
             </v-col>
             <v-col cols="3">
@@ -46,14 +46,17 @@
 <script>
   import CustomCard from "../Cards/CustomCard";
   import AddSectionDropdown from "./AddSectionDropdown";
-  import {mapActions} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
 
   export default {
     name: "ProfileSummary",
     components: {AddSectionDropdown, CustomCard},
+    computed: {
+      ...mapGetters("profileModule", ["profile"])
+    },
     data() {
       return {
-        profile: {
+        profileInfo: {
           firstName: "Erfan",
           lastName: "Moeini",
           headline: "Teacher Assistant at Shiraz University",

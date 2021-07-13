@@ -1,5 +1,5 @@
 <template>
-  <custom-card title="Registration" center-title>
+  <custom-card title="Registration" sub-section center-title>
     <template v-slot:body>
       <validation-observer ref="observer" v-slot="">
         <v-form @submit.prevent="submitForm">
@@ -12,7 +12,7 @@
                 :vid="field.vid ? field.vid : ''"
                 :ref="field.ref ? field.ref : ''"
               >
-                <vue-tel-input v-if="field.type === 'phone'" v-model="userInfo[field.model]" :error-messages="errors" />
+                <vue-tel-input v-if="field.type === 'phone'" v-model="userInfo[field.model]" :error-messages="errors"/>
                 <v-menu
                   v-else-if="field.type === 'DOB'"
                   v-model="datePickerMenu"
@@ -73,7 +73,27 @@
         </v-form>
       </validation-observer>
     </template>
-
+    <template v-slot:actions>
+      <v-row justify="center" align="center" class="py-2">
+        <span class="text-subtitle-2">
+        Already have an account?
+        </span>
+        <span>
+          <v-btn
+            class="mx-2 my-1 text--lighten-2"
+            small
+            outlined
+            color="primary"
+            plain
+            type="submit"
+            to="/login"
+          >
+            Login
+          </v-btn>
+      </span>
+      </v-row>
+      <custom-alert v-model="error.status" @input="error.status = !error.status" :message="error.message" :type="error.type" />
+    </template>
   </custom-card>
 </template>
 
@@ -82,6 +102,8 @@
   import {required, email, max, min, numeric} from 'vee-validate/dist/rules'
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
+  import {mapActions} from "vuex";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   setInteractionMode('eager');
 
@@ -111,7 +133,7 @@
   })
 
   extend('match', { // this is for password matching
-    validate: (value,  [compare] ) => {
+    validate: (value, [compare]) => {
       return compare && value === compare;
     },
 
@@ -120,7 +142,7 @@
 
   export default {
     name: "SignUpForm",
-    components: {CustomCard, ValidationProvider, ValidationObserver},
+    components: {CustomAlert, CustomCard, ValidationProvider, ValidationObserver},
     computed: {
       fieldGroups() {
         return [
@@ -177,15 +199,15 @@
           [
             {
               name: "Phone Number",
-              rules: "required|numeric",
-              required: true,
+              rules: "",
+              required: false,
               type: "phone",
               model: "phoneNumber"
             },
             {
               name: "Date of Birth",
-              rules: "required",
-              required: true,
+              rules: "",
+              required: false,
               type: "DOB",
               model: "dateOfBirth"
             },
@@ -199,11 +221,11 @@
               model: "country"
             },
             {
-              name: "Region",
+              name: "Location in Country",
               rules: "required",
               required: true,
               type: "region",
-              model: "region"
+              model: "locationInCountry"
             },
           ]
         ]
@@ -221,7 +243,12 @@
           confirmPassword: "",
           dateOfBirth: "",
           country: "",
-          region: ""
+          locationInCountry: ""
+        },
+        error: {
+          status: false,
+          message: "",
+          type: ""
         },
         loading: false,
         datePickerMenu: false,
@@ -230,19 +257,47 @@
     },
 
     methods: {
+      ...mapActions("authModule", ["signUp"]),
       submitForm() {
         this.loading = true;
         this.$refs.observer.validate().then(result => {
-          if (result) { // if data is validated and has no problem
+          console.log(result)
+          console.log(this.userInfo);
+          if (result && this.validate()) { // if data is validated and has no problem
             let payload = {
               ...this.userInfo
             }
             delete payload.confirmPassword
             // Code for API
+            this.signUp(payload).then(() => {
+              this.$router.replace({name: "Login"})
+            }).catch(err => {
+              this.error.message = err.message;
+              this.error.type = "error";
+              this.error.status = true;
+            })
           }
         }).finally(() => {
           this.loading = false;
         })
+      },
+
+      validate() {
+        const regex = /[a-zA-Z]/g;
+        if (this.userInfo.phoneNumber === "" || regex.test(this.userInfo.phoneNumber) || this.userInfo.phoneNumber === null) {
+          this.showSnackbar("Invalid Phone Number!", "error");
+          return false;
+        } else if (this.userInfo.dateOfBirth === "" || this.userInfo.dateOfBirth === null) {
+          this.showSnackbar("Date of birth can not be empty!", "error");
+          return false;
+        }
+        return true;
+      },
+
+      showSnackbar(msg, type) {
+        this.error.message = msg;
+        this.error.type = type;
+        this.error.status = true;
       }
     }
   }

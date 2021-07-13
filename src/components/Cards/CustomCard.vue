@@ -31,6 +31,7 @@
     <v-card-text>
       <slot name="body"/>
     </v-card-text>
+    <v-divider v-if="subSection" class="my-2" />
     <v-card-actions>
       <slot name="actions"></slot>
     </v-card-actions>
@@ -50,6 +51,7 @@
       cardLoading: {type: Boolean, default: false},
       btnColor: {type: String, default: 'primary'},
       disabled: {type: Boolean, default: false},
+      subSection: {type: Boolean, default: false}
     }
   }
 </script>

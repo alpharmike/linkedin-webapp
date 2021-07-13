@@ -1,53 +1,56 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="7">
-        <v-row justify="space-between">
-          <v-col cols="12">
-            <ProfileSummary @section-selected="openSectionDialog" />
-          </v-col>
+  <div class="fill-height">
+    <v-container v-if="!loading" fluid>
+      <v-row>
+        <v-col cols="7">
+          <v-row justify="space-between">
+            <v-col cols="12">
+              <ProfileSummary @section-selected="openSectionDialog" />
+            </v-col>
 
-          <v-col cols="12">
-            <about-section @edit="dialogs.about = true" />
-          </v-col>
+            <v-col cols="12">
+              <about-section @edit="dialogs.about = true" />
+            </v-col>
 
-          <v-col cols="12">
-            <background-section @add="() => openSectionDialog('background')" />
-          </v-col>
+            <v-col cols="12">
+              <background-section @add="() => openSectionDialog('background')" />
+            </v-col>
 
-          <v-col cols="12">
-            <accomplishment-section @add="() => openSectionDialog('accomplishments')" />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+            <v-col cols="12">
+              <accomplishment-section @add="() => openSectionDialog('accomplishments')" />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
 
-    <custom-dialog :show.sync="dialogs.intro">
-      <template v-slot:body>
-        <intro-form @close="dialogs.intro = false" />
-      </template>
-    </custom-dialog>
-    <custom-dialog :show.sync="dialogs.background">
-      <template v-slot:body>
-        <background-form @close="dialogs.background = false" />
-      </template>
-    </custom-dialog>
-    <custom-dialog :show.sync="dialogs.accomplishments">
-      <template v-slot:body>
-        <accomplishment-form @close="dialogs.accomplishments = false" />
-      </template>
-    </custom-dialog>
-    <custom-dialog :show.sync="dialogs.skills">
-      <template v-slot:body>
-        <skill-form @close="dialogs.skills = false" />
-      </template>
-    </custom-dialog>
-    <custom-dialog :show.sync="dialogs.about">
-      <template v-slot:body>
-        <about-form @close="dialogs.about = false" />
-      </template>
-    </custom-dialog>
-  </v-container>
+      <custom-dialog :show.sync="dialogs.intro">
+        <template v-slot:body>
+          <intro-form @close="dialogs.intro = false" />
+        </template>
+      </custom-dialog>
+      <custom-dialog :show.sync="dialogs.background">
+        <template v-slot:body>
+          <background-form @close="dialogs.background = false" />
+        </template>
+      </custom-dialog>
+      <custom-dialog :show.sync="dialogs.accomplishments">
+        <template v-slot:body>
+          <accomplishment-form @close="dialogs.accomplishments = false" />
+        </template>
+      </custom-dialog>
+      <custom-dialog :show.sync="dialogs.skills">
+        <template v-slot:body>
+          <skill-form @close="dialogs.skills = false" />
+        </template>
+      </custom-dialog>
+      <custom-dialog :show.sync="dialogs.about">
+        <template v-slot:body>
+          <about-form @close="dialogs.about = false" />
+        </template>
+      </custom-dialog>
+    </v-container>
+    <spinner v-else />
+  </div>
 </template>
 
 <script>
@@ -61,14 +64,22 @@
   import AboutForm from "../../components/Forms/AboutForm";
   import BackgroundSection from "../../components/Profile/BackgroundSection";
   import AccomplishmentSection from "../../components/Profile/AccomplishmentSection";
+  import {mapActions, mapGetters} from "vuex";
+  import Spinner from "../../components/Loaders/Spinner";
 
   export default {
     name: "Profile",
     components: {
+      Spinner,
       AccomplishmentSection,
       BackgroundSection,
       AboutForm,
       AboutSection, SkillForm, AccomplishmentForm, IntroForm, BackgroundForm, CustomDialog, ProfileSummary},
+
+    computed: {
+      ...mapGetters("profileModule", ["profile"])
+    },
+
     data() {
       return {
         dialogs: {
@@ -77,15 +88,25 @@
           accomplishments: false,
           skills: false,
           about: false
-        }
+        },
+
+        loading: false,
       }
     },
 
     methods: {
+      ...mapActions("profileModule", ["getProfile"]),
       openSectionDialog(section) {
         console.log(section)
         this.dialogs[section.toLowerCase()] = true
       },
+    },
+
+    async created() {
+      this.loading = true;
+      await this.getProfile();
+      console.log(this.profile);
+      this.loading = false;
     }
   }
 </script>

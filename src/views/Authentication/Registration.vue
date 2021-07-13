@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height">
-    <v-row justify="center" align="center" class="fill-height">
+    <v-row justify="center" align="center" >
       <v-col cols="8">
         <sign-up-form />
       </v-col>
