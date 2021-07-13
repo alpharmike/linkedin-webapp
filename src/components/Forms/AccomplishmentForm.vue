@@ -1,7 +1,7 @@
 <template>
   <custom-card title="Add Background" :card-loading="submitLoading">
     <template v-slot:body>
-      <validation-observer ref="backgroundObserver" v-slot="">
+      <validation-observer ref="accomplishmentObserver" v-slot="">
         <v-form @submit.prevent="submitBackgroundForm">
           <v-row>
             <v-col cols="12" v-for="(field, index) in fields" :key="index">
@@ -21,7 +21,6 @@
                   clearable
                   :error-messages="errors"
                 ></v-select>
-                <custom-date-picker v-else-if="field.type === 'date'" :label="field.name" :required="field.required" v-model="backgroundInfo[field.model]" />
                 <v-textarea
                   v-else-if="field.type === 'textarea'"
                   :error-messages="errors"
@@ -87,9 +86,9 @@
 <script>
   import {required} from 'vee-validate/dist/rules'
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
-  import CustomCard from "../Cards/CustomCard";
-  import CustomDatePicker from "../Inputs/CustomDatePicker";
   import {mapGetters} from "vuex";
+  import CustomDatePicker from "../Inputs/CustomDatePicker";
+  import CustomCard from "../Cards/CustomCard";
 
   setInteractionMode('eager');
 
@@ -99,74 +98,8 @@
   })
 
   export default {
-    name: "BackgroundForm",
-    components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
-    computed: {
-      ...mapGetters({
-        backgroundSection: "sectionModule/backgroundSection"
-      }),
-      fields() {
-        return [
-          {
-            name: "Title",
-            rules: "required",
-            required: true,
-            type: "text",
-            model: "title"
-          },
-          {
-            name: "Background Type",
-            rules: "required",
-            required: true,
-            type: "select",
-            items: this.backgroundSection.children,
-            model: "type"
-          },
-          {
-            name: "Start Date",
-            rules: "required",
-            required: true,
-            type: "date",
-            model: "startDate"
-          },
-          {
-            name: "End Date",
-            rules: "required",
-            required: true,
-            type: "date",
-            model: "endDate"
-          },
-          {
-            name: "Description",
-            rules: "",
-            required: false,
-            type: "textarea",
-            model: "description"
-          }
-        ]
-      }
-    },
-
-    data() {
-      return {
-        backgroundInfo: {
-          title: "",
-          type: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-        },
-        // Should come from store
-        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-        submitLoading: false,
-      }
-    },
-
-    methods: {
-      submitBackgroundForm() {
-
-      }
-    }
+    name: "AccomplishmentForm",
+    components: {CustomCard, ValidationObserver, ValidationProvider}
   }
 </script>
 

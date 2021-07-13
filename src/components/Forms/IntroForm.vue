@@ -1,8 +1,8 @@
 <template>
-  <custom-card title="Add Background" :card-loading="submitLoading">
+  <custom-card title="Edit Into" :card-loading="submitLoading">
     <template v-slot:body>
-      <validation-observer ref="backgroundObserver" v-slot="">
-        <v-form @submit.prevent="submitBackgroundForm">
+      <validation-observer ref="intoObserver" v-slot="">
+        <v-form @submit.prevent="submitProfileForm">
           <v-row>
             <v-col cols="12" v-for="(field, index) in fields" :key="index">
               <validation-provider
@@ -14,30 +14,32 @@
                   v-if="field.type === 'select'"
                   :items="field.items"
                   :label="field.name"
-                  v-model="backgroundInfo[field.model]"
-                  :value="backgroundInfo[field.model]"
+                  v-model="profileInfo[field.model]"
+                  :value="profileInfo[field.model]"
                   dense
                   outlined
                   clearable
                   :error-messages="errors"
                 ></v-select>
-                <custom-date-picker v-else-if="field.type === 'date'" :label="field.name" :required="field.required" v-model="backgroundInfo[field.model]" />
+                <custom-date-picker v-else-if="field.type === 'date'" :label="field.name" :required="field.required" v-model="profileInfo[field.model]" />
                 <v-textarea
                   v-else-if="field.type === 'textarea'"
                   :error-messages="errors"
                   :label="field.name"
-                  v-model="backgroundInfo[field.model]"
+                  v-model="profileInfo[field.model]"
                   clearable
                   :required="field.required"
                   outlined
                   dense
+                  auto-grow
+                  :rows="field.rows"
                   :type="field.type"
                 ></v-textarea>
                 <v-text-field
                   v-else
                   :error-messages="errors"
                   :label="field.name"
-                  v-model="backgroundInfo[field.model]"
+                  v-model="profileInfo[field.model]"
                   clearable
                   :required="field.required"
                   outlined
@@ -75,7 +77,7 @@
         type="submit"
         :loading="submitLoading"
         :disabled="submitLoading"
-        @click="submitBackgroundForm"
+        @click="submitProfileForm"
         small
       >
         Submit
@@ -88,8 +90,8 @@
   import {required} from 'vee-validate/dist/rules'
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
-  import CustomDatePicker from "../Inputs/CustomDatePicker";
   import {mapGetters} from "vuex";
+  import CustomDatePicker from "../Inputs/CustomDatePicker";
 
   setInteractionMode('eager');
 
@@ -99,7 +101,7 @@
   })
 
   export default {
-    name: "BackgroundForm",
+    name: "ProfileForm",
     components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
     computed: {
       ...mapGetters({
@@ -108,62 +110,88 @@
       fields() {
         return [
           {
-            name: "Title",
+            name: "First Name",
             rules: "required",
             required: true,
             type: "text",
-            model: "title"
+            model: "firstName"
           },
           {
-            name: "Background Type",
+            name: "Last Name",
+            rules: "required",
+            required: true,
+            type: "text",
+            model: "lastName"
+          },
+          {
+            name: "Headline",
+            rules: "required",
+            required: true,
+            type: "textarea",
+            rows: 2,
+            model: "headline"
+          },
+          {
+            name: "Country",
+            rules: "required",
+            required: true,
+            type: "text",
+            model: "country"
+          },
+          {
+            name: "Region",
+            rules: "",
+            required: false,
+            type: "textarea",
+            rows: 2,
+            model: "region"
+          },
+          {
+            name: "Address",
+            rules: "",
+            required: false,
+            type: "textarea",
+            rows: 2,
+            model: "address"
+          },
+          {
+            name: "Industry",
             rules: "required",
             required: true,
             type: "select",
             items: this.backgroundSection.children,
-            model: "type"
+            model: "industry"
           },
           {
-            name: "Start Date",
-            rules: "required",
-            required: true,
-            type: "date",
-            model: "startDate"
-          },
-          {
-            name: "End Date",
-            rules: "required",
-            required: true,
-            type: "date",
-            model: "endDate"
-          },
-          {
-            name: "Description",
+            name: "Date of Birth",
             rules: "",
             required: false,
-            type: "textarea",
-            model: "description"
-          }
+            type: "date",
+            model: "dateOfBirth"
+          },
         ]
       }
     },
 
     data() {
       return {
-        backgroundInfo: {
-          title: "",
-          type: "",
-          startDate: "",
-          endDate: "",
-          description: "",
+        profileInfo: {
+          firstName: "",
+          lastName: "",
+          headline: "",
+          country: "",
+          region: "",
+          address: "",
+          industry: "",
+          dateOfBirth: ""
         },
-        // Should come from store
-        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+
         submitLoading: false,
       }
     },
 
     methods: {
-      submitBackgroundForm() {
+      submitProfileForm() {
 
       }
     }

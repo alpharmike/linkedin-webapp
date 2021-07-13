@@ -1,14 +1,12 @@
 <template>
   <v-dialog v-model="dialog" max-width="75%" transition="dialog-transition">
-    <background-form @close="dialog = false" />
+    <slot name="body"></slot>
   </v-dialog>
 </template>
 
 <script>
-  import BackgroundForm from "../Forms/BackgroundForm";
   export default {
-    name: "BackgroundDialog",
-    components: {BackgroundForm},
+    name: "CustomDialog",
     props: {
       show: {type: Boolean, default: false}
     },

@@ -4,6 +4,10 @@ import {BACKGROUND_TYPES} from "../../../network/API";
 const state = {
   sections: [
     {
+      title: "Intro",
+      children: []
+    },
+    {
       title: "Background",
       children: []
     },
