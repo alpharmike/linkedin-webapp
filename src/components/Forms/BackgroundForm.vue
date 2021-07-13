@@ -1,5 +1,5 @@
 <template>
-  <custom-card title="Add Background" :card-loading="submitLoading">
+  <custom-card :title="edit ? 'Edit Background': 'Add Background'" :card-loading="submitLoading">
     <template v-slot:body>
       <validation-observer ref="backgroundObserver" v-slot="">
         <v-form @submit.prevent="submitBackgroundForm">
@@ -101,6 +101,10 @@
   export default {
     name: "BackgroundForm",
     components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
+    props: {
+      edit: {type: Boolean, default: false},
+      editingBackground: {type: Object}
+    },
     computed: {
       ...mapGetters({
         backgroundSection: "sectionModule/backgroundSection"
@@ -157,6 +161,7 @@
           description: "",
         },
         submitLoading: false,
+        editingBg: this.editingBackground,
       }
     },
 
@@ -174,6 +179,23 @@
         }).finally(() => {
           this.submitLoading = false;
         })
+      }
+    },
+
+    watch: {
+      editingBackground: function (newValue) {
+        this.editingBg = {...newValue};
+      },
+      editingBg: function (newValue) {
+        if (this.edit) {
+          this.backgroundInfo = {...newValue};
+        }
+      }
+    },
+
+    created() {
+      if (this.edit) {
+        this.backgroundInfo = {...this.editingBackground};
       }
     }
   }

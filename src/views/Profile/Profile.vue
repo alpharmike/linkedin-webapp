@@ -10,6 +10,10 @@
           <v-col cols="12">
             <about-section @edit="dialogs.about = true" />
           </v-col>
+
+          <v-col cols="12">
+            <background-section />
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -51,10 +55,12 @@
   import SkillForm from "../../components/Forms/SkillForm";
   import AboutSection from "../../components/Profile/AboutSection";
   import AboutForm from "../../components/Forms/AboutForm";
+  import BackgroundSection from "../../components/Profile/BackgroundSection";
 
   export default {
     name: "Profile",
     components: {
+      BackgroundSection,
       AboutForm,
       AboutSection, SkillForm, AccomplishmentForm, IntroForm, BackgroundForm, CustomDialog, ProfileSummary},
     data() {
@@ -73,7 +79,7 @@
       openSectionDialog(section) {
         console.log(section)
         this.dialogs[section.toLowerCase()] = true
-      }
+      },
     }
   }
 </script>

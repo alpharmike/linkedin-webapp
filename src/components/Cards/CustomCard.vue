@@ -18,7 +18,6 @@
               :disabled="btnLoading || cardLoading"
               depressed
               icon
-              :color="btnColor"
               class="flex-unset ma-0"
               @click="$emit('header-button-click')"
             >

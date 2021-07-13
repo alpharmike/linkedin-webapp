@@ -9,7 +9,10 @@ const state = {
     },
     {
       title: "Background",
-      children: []
+      children: [
+        "Work Experience",
+        "Volunteer Experience"
+      ]
     },
     {
       title: "Accomplishments",
