@@ -156,15 +156,24 @@
           endDate: "",
           description: "",
         },
-        // Should come from store
-        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
         submitLoading: false,
       }
     },
 
     methods: {
       submitBackgroundForm() {
+        this.submitLoading = true;
+        this.$refs.backgroundObserver.validate().then(result => {
+          if (result) { // if data is validated and has no problem
+            let payload = {
+              ...this.backgroundInfo
+            }
+            // Code for API nad store
 
+          }
+        }).finally(() => {
+          this.submitLoading = false;
+        })
       }
     }
   }

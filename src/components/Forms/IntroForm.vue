@@ -105,7 +105,7 @@
     components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
     computed: {
       ...mapGetters({
-        backgroundSection: "sectionModule/backgroundSection"
+        industries: "typeModule/industries"
       }),
       fields() {
         return [
@@ -159,7 +159,7 @@
             rules: "required",
             required: true,
             type: "select",
-            items: this.backgroundSection.children,
+            items: this.industries,
             model: "industry"
           },
           {
