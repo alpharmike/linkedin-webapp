@@ -1,8 +1,16 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col>
-        <ProfileSummary @section-selected="openSectionDialog" />
+      <v-col cols="7">
+        <v-row justify="space-between">
+          <v-col cols="12">
+            <ProfileSummary @section-selected="openSectionDialog" />
+          </v-col>
+
+          <v-col cols="12">
+            <about-section @edit="dialogs.about = true" />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -26,6 +34,11 @@
         <skill-form @close="dialogs.skills = false" />
       </template>
     </custom-dialog>
+    <custom-dialog :show.sync="dialogs.about">
+      <template v-slot:body>
+        <about-form @close="dialogs.about = false" />
+      </template>
+    </custom-dialog>
   </v-container>
 </template>
 
@@ -36,10 +49,14 @@
   import IntroForm from "../../components/Forms/IntroForm";
   import AccomplishmentForm from "../../components/Forms/AccomplishmentForm";
   import SkillForm from "../../components/Forms/SkillForm";
+  import AboutSection from "../../components/Profile/AboutSection";
+  import AboutForm from "../../components/Forms/AboutForm";
 
   export default {
     name: "Profile",
-    components: {SkillForm, AccomplishmentForm, IntroForm, BackgroundForm, CustomDialog, ProfileSummary},
+    components: {
+      AboutForm,
+      AboutSection, SkillForm, AccomplishmentForm, IntroForm, BackgroundForm, CustomDialog, ProfileSummary},
     data() {
       return {
         dialogs: {
@@ -47,6 +64,7 @@
           intro: false,
           accomplishments: false,
           skills: false,
+          about: false
         }
       }
     },

@@ -1,8 +1,8 @@
 <template>
   <v-card :loading="cardLoading" :disabled="disabled" elevation="5">
     <v-card-title class="my-0 py-0 font-weight-bold">
-      <v-row justify="space-between">
-        <v-col class="justify-start align-center" :cols="!headerButton ? 12 : 10">
+      <v-row justify="space-between" class="align-center">
+        <v-col class="justify-start align-center" :cols="!headerButton ? 12 : 11">
           <slot name="header">
             <v-icon v-if="icon" class="flex-unset">{{ icon }}</v-icon>&nbsp;
             <p :class="{'text-center': centerTitle && !headerButton}">
@@ -10,17 +10,19 @@
             </p>
           </slot>
         </v-col>
-        <v-col class="align-center my-2" cols="2" v-if="headerButton">
+        <v-col class="align-center my-2" cols="1" v-if="headerButton">
           <slot name="header-button">
             <v-btn
               v-if="headerButton"
               :loading="btnLoading || cardLoading"
               :disabled="btnLoading || cardLoading"
               depressed
+              icon
               :color="btnColor"
               class="flex-unset ma-0"
               @click="$emit('header-button-click')"
-            >{{ headerButton }}
+            >
+              <v-icon>{{headerButtonIcon}}</v-icon>
             </v-btn>
           </slot>
         </v-col>
@@ -42,7 +44,8 @@
     props: {
       title: {type: String, default: ''},
       icon: {type: String},
-      headerButton: {},
+      headerButton: {type: Boolean, default: false},
+      headerButtonIcon: {type: String, default: ""},
       centerTitle: {type: Boolean, default: false},
       btnLoading: {type: Boolean, default: false},
       cardLoading: {type: Boolean, default: false},
