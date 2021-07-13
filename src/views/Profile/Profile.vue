@@ -12,7 +12,11 @@
           </v-col>
 
           <v-col cols="12">
-            <background-section />
+            <background-section @add="() => openSectionDialog('background')" />
+          </v-col>
+
+          <v-col cols="12">
+            <accomplishment-section @add="() => openSectionDialog('accomplishments')" />
           </v-col>
         </v-row>
       </v-col>
@@ -56,10 +60,12 @@
   import AboutSection from "../../components/Profile/AboutSection";
   import AboutForm from "../../components/Forms/AboutForm";
   import BackgroundSection from "../../components/Profile/BackgroundSection";
+  import AccomplishmentSection from "../../components/Profile/AccomplishmentSection";
 
   export default {
     name: "Profile",
     components: {
+      AccomplishmentSection,
       BackgroundSection,
       AboutForm,
       AboutSection, SkillForm, AccomplishmentForm, IntroForm, BackgroundForm, CustomDialog, ProfileSummary},

@@ -1,5 +1,5 @@
 <template>
-  <custom-card title="Add Accomplishments" :card-loading="submitLoading">
+  <custom-card :title="edit ? 'Edit Accomplishments' : 'Add Accomplishments'" :card-loading="submitLoading">
     <template v-slot:body>
       <validation-observer ref="accomplishmentObserver" v-slot="">
         <v-form @submit.prevent="submitForm">
@@ -100,6 +100,10 @@
   export default {
     name: "AccomplishmentForm",
     components: {CustomCard, ValidationObserver, ValidationProvider},
+    props: {
+      edit: {type: Boolean, default: false},
+      editingAccomplishment: {type: Object}
+    },
     computed: {
       ...mapGetters({
         accomplishmentsSection: "sectionModule/accomplishmentsSection"
@@ -141,6 +145,7 @@
         },
 
         submitLoading: false,
+        editingAcc: null,
       }
     },
 
@@ -158,6 +163,23 @@
         }).finally(() => {
           this.submitLoading = false;
         })
+      }
+    },
+
+    watch: {
+      editingAccomplishment: function (newValue) {
+        this.editingAcc = {...newValue};
+      },
+      editingAcc: function (newValue) {
+        if (this.edit) {
+          this.accomplishmentsInfo = {...newValue};
+        }
+      }
+    },
+
+    created() {
+      if (this.edit) {
+        this.accomplishmentsInfo = {...this.editingAccomplishment};
       }
     }
   }

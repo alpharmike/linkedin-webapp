@@ -1,6 +1,6 @@
 <template>
   <div>
-    <custom-card title="Backgrounds">
+    <custom-card title="Backgrounds" header-button header-button-icon="mdi-plus" @header-button-click="$emit('add')">
       <template v-slot:body>
         <v-list
           subheader
