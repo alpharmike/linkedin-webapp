@@ -5,18 +5,18 @@
         <v-list
           subheader
         >
-          <div v-for="backgroundType in backgroundSection.children" :key="backgroundType">
-            <v-subheader class="font-weight-bold text-body-1 text--primary">{{backgroundType}}</v-subheader>
+          <div v-for="backgroundType in backgroundSection.children" :key="backgroundType.name + backgroundType.id">
+            <v-subheader class="font-weight-bold text-body-1 text--primary">{{backgroundType.name}}</v-subheader>
             <div
-              v-for="(background, index) in items"
-              :key="background.title + index"
+              v-for="(background) in backgrounds"
+              :key="background.title + background.id"
               class="ml-5"
             >
-              <v-list-item  v-if="background.type === backgroundType">
+              <v-list-item  v-if="background.backgroundType === backgroundType.id">
                 <v-list-item-content>
                   <v-list-item-title v-text="background.title"></v-list-item-title>
                   <v-list-item-subtitle v-text="background.description"></v-list-item-subtitle>
-                  <v-list-item-subtitle>{{background.date}}</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{`${background.startDate} - ${background.endDate ? background.endDate : "Present"}`}}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn icon @click="() => editBackground(background)">
@@ -51,7 +51,8 @@
     components: {BackgroundForm, CustomDialog, CustomCard},
     computed: {
       ...mapGetters({
-        backgroundSection: "sectionModule/backgroundSection"
+        backgroundSection: "sectionModule/backgroundSection",
+        backgrounds: "sectionModule/backgrounds",
       }),
 
       items() {
@@ -102,7 +103,7 @@
           this.editingBackground = null;
         }
       }
-    }
+    },
   }
 </script>
 

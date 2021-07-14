@@ -33,7 +33,9 @@ const state = {
         "Date Mining"
       ]
     },
-  ]
+  ],
+
+  backgrounds: []
 };
 
 const mutations = {
@@ -43,6 +45,10 @@ const mutations = {
         section.children = payload.items;
       }
     })
+  },
+
+  setBackgrounds(state, payload) {
+    state.backgrounds = payload;
   },
 };
 
@@ -61,6 +67,26 @@ const actions = {
   async createBackground(context, payload) {
     try {
       let response = await axios.post(BACKGROUND, payload);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async getBackgrounds(context) {
+    try {
+      let response = await axios.get(BACKGROUND);
+      console.log(response);
+      context.commit('setBackgrounds', response.data);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async editBackground(context, payload) {
+    try {
+      console.log(payload)
+      let response = await axios.patch(`${BACKGROUND}/${payload.id}`);
       console.log(response);
     } catch (e) {
       console.log(e);
@@ -85,6 +111,9 @@ const getters = {
     const index = state.sections.findIndex(section => section.title.toLowerCase() === "skills");
     return state.sections[index];
   },
+  backgrounds: (state) => {
+    return state.backgrounds;
+  }
 };
 
 function getTypeAPI(section) {

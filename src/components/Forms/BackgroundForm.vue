@@ -136,15 +136,15 @@
           },
           {
             name: "Start Date",
-            rules: "required",
-            required: true,
+            rules: "",
+            required: false,
             type: "date",
             model: "startDate"
           },
           {
             name: "End Date",
-            rules: "required",
-            required: true,
+            rules: "",
+            required: false,
             type: "date",
             model: "endDate"
           },
@@ -180,28 +180,53 @@
 
     methods: {
       ...mapActions({
-        createBackground: "sectionModule/createBackground"
+        createBackground: "sectionModule/createBackground",
+        editBackground: "sectionModule/editBackground",
+        getBackgrounds: "sectionModule/getBackgrounds"
       }),
       submitBackgroundForm() {
         this.submitLoading = true;
         this.$refs.backgroundObserver.validate().then(result => {
-          if (result) { // if data is validated and has no problem
+          if (result && this.validate()) { // if data is validated and has no problem
+            console.log(result)
             let payload = {
               ...this.backgroundInfo
             }
+            console.log(payload)
             // Code for API nad store
-            this.createBackground(payload).then(() => {
-              this.$emit('close');
-              enableSnackbar(this.reqStatus, "Background created successfully!", "info");
-              this.$emit('show-alert', this.reqStatus);
-            }).catch(err => {
-              enableSnackbar(this.reqStatus, err.message, "error")
-            }).finally(() => {
-              this.submitLoading = false;
-            })
+            if (!this.edit) {
+              this.createBackground(payload).then(async () => {
+                this.$emit('close');
+                enableSnackbar(this.reqStatus, "Background created successfully!", "info");
+                this.$emit('show-alert', this.reqStatus);
+                await this.getBackgrounds();
+              }).catch(err => {
+                enableSnackbar(this.reqStatus, err.message, "error")
+              }).finally(() => {
+                this.submitLoading = false;
+              })
+            } else {
+              this.editBackground(payload).then(() => {
+                this.$emit('close');
+                enableSnackbar(this.reqStatus, "Background edited successfully!", "info");
+                this.$emit('show-alert', this.reqStatus);
+              }).catch(err => {
+                enableSnackbar(this.reqStatus, err.message, "error")
+              }).finally(() => {
+                this.submitLoading = false;
+              })
+            }
           }
         })
-      }
+      },
+
+      validate() {
+        if (this.backgroundInfo.startDate === "" || this.backgroundInfo.startDate === null) {
+          enableSnackbar(this.reqStatus, "Start date can not be empty", "error")
+          return false;
+        }
+        return true;
+      },
     },
 
     watch: {

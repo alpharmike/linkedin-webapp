@@ -108,7 +108,8 @@
     methods: {
       ...mapActions({
         getProfile: "profileModule/getProfile",
-        setChildren: "sectionModule/setChildren"
+        setChildren: "sectionModule/setChildren",
+        getBackgrounds: "sectionModule/getBackgrounds"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -121,6 +122,10 @@
 
       async initSubSections() {
         await this.setSectionChildren("background");
+      },
+
+      async getProfileBackgrounds() {
+        await this.getBackgrounds();
       }
     },
 
@@ -128,6 +133,7 @@
       this.loading = true;
       await this.getProfile();
       await this.initSubSections();
+      await this.getProfileBackgrounds();
       this.loading = false;
     }
   }
