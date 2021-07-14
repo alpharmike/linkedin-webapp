@@ -5,3 +5,5 @@ export const BACKGROUND_TYPES = '/background-types';
 export const SIGN_UP = '/sign-up';
 export const LOGIN = '/login';
 export const PROFILE = '/profile';
+export const POST = '/post';
+

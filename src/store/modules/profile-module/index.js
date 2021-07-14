@@ -53,20 +53,9 @@ const actions = {
         payload
       );
     } catch (e) {
-      if (e.response.status === 401) {
-        throw Error("Not Authorized!")
-      } else if (e.response.status === 422) {
-        let errors = e.response.data.data;
-        if (errors && errors.length !== 0) {
-          let errMsg = errors[0].msg;
-          throw Error(errMsg);
-        }
-      } else if (e.response.status >= 500) {
-        throw Error("Network Error!")
-      }
+      throw Error(errors[e.response.status.toString()])
     }
-  },
-*/
+  },*/
   /*async getAllUsers(context, filterKey) {
     try {
       let response = await axios.get(
