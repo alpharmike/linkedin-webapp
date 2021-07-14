@@ -4,7 +4,7 @@
       <validation-observer ref="backgroundObserver" v-slot="">
         <v-form @submit.prevent="submitBackgroundForm">
           <v-row>
-            <v-col cols="12" v-for="(field, index) in fields" :key="index">
+            <v-col cols="12" v-for="(field, index) in fields" :key="field.name + index">
               <validation-provider
                 v-slot="{ errors }"
                 :name="field.name"
@@ -16,6 +16,8 @@
                   :label="field.name"
                   v-model="backgroundInfo[field.model]"
                   :value="backgroundInfo[field.model]"
+                  :item-value="field.value"
+                  :item-text="field.text"
                   dense
                   outlined
                   clearable
@@ -80,6 +82,8 @@
       >
         Submit
       </v-btn>
+
+      <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
 </template>
@@ -89,7 +93,9 @@
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
   import CustomDatePicker from "../Inputs/CustomDatePicker";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
+  import {enableSnackbar} from "../../utils/error_utils";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   setInteractionMode('eager');
 
@@ -100,7 +106,7 @@
 
   export default {
     name: "BackgroundForm",
-    components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
+    components: {CustomAlert, CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
     props: {
       edit: {type: Boolean, default: false},
       editingBackground: {type: Object}
@@ -123,8 +129,10 @@
             rules: "required",
             required: true,
             type: "select",
+            text: "name",
+            value: "id",
             items: this.backgroundSection.children,
-            model: "type"
+            model: "backgroundType"
           },
           {
             name: "Start Date",
@@ -155,17 +163,25 @@
       return {
         backgroundInfo: {
           title: "",
-          type: "",
+          backgroundType: "",
           startDate: "",
           endDate: "",
           description: "",
         },
         submitLoading: false,
         editingBg: this.editingBackground,
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        }
       }
     },
 
     methods: {
+      ...mapActions({
+        createBackground: "sectionModule/createBackground"
+      }),
       submitBackgroundForm() {
         this.submitLoading = true;
         this.$refs.backgroundObserver.validate().then(result => {
@@ -174,10 +190,16 @@
               ...this.backgroundInfo
             }
             // Code for API nad store
-
+            this.createBackground(payload).then(() => {
+              this.$emit('close');
+              enableSnackbar(this.reqStatus, "Background created successfully!", "info");
+              this.$emit('show-alert', this.reqStatus);
+            }).catch(err => {
+              enableSnackbar(this.reqStatus, err.message, "error")
+            }).finally(() => {
+              this.submitLoading = false;
+            })
           }
-        }).finally(() => {
-          this.submitLoading = false;
         })
       }
     },
@@ -197,6 +219,7 @@
       if (this.edit) {
         this.backgroundInfo = {...this.editingBackground};
       }
+      console.log(this.backgroundSection)
     }
   }
 </script>

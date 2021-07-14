@@ -1,5 +1,5 @@
-export const enableError = (error, msg, type) => {
-  error.message = msg;
-  error.type = type;
-  error.status = true;
+export const enableSnackbar = (body, msg, type) => {
+  body.message = msg;
+  body.type = type;
+  body.status = true;
 }

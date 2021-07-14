@@ -1,5 +1,6 @@
 import axios from '../../../network/axios';
-import {BACKGROUND_TYPES} from "../../../network/API";
+import {BACKGROUND_TYPE, BACKGROUND} from "../../../network/API";
+import {errors} from "../../../network/errors";
 
 const state = {
   sections: [
@@ -38,7 +39,7 @@ const state = {
 const mutations = {
   setChildren(state, payload) {
     state.sections.forEach(section => {
-      if (section.title === payload.title) {
+      if (section.title.toLowerCase() === payload.title.toLowerCase()) {
         section.children = payload.items;
       }
     })
@@ -48,38 +49,22 @@ const mutations = {
 const actions = {
   async setChildren(context, payload) {
     try {
-      let response = await axios.get(BACKGROUND_TYPES);
-      context.commit('setChildren', response.data);
+      // payload is the section name
+      const url = getTypeAPI(payload)
+      let response = await axios.get(url);
+      context.commit('setChildren', {items: [...response.data], title: payload});
     } catch (e) {
-      if (e.response.status === 401) {
-        throw Error("Not Authorized!")
-      } else if (e.response.status === 422) {
-        let errors = e.response.data.data;
-        if (errors && errors.length !== 0) {
-          let errMsg = errors[0].msg;
-          throw Error(errMsg);
-        }
-      } else if (e.response.status >= 500) {
-        throw Error("Network Error!")
-      }
+      throw Error(errors[e.response.status.toString()])
     }
   },
 
-  async createItem(context ,payload) {
+  async createBackground(context, payload) {
     try {
-      await axios.post("", payload.data);
+      let response = await axios.post(BACKGROUND, payload);
+      console.log(response);
     } catch (e) {
-      if (e.response.status === 401) {
-        throw Error("Not Authorized!")
-      } else if (e.response.status === 422) {
-        let errors = e.response.data.data;
-        if (errors && errors.length !== 0) {
-          let errMsg = errors[0].msg;
-          throw Error(errMsg);
-        }
-      } else if (e.response.status >= 500) {
-        throw Error("Network Error!")
-      }
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
     }
   }
 };
@@ -102,6 +87,13 @@ const getters = {
   },
 };
 
+function getTypeAPI(section) {
+  switch (section) {
+    case 'background':
+      return BACKGROUND_TYPE
+
+  }
+}
 
 export default {
   namespaced: true,

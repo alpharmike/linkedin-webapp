@@ -71,7 +71,7 @@
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
   import {mapActions} from "vuex";
-  import {enableError} from "../../utils/error_utils";
+  import {enableSnackbar} from "../../utils/error_utils";
   import CustomAlert from "../Alerts/CustomAlert";
 
   setInteractionMode('eager');
@@ -134,7 +134,7 @@
             this.login(payload).then(() => {
               this.$router.replace({name: "Home"})
             }).catch(err => {
-              enableError(this.error, err.message, "error")
+              enableSnackbar(this.error, err.message, "error")
             }).finally(() => {
               console.log("here");
               this.loading = false;
