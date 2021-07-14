@@ -30,9 +30,16 @@
               </v-list-item-content>
 
               <v-list-item-action>
-                <v-btn icon @click="() => editAcc(acc)">
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+
+
+                <v-row>
+                  <v-btn icon @click="() => editAcc(acc)">
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn icon @click="() => initRemoval(acc)">
+                    <v-icon color="error">mdi-delete</v-icon>
+                  </v-btn>
+                </v-row>
               </v-list-item-action>
             </v-list-item>
           </v-list-group>
@@ -44,18 +51,28 @@
         <accomplishment-form edit :editing-accomplishment="editingAcc" @show-alert="(alert) => $emit('edited', alert)" @close="accDialog = false" />
       </template>
     </custom-dialog>
+    <dialog-alert
+      title="Accomplishment Removal"
+      msg="Are you sure you wan to remove the selected accomplishment?"
+      :show.sync="remove.dialog"
+      :is-loading="remove.loading"
+      @cancel="remove.dialog = false"
+      @accept="deleteAcc"
+    />
   </div>
 </template>
 
 <script>
   import CustomCard from "../Cards/CustomCard";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
   import CustomDialog from "../Dialogs/CustomDialog";
   import AccomplishmentForm from "../Forms/AccomplishmentForm";
+  import DialogAlert from "../Alerts/DialogAlert";
+  import {enableSnackbar} from "../../utils/error_utils";
 
   export default {
     name: "AccomplishmentSection",
-    components: {AccomplishmentForm, CustomDialog, CustomCard},
+    components: {DialogAlert, AccomplishmentForm, CustomDialog, CustomCard},
     computed: {
       ...mapGetters("sectionModule", ["accomplishmentsSection", "accomplishments"]),
 
@@ -82,13 +99,44 @@
       return {
         accDialog: false,
         editingAcc: null,
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
+        remove: {
+          loading: false,
+          dialog: false,
+          backgroundId: ''
+        }
       }
     },
 
     methods: {
+      ...mapActions("sectionModule", ["removeAcc", "getAcc"]),
       editAcc(acc) {
         this.editingAcc = acc;
         this.accDialog = true;
+      },
+
+      initRemoval(acc) {
+        this.remove.accId = acc.id;
+        this.remove.dialog = true;
+      },
+
+      deleteAcc() {
+        this.remove.loading = true;
+        this.removeAcc(this.remove.accId).then(async () => {
+          this.remove.loading = false;
+          this.remove.dialog = false;
+          this.remove.accId = '';
+          enableSnackbar(this.reqStatus, "Accomplishment deleted successfully!", "error")
+          await this.getAcc();
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.remove.loading = false;
+        })
       }
     },
 

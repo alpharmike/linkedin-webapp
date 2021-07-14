@@ -143,6 +143,7 @@
     },
 
     async created() {
+      console.log("here")
       this.loading = true;
       await this.getProfile();
       await this.initSubSections();
@@ -150,6 +151,7 @@
       await this.getProfileAcc();
       await this.initTypes();
       this.loading = false;
+      console.log(this.$route.params)
     }
   }
 </script>

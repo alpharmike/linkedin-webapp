@@ -146,6 +146,17 @@ const actions = {
     }
   },
 
+  async removeAcc(context, payload) {
+    try {
+      // payload is the id of the background to be deleted
+      let response = await axios.delete(`${ACCOMPLISHMENT}/${payload}`);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
 
 };
 

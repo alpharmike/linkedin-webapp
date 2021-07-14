@@ -50,6 +50,7 @@
       @cancel="remove.dialog = false"
       @accept="deleteBackground"
     />
+    <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
   </div>
 
 </template>
@@ -61,10 +62,11 @@
   import BackgroundForm from "../Forms/BackgroundForm";
   import DialogAlert from "../Alerts/DialogAlert";
   import {enableSnackbar} from "../../utils/error_utils";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   export default {
     name: "BackgroundSection",
-    components: {DialogAlert, BackgroundForm, CustomDialog, CustomCard},
+    components: {CustomAlert, DialogAlert, BackgroundForm, CustomDialog, CustomCard},
     computed: {
       ...mapGetters({
         backgroundSection: "sectionModule/backgroundSection",
