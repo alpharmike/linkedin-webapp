@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {BACKGROUND_TYPE, BACKGROUND, ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE} from "../../../network/API";
+import {ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE, BACKGROUND, BACKGROUND_TYPE} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -95,6 +95,17 @@ const actions = {
       delete payload.id;
       delete  payload.profileId;
       let response = await axios.put(`${BACKGROUND}/${id}`, payload);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async removeBackground(context, payload) {
+    try {
+      // payload is the id of te background to be deleted
+      let response = await axios.delete(`${BACKGROUND}/${payload}`);
       console.log(response);
     } catch (e) {
       console.log(e);

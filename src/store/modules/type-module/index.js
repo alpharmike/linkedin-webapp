@@ -1,33 +1,33 @@
 import axios from '../../../network/axios';
-import {BACKGROUND_TYPES} from "../../../network/API";
+import {
+  ACCOMPLISHMENT_TYPE,
+  BACKGROUND_TYPE,
+  BACKGROUND_TYPES,
+  FORMER_NAME_VISIBILITY_TYPE,
+  INDUSTRY_TYPE
+} from "../../../network/API";
+import {errors} from "../../../network/errors";
 
 const state = {
-  industries: []
+  industries: [],
+  formerNameVisTypes: [],
 };
 
 const mutations = {
-  setChildren(state, payload) {
+  setTypeItems(state, payload) {
     state[payload.title] = payload.items;
   },
 };
 
 const actions = {
-  async setChildren(context, payload) {
+  async setTypeItems(context, payload) {
     try {
-      let response = await axios.get(BACKGROUND_TYPES);
-      context.commit('setChildren', response.data);
+      // payload is the type name
+      const url = getTypeAPI(payload)
+      let response = await axios.get(url);
+      context.commit('setTypeItems', {items: response.data, title: payload});
     } catch (e) {
-      if (e.response.status === 401) {
-        throw Error("Not Authorized!")
-      } else if (e.response.status === 422) {
-        let errors = e.response.data.data;
-        if (errors && errors.length !== 0) {
-          let errMsg = errors[0].msg;
-          throw Error(errMsg);
-        }
-      } else if (e.response.status >= 500) {
-        throw Error("Network Error!")
-      }
+      throw Error(errors[e.response.status.toString()])
     }
   },
 };
@@ -39,7 +39,20 @@ const getters = {
   industries: (state) => {
     return state.industries;
   },
+  formerNameVisTypes: (state) => {
+    return state.formerNameVisTypes;
+  },
 };
+
+function getTypeAPI(type) {
+  switch (type) {
+    case 'industries':
+      return INDUSTRY_TYPE
+    case 'formerNameVisTypes':
+      return FORMER_NAME_VISIBILITY_TYPE
+  }
+}
+
 
 
 export default {

@@ -25,7 +25,7 @@
 
       <custom-dialog :show.sync="dialogs.intro">
         <template v-slot:body>
-          <intro-form @close="dialogs.intro = false"/>
+          <intro-form  @show-alert="(alert) => reqStatus = alert" @close="dialogs.intro = false"/>
         </template>
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.background">
@@ -84,7 +84,8 @@
     },
 
     computed: {
-      ...mapGetters("profileModule", ["profile"])
+      ...mapGetters("profileModule", ["profile"]),
+      ...mapGetters("typeModule", ["industries"]),
     },
 
     data() {
@@ -109,6 +110,7 @@
       ...mapActions({
         getProfile: "profileModule/getProfile",
         setChildren: "sectionModule/setChildren",
+        setTypeItems: "typeModule/setTypeItems",
         getBackgrounds: "sectionModule/getBackgrounds",
         getAcc: "sectionModule/getAcc"
       }),
@@ -126,6 +128,11 @@
         await this.setSectionChildren("accomplishments");
       },
 
+      async initTypes() {
+        await this.setTypeItems("industries");
+        await this.setTypeItems("formerNameVisTypes");
+      },
+
       async getProfileBackgrounds() {
         await this.getBackgrounds();
       },
@@ -141,6 +148,7 @@
       await this.initSubSections();
       await this.getProfileBackgrounds();
       await this.getProfileAcc();
+      await this.initTypes();
       this.loading = false;
     }
   }

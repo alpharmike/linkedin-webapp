@@ -46,16 +46,16 @@ const actions = {
     }
   },
 
-  /*async editProfile(context, payload) {
+  async editProfile(context, payload) {
     try {
-      let response = await axios.post(
-        EDIT_PROFILE,
+      let response = await axios.put(
+        PROFILE,
         payload
       );
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
-  },*/
+  },
   /*async getAllUsers(context, filterKey) {
     try {
       let response = await axios.get(

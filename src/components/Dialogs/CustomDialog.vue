@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="75%" transition="dialog-transition">
+  <v-dialog v-model="dialog" :width="width" transition="dialog-transition">
     <slot name="body"></slot>
   </v-dialog>
 </template>
@@ -8,7 +8,11 @@
   export default {
     name: "CustomDialog",
     props: {
-      show: {type: Boolean, default: false}
+      show: {type: Boolean, default: false},
+      width: {
+        type: String,
+        default: "75%"
+      }
     },
     data() {
       return {

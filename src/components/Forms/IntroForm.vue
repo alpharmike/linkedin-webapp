@@ -1,7 +1,7 @@
 <template>
-  <custom-card title="Edit Into" :card-loading="submitLoading">
+  <custom-card title="Edit Intro" :card-loading="submitLoading">
     <template v-slot:body>
-      <validation-observer ref="intoObserver" v-slot="">
+      <validation-observer ref="introObserver" v-slot="">
         <v-form @submit.prevent="submitProfileForm">
           <v-row>
             <v-col cols="12" v-for="(field, index) in fields" :key="index">
@@ -17,6 +17,8 @@
                   v-model="profileInfo[field.model]"
                   :value="profileInfo[field.model]"
                   dense
+                  :item-text="field.text"
+                  :item-value="field.value"
                   outlined
                   clearable
                   :error-messages="errors"
@@ -82,6 +84,8 @@
       >
         Submit
       </v-btn>
+
+      <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
 </template>
@@ -90,8 +94,10 @@
   import {required} from 'vee-validate/dist/rules'
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import CustomCard from "../Cards/CustomCard";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
   import CustomDatePicker from "../Inputs/CustomDatePicker";
+  import {enableSnackbar} from "../../utils/error_utils";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   setInteractionMode('eager');
 
@@ -102,10 +108,12 @@
 
   export default {
     name: "ProfileForm",
-    components: {CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
+    components: {CustomAlert, CustomDatePicker, CustomCard, ValidationObserver, ValidationProvider},
     computed: {
       ...mapGetters({
-        industries: "typeModule/industries"
+        industries: "typeModule/industries",
+        formerNameVisTypes: "typeModule/formerNameVisTypes",
+        profile: "profileModule/profile"
       }),
       fields() {
         return [
@@ -124,6 +132,23 @@
             model: "lastName"
           },
           {
+            name: "Former Name",
+            rules: "",
+            required: false,
+            type: "text",
+            model: "formerName"
+          },
+          {
+            name: "Former Name Visibility",
+            rules: "",
+            required: false,
+            type: "select",
+            text: "name",
+            value: "id",
+            items: this.formerNameVisTypes,
+            model: "formerNameVisibilityType"
+          },
+          {
             name: "Headline",
             rules: "required",
             required: true,
@@ -139,12 +164,12 @@
             model: "country"
           },
           {
-            name: "Region",
+            name: "Location in Country",
             rules: "",
             required: false,
             type: "textarea",
             rows: 2,
-            model: "region"
+            model: "locationInCountry"
           },
           {
             name: "Address",
@@ -159,6 +184,8 @@
             rules: "required",
             required: true,
             type: "select",
+            text: "name",
+            value: "id",
             items: this.industries,
             model: "industry"
           },
@@ -178,22 +205,68 @@
         profileInfo: {
           firstName: "",
           lastName: "",
+          formerName: "",
+          formerNameVisibilityType: "",
           headline: "",
           country: "",
-          region: "",
+          locationInCountry: "",
           address: "",
           industry: "",
           dateOfBirth: ""
         },
-
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
         submitLoading: false,
       }
     },
 
     methods: {
+      ...mapActions({
+        editProfile: "profileModule/editProfile",
+        getProfile: "profileModule/getProfile",
+      }),
       submitProfileForm() {
+        this.submitLoading = true;
+        this.$refs.introObserver.validate().then(result => {
+          if (result && this.validate()) { // if data is validated and has no problem
+            console.log(result)
+            let payload = {
+              ...this.profileInfo
+            }
+            console.log(payload);
+            // Code for API and store
+            this.editProfile(payload).then(async () => {
+              this.$emit('close');
+              enableSnackbar(this.reqStatus, "Intro updated successfully!", "info");
+              this.$emit('show-alert', this.reqStatus);
+              await this.getProfile();
+            }).catch(err => {
+              enableSnackbar(this.reqStatus, err.message, "error")
+            }).finally(() => {
+              this.submitLoading = false;
+            })
+          } else {
+            this.submitLoading = false;
+          }
+        }).catch(err => {
+          this.submitLoading = false;
+          enableSnackbar(this.reqStatus, err.message, "error")
+        })
+      },
+      validate() {
+        if (this.profileInfo.dateOfBirth === "" || this.profileInfo.dateOfBirth === null) {
+          enableSnackbar(this.reqStatus, "Date of birth can not be empty!", "error")
+          return false;
+        }
+        return true;
+      },
+    },
 
-      }
+    mounted() {
+      this.profileInfo = {...this.profile};
     }
   }
 </script>
