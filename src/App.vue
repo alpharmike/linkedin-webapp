@@ -4,26 +4,11 @@
       app
       color="primary"
       dark
+      v-if="isAuthenticated"
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+      <profile-dropdown />
+
 
       <v-spacer></v-spacer>
 
@@ -45,9 +30,14 @@
 
 <script>
 
+import ProfileDropdown from "./components/Dropdown/ProfileDropdown";
+import {mapGetters} from "vuex";
 export default {
   name: 'App',
-
+  components: {ProfileDropdown},
+  computed: {
+    ...mapGetters("authModule", ["isAuthenticated"])
+  },
   data: () => ({
     //
   })

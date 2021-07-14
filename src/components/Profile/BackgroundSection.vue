@@ -1,6 +1,6 @@
 <template>
   <div>
-    <custom-card title="Backgrounds" header-button header-button-icon="mdi-plus" @header-button-click="$emit('add')">
+    <custom-card title="Backgrounds" :header-button="isMe" header-button-icon="mdi-plus" @header-button-click="$emit('add')">
       <template v-slot:body>
         <v-list
           subheader
@@ -18,7 +18,7 @@
                   <v-list-item-subtitle v-text="background.description"></v-list-item-subtitle>
                   <v-list-item-subtitle>{{`${background.startDate} - ${background.endDate ? background.endDate : "Present"}`}}</v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
+                <v-list-item-action v-if="isMe">
                   <v-row>
                     <v-btn icon @click="() => editBackground(background)">
                       <v-icon >mdi-pencil</v-icon>
@@ -27,7 +27,6 @@
                       <v-icon color="error">mdi-delete</v-icon>
                     </v-btn>
                   </v-row>
-
                 </v-list-item-action>
               </v-list-item>
             </div>
@@ -72,6 +71,10 @@
         backgroundSection: "sectionModule/backgroundSection",
         backgrounds: "sectionModule/backgrounds",
       }),
+    },
+
+    props: {
+      isMe: {type: Boolean, default: true}
     },
 
     data() {

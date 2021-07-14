@@ -10,5 +10,6 @@ export const ACCOMPLISHMENT = '/accomplishment';
 export const SIGN_UP = '/sign-up';
 export const LOGIN = '/login';
 export const PROFILE = '/profile';
+export const PROFILE_BY_USERNAME = '/get-profile/username';
 export const POST = '/post';
 

@@ -5,19 +5,20 @@
         <v-col cols="7">
           <v-row justify="space-between">
             <v-col cols="12">
-              <ProfileSummary @section-selected="openSectionDialog"/>
+              <ProfileSummary :is-me="isMyProfile" :profile="currProfile" @section-selected="openSectionDialog"/>
             </v-col>
 
             <v-col cols="12">
-              <about-section @edit="dialogs.about = true"/>
+              <about-section :is-me="isMyProfile" @edit="dialogs.about = true"/>
             </v-col>
 
             <v-col cols="12">
-              <background-section @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('background')"/>
+              <background-section :is-me="isMyProfile"  @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('background')"/>
             </v-col>
 
             <v-col cols="12">
-              <accomplishment-section @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('accomplishments')"/>
+              <accomplishment-section :is-me="isMyProfile" @edited="(alert) => reqStatus = alert"
+                                      @add="() => openSectionDialog('accomplishments')"/>
             </v-col>
           </v-row>
         </v-col>
@@ -25,7 +26,7 @@
 
       <custom-dialog :show.sync="dialogs.intro">
         <template v-slot:body>
-          <intro-form  @show-alert="(alert) => reqStatus = alert" @close="dialogs.intro = false"/>
+          <intro-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.intro = false"/>
         </template>
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.background">
@@ -84,7 +85,7 @@
     },
 
     computed: {
-      ...mapGetters("profileModule", ["profile"]),
+      ...mapGetters("profileModule", ["profile", "visitingProfile"]),
       ...mapGetters("typeModule", ["industries"]),
     },
 
@@ -103,12 +104,15 @@
           status: false
         },
         loading: false,
+        currProfile: {},
+        isMyProfile: true,
       }
     },
 
     methods: {
       ...mapActions({
         getProfile: "profileModule/getProfile",
+        getProfileByUsername: "profileModule/getProfileByUsername",
         setChildren: "sectionModule/setChildren",
         setTypeItems: "typeModule/setTypeItems",
         getBackgrounds: "sectionModule/getBackgrounds",
@@ -133,13 +137,18 @@
         await this.setTypeItems("formerNameVisTypes");
       },
 
-      async getProfileBackgrounds() {
-        await this.getBackgrounds();
+      async getProfileBackgrounds(id) {
+        await this.getBackgrounds(id);
       },
 
-      async getProfileAcc() {
-        await this.getAcc();
+      async getProfileAcc(id) {
+        await this.getAcc(id);
       },
+
+      async getUserProfile(username) {
+        console.log(username)
+        await this.getProfileByUsername(username);
+      }
     },
 
     async created() {
@@ -147,11 +156,23 @@
       this.loading = true;
       await this.getProfile();
       await this.initSubSections();
+      await this.initTypes();
       await this.getProfileBackgrounds();
       await this.getProfileAcc();
-      await this.initTypes();
+      const username = this.$route.params.username;
+      if (username !== this.profile.username) {
+        this.isMyProfile = false;
+        await this.getUserProfile(username);
+        await this.getProfileBackgrounds(this.visitingProfile.id);
+        await this.getProfileAcc(this.visitingProfile.id);
+        this.currProfile = this.visitingProfile;
+      } else {
+        await this.getProfileBackgrounds();
+        await this.getProfileAcc();
+        this.currProfile = {...this.profile};
+        console.log(this.currProfile)
+      }
       this.loading = false;
-      console.log(this.$route.params)
     }
   }
 </script>

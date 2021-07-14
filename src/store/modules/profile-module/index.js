@@ -1,9 +1,27 @@
 import axios from '../../../network/axios';
-import {PROFILE} from "../../../network/API";
+import {PROFILE, PROFILE_BY_USERNAME} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
   profile: {
+    username: "",
+    email: "",
+    phoneNumber: "",
+    firstName: "",
+    lastName: "",
+    formerName: "",
+    headline: "",
+    about: "",
+    address: "",
+    country: "",
+    locationInCountry: "",
+    industry: "",
+    dateOfBirth: "",
+    urlToProfile: "",
+    formerNameVisibilityType: "",
+    phoneType: ""
+  },
+  visitingProfile: {
     username: "",
     email: "",
     phoneNumber: "",
@@ -26,6 +44,10 @@ const state = {
 const mutations = {
   setProfile(state, payload) {
     state.profile = {...payload}
+  },
+
+  setVisitingProfile(state, payload) {
+    state.visitingProfile = {...payload}
   },
 
   verifyAcc(state) {
@@ -56,6 +78,18 @@ const actions = {
       throw Error(errors[e.response.status.toString()])
     }
   },
+
+  async getProfileByUsername(context, payload) {
+    try {
+      // payload is the username
+      console.log(payload)
+      let response = await axios.get(`${PROFILE_BY_USERNAME}/${payload}`);
+      const data = response.data;
+      await context.commit('setVisitingProfile', data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  }
   /*async getAllUsers(context, filterKey) {
     try {
       let response = await axios.get(
@@ -92,6 +126,9 @@ const actions = {
 const getters = {
   profile: (state) => {
     return state.profile
+  },
+  visitingProfile: (state) => {
+    return state.visitingProfile
   }
 };
 

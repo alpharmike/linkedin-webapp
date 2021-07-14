@@ -24,13 +24,13 @@
                 <span class="text-subtitle-2 text--lighten-5">{{ /*profile.industry +*/ " Connections" }}</span>
               </a>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="3" v-if="isMe">
               <add-section-dropdown @choose-section="getSubSections" />
             </v-col>
           </v-row>
         </v-col>
 
-        <v-col cols="1">
+        <v-col cols="1" v-if="isMe">
           <v-btn
             icon
             @click="$emit('section-selected', 'intro')"
@@ -52,7 +52,11 @@
     name: "ProfileSummary",
     components: {AddSectionDropdown, CustomCard},
     computed: {
-      ...mapGetters("profileModule", ["profile"])
+      // ...mapGetters("profileModule", ["profile"])
+    },
+    props: {
+      profile: {type: Object, required: true},
+      isMe: {type: Boolean, default: true}
     },
     data() {
       return {

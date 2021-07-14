@@ -1,6 +1,6 @@
 <template>
   <div>
-    <custom-card title="Accomplishments" header-button header-button-icon="mdi-plus" @header-button-click="$emit('add')">
+    <custom-card title="Accomplishments" :header-button="isMe" header-button-icon="mdi-plus" @header-button-click="$emit('add')">
       <template v-slot:body>
         <v-list dense>
           <v-list-group
@@ -29,9 +29,7 @@
                 <v-list-item-subtitle>{{acc.description}}</v-list-item-subtitle>
               </v-list-item-content>
 
-              <v-list-item-action>
-
-
+              <v-list-item-action v-if="isMe">
                 <v-row>
                   <v-btn icon @click="() => editAcc(acc)">
                     <v-icon>mdi-pencil</v-icon>
@@ -93,6 +91,10 @@
         console.log(categorized);
         return categorized;
       }
+    },
+
+    props: {
+      isMe: {type: Boolean, default: true}
     },
 
     data() {

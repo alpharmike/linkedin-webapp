@@ -1,5 +1,5 @@
 <template>
-  <custom-card title="About" header-button header-button-icon="mdi-pencil" @header-button-click="$emit('edit')">
+  <custom-card title="About" :header-button="isMe" header-button-icon="mdi-pencil" @header-button-click="$emit('edit')">
     <template v-slot:body>
       <span>
         {{about}}
@@ -14,6 +14,9 @@
   export default {
     name: "AboutSection",
     components: {CustomCard},
+    props: {
+      isMe: {type: Boolean, default: true}
+    },
     data() {
       return {
         // Set it to value from profile at mounted/created

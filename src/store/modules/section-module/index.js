@@ -10,10 +10,7 @@ const state = {
     },
     {
       title: "Background",
-      children: [
-        "Work Experience",
-        "Volunteer Experience"
-      ]
+      children: []
     },
     {
       title: "Accomplishments",
@@ -21,17 +18,7 @@ const state = {
     },
     {
       title: "Skills",
-      children: [
-        "SQL",
-        "Back-End Web Development",
-        "Artificial Intelligence",
-        "jQuery",
-        "Information Technology",
-        "Convolutional Neural Networks",
-        "Web Design",
-        "User Experience",
-        "Date Mining"
-      ]
+      children: []
     },
   ],
 
@@ -77,9 +64,11 @@ const actions = {
     }
   },
 
-  async getBackgrounds(context) {
+  async getBackgrounds(context, payload) {
     try {
-      let response = await axios.get(BACKGROUND);
+      // get background for the logged in profile or other users (the payload can be profile id of another user)
+      const url = payload ? `${BACKGROUND}/${payload}` : BACKGROUND;
+      let response = await axios.get(url);
       console.log(response);
       context.commit('setBackgrounds', response.data);
     } catch (e) {
@@ -121,9 +110,10 @@ const actions = {
     }
   },
 
-  async getAcc(context) {
+  async getAcc(context, payload) {
     try {
-      let response = await axios.get(ACCOMPLISHMENT);
+      const url = payload ? `${ACCOMPLISHMENT}/${payload}` : ACCOMPLISHMENT;
+      let response = await axios.get(url);
       console.log(response);
       context.commit('setAcc', response.data);
     } catch (e) {

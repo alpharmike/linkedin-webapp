@@ -38,7 +38,7 @@ const actions = {
       throw Error(errors[e.response.status.toString()])
     }
   },
-  logout(context) {
+  async logout(context) {
     axios.defaults.headers.common['Authorization'] = '';
     localStorage.removeItem("LinkedinToken");
     context.commit('setToken', "");

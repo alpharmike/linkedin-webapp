@@ -113,7 +113,6 @@
     computed: {
       ...mapGetters({
         accomplishmentsSection: "sectionModule/accomplishmentsSection",
-        accomplishments: "sectionModule/accomplishments"
       }),
       fields() {
         return [
