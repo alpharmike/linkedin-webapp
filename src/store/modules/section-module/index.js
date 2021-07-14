@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {BACKGROUND_TYPE, BACKGROUND} from "../../../network/API";
+import {BACKGROUND_TYPE, BACKGROUND, ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -35,7 +35,8 @@ const state = {
     },
   ],
 
-  backgrounds: []
+  backgrounds: [],
+  accomplishments: [],
 };
 
 const mutations = {
@@ -49,6 +50,10 @@ const mutations = {
 
   setBackgrounds(state, payload) {
     state.backgrounds = payload;
+  },
+
+  setAcc(state, payload) {
+    state.accomplishments = payload;
   },
 };
 
@@ -86,13 +91,51 @@ const actions = {
   async editBackground(context, payload) {
     try {
       console.log(payload)
-      let response = await axios.patch(`${BACKGROUND}/${payload.id}`);
+      const id = payload.id;
+      delete payload.id;
+      delete  payload.profileId;
+      let response = await axios.put(`${BACKGROUND}/${id}`, payload);
       console.log(response);
     } catch (e) {
       console.log(e);
       throw Error(errors[e.response.status.toString()])
     }
-  }
+  },
+
+  async createAcc(context, payload) {
+    try {
+      let response = await axios.post(ACCOMPLISHMENT, payload);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async getAcc(context) {
+    try {
+      let response = await axios.get(ACCOMPLISHMENT);
+      console.log(response);
+      context.commit('setAcc', response.data);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async editAcc(context, payload) {
+    try {
+      console.log(payload)
+      const id = payload.id;
+      delete payload.id;
+      delete  payload.profileId;
+      let response = await axios.put(`${ACCOMPLISHMENT}/${id}`, payload);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+
 };
 
 const getters = {
@@ -113,6 +156,9 @@ const getters = {
   },
   backgrounds: (state) => {
     return state.backgrounds;
+  },
+  accomplishments: (state) => {
+    return state.accomplishments;
   }
 };
 
@@ -120,7 +166,8 @@ function getTypeAPI(section) {
   switch (section) {
     case 'background':
       return BACKGROUND_TYPE
-
+    case 'accomplishments':
+      return ACCOMPLISHMENT_TYPE
   }
 }
 

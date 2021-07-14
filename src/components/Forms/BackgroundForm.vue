@@ -206,10 +206,11 @@
                 this.submitLoading = false;
               })
             } else {
-              this.editBackground(payload).then(() => {
+              this.editBackground(payload).then(async () => {
                 this.$emit('close');
                 enableSnackbar(this.reqStatus, "Background edited successfully!", "info");
                 this.$emit('show-alert', this.reqStatus);
+                await this.getBackgrounds();
               }).catch(err => {
                 enableSnackbar(this.reqStatus, err.message, "error")
               }).finally(() => {

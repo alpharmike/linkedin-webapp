@@ -33,7 +33,7 @@
     </custom-card>
     <custom-dialog :show.sync="backgroundDialog">
       <template v-slot:body>
-        <background-form edit :editing-background="editingBackground" @close="backgroundDialog = false" />
+        <background-form edit :editing-background="editingBackground" @show-alert="(alert) => $emit('edited', alert)" @close="backgroundDialog = false" />
       </template>
     </custom-dialog>
   </div>
@@ -54,33 +54,6 @@
         backgroundSection: "sectionModule/backgroundSection",
         backgrounds: "sectionModule/backgrounds",
       }),
-
-      items() {
-        return [
-          {
-            type: "Work Experience",
-            title: 'Amateur Assistant',
-            description: "Hello World",
-            startDate: "2019-10-12",
-            endDate: "2020-10-05"
-          },
-          {
-            type: "Work Experience",
-            title: 'Junior Assistant',
-            description: "Hello World",
-            startDate: "2019-10-12",
-            endDate: "2020-10-05"
-          },
-          {
-            type: "Volunteer Experience",
-            title: 'Senior Assistant',
-            description: "Hello World",
-            startDate: "2019-10-12",
-            endDate: "2020-10-05"
-          },
-        ]
-
-      }
     },
 
     data() {

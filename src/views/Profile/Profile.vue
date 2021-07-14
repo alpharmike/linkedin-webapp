@@ -13,11 +13,11 @@
             </v-col>
 
             <v-col cols="12">
-              <background-section @add="() => openSectionDialog('background')"/>
+              <background-section @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('background')"/>
             </v-col>
 
             <v-col cols="12">
-              <accomplishment-section @add="() => openSectionDialog('accomplishments')"/>
+              <accomplishment-section @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('accomplishments')"/>
             </v-col>
           </v-row>
         </v-col>
@@ -35,7 +35,7 @@
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.accomplishments">
         <template v-slot:body>
-          <accomplishment-form @close="dialogs.accomplishments = false"/>
+          <accomplishment-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.accomplishments = false"/>
         </template>
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.skills">
@@ -109,7 +109,8 @@
       ...mapActions({
         getProfile: "profileModule/getProfile",
         setChildren: "sectionModule/setChildren",
-        getBackgrounds: "sectionModule/getBackgrounds"
+        getBackgrounds: "sectionModule/getBackgrounds",
+        getAcc: "sectionModule/getAcc"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -122,11 +123,16 @@
 
       async initSubSections() {
         await this.setSectionChildren("background");
+        await this.setSectionChildren("accomplishments");
       },
 
       async getProfileBackgrounds() {
         await this.getBackgrounds();
-      }
+      },
+
+      async getProfileAcc() {
+        await this.getAcc();
+      },
     },
 
     async created() {
@@ -134,6 +140,7 @@
       await this.getProfile();
       await this.initSubSections();
       await this.getProfileBackgrounds();
+      await this.getProfileAcc();
       this.loading = false;
     }
   }

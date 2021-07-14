@@ -16,6 +16,8 @@
                   :label="field.name"
                   v-model="accomplishmentsInfo[field.model]"
                   :value="accomplishmentsInfo[field.model]"
+                  :item-text="field.text"
+                  :item-value="field.value"
                   dense
                   outlined
                   clearable
@@ -79,6 +81,8 @@
       >
         Submit
       </v-btn>
+
+      <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
 </template>
@@ -86,9 +90,11 @@
 <script>
   import {required} from 'vee-validate/dist/rules'
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
   import CustomDatePicker from "../Inputs/CustomDatePicker";
   import CustomCard from "../Cards/CustomCard";
+  import {enableSnackbar} from "../../utils/error_utils";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   setInteractionMode('eager');
 
@@ -99,31 +105,34 @@
 
   export default {
     name: "AccomplishmentForm",
-    components: {CustomCard, ValidationObserver, ValidationProvider},
+    components: {CustomAlert, CustomCard, ValidationObserver, ValidationProvider},
     props: {
       edit: {type: Boolean, default: false},
       editingAccomplishment: {type: Object}
     },
     computed: {
       ...mapGetters({
-        accomplishmentsSection: "sectionModule/accomplishmentsSection"
+        accomplishmentsSection: "sectionModule/accomplishmentsSection",
+        accomplishments: "sectionModule/accomplishments"
       }),
       fields() {
         return [
           {
-            name: "Title",
+            name: "Subject",
             rules: "required",
             required: true,
             type: "text",
-            model: "title"
+            model: "subject"
           },
           {
             name: "Accomplishment Type",
             rules: "required",
             required: true,
             type: "select",
+            text: "name",
+            value: "id",
             items: this.accomplishmentsSection.children,
-            model: "type"
+            model: "accomplishmentType"
           },
           {
             name: "Description",
@@ -139,17 +148,26 @@
     data() {
       return {
         accomplishmentsInfo: {
-          title: "",
-          type: "",
+          subject: "",
+          accomplishmentType: "",
           description: ""
         },
-
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
         submitLoading: false,
         editingAcc: null,
       }
     },
 
     methods: {
+      ...mapActions({
+        createAcc: "sectionModule/createAcc",
+        editAcc: "sectionModule/editAcc",
+        getAcc: "sectionModule/getAcc"
+      }),
       submitForm() {
         this.submitLoading = true;
         this.$refs.accomplishmentObserver.validate().then(result => {
@@ -158,10 +176,33 @@
               ...this.accomplishmentsInfo
             }
             // Code for API nad store
-
+            if (!this.edit) {
+              this.createAcc(payload).then(async () => {
+                this.$emit('close');
+                enableSnackbar(this.reqStatus, "Accomplishment created successfully!", "info");
+                this.$emit('show-alert', this.reqStatus);
+                await this.getAcc();
+              }).catch(err => {
+                enableSnackbar(this.reqStatus, err.message, "error")
+              }).finally(() => {
+                this.submitLoading = false;
+              })
+            } else {
+              this.editAcc(payload).then(async () => {
+                this.$emit('close');
+                enableSnackbar(this.reqStatus, "Accomplishment edited successfully!", "info");
+                this.$emit('show-alert', this.reqStatus);
+                await this.getAcc();
+              }).catch(err => {
+                enableSnackbar(this.reqStatus, err.message, "error")
+              }).finally(() => {
+                this.submitLoading = false;
+              })
+            }
           }
-        }).finally(() => {
+        }).catch(err => {
           this.submitLoading = false;
+          enableSnackbar(this.reqStatus, err.message, "error")
         })
       }
     },
