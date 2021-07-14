@@ -243,6 +243,7 @@
               enableSnackbar(this.reqStatus, "Intro updated successfully!", "info");
               this.$emit('show-alert', this.reqStatus);
               await this.getProfile();
+              this.$emit('edited')
             }).catch(err => {
               enableSnackbar(this.reqStatus, err.message, "error")
             }).finally(() => {

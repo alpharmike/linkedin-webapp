@@ -26,7 +26,7 @@
 
       <custom-dialog :show.sync="dialogs.intro">
         <template v-slot:body>
-          <intro-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.intro = false"/>
+          <intro-form @edited="currProfile = {...profile}" @show-alert="(alert) => reqStatus = alert" @close="dialogs.intro = false"/>
         </template>
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.background">
