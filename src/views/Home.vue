@@ -31,11 +31,15 @@ export default {
   },
 
   methods: {
-    ...mapActions("typeModule", ["setTypeItems"])
+    ...mapActions("typeModule", ["setTypeItems"]),
+    ...mapActions("profileModule", ["getProfile"])
   },
 
   async created() {
+    this.loading = true;
+    await this.getProfile();
     await this.setTypeItems("postVisTypes")
+    this.loading = false;
   }
 }
 </script>

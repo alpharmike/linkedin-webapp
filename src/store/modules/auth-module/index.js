@@ -16,8 +16,8 @@ const actions = {
   async login(context, payload) {
     try {
       let response = await axios.post(LOGIN, payload);
-      context.commit("setToken", "Bearer " + response.data.token);
-      localStorage.setItem("LinkedinToken", state.token);
+      await context.commit("setToken", "Bearer " + response.data.token);
+      await localStorage.setItem("LinkedinToken", state.token);
       axios.defaults.headers.common['Authorization'] = state.token;
     } catch (e) {
       console.log(e);

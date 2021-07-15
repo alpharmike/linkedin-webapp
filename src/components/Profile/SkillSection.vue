@@ -9,14 +9,32 @@
             :key="skill.name + skill.id"
           >
             <template v-slot:prependIcon>
-              <v-row align="center" justify="center">
-                <v-avatar
-                  left
-                  size="30"
-                  class="primary"
-                >
-                  <span class="white--text"><!--{{skill.endorsements.length}}-->2</span>
-                </v-avatar>
+              <v-row align="center" justify="space-between" dense no-gutters>
+                <v-col cols="1" align-self="center" align="center">
+                  <v-avatar
+                    left
+                    size="25"
+                    class="primary"
+                  >
+                    <span class="white--text"><!--{{skill.endorsements.length}}-->2</span>
+                  </v-avatar>
+                </v-col>
+                <v-col cols="2" align-self="center" align="center">
+                  <v-btn
+                    v-if="!isMe"
+                    text
+                    icon
+                    small
+                    color="accent"
+                    @click.stop="() => initEndorsement(skill)"
+                  >
+                    <v-icon>mdi-thumb-up</v-icon>
+                  </v-btn>
+
+                  <v-btn small v-else icon @click.stop="() => initRemoval(skill)">
+                    <v-icon color="error">mdi-delete</v-icon>
+                  </v-btn>
+                </v-col>
               </v-row>
 
             </template>
@@ -53,6 +71,21 @@
         </span>
       </template>
     </custom-card>
+    <custom-dialog width="40%" :show.sync="dialogs.endorsementDialog">
+      <template v-slot:body>
+        <endorsement-form :skill="endorsedSkill" @show-alert="(alert) => reqStatus = alert" @close="dialogs.endorsementDialog = false" />
+      </template>
+    </custom-dialog>
+
+    <dialog-alert
+      title="Skill Removal"
+      msg="Are you sure you wan to remove the selected skill?"
+      :show.sync="remove.dialog"
+      :is-loading="remove.loading"
+      @cancel="remove.dialog = false"
+      @accept="deleteSkill"
+    />
+    <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
   </div>
 </template>
 
@@ -60,10 +93,14 @@
   import CustomCard from "../Cards/CustomCard";
   import {mapActions, mapGetters} from "vuex";
   import {enableSnackbar} from "../../utils/error_utils";
+  import CustomDialog from "../Dialogs/CustomDialog";
+  import EndorsementForm from "../Forms/EndorsementForm";
+  import DialogAlert from "../Alerts/DialogAlert";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   export default {
     name: "SkillSection",
-    components: {CustomCard},
+    components: {CustomAlert, DialogAlert, EndorsementForm, CustomDialog, CustomCard},
 
     computed: {
       ...mapGetters({
@@ -78,8 +115,11 @@
 
     data() {
       return {
-        skillsDialog: false,
-        editingSkill: null,
+        dialogs: {
+          skillsDialog: false,
+          endorsementDialog: false,
+        },
+        endorsedSkill: null,
         reqStatus: {
           message: "",
           type: "",
@@ -95,11 +135,6 @@
 
     methods: {
       ...mapActions("sectionModule", ["removeSkill", "getSkills"]),
-      editSkill(skill) {
-        this.editingSkill = skill;
-        this.skillsDialog = true;
-      },
-
       initRemoval(skill) {
         this.remove.skillId = skill.id;
         this.remove.dialog = true;
@@ -118,14 +153,11 @@
         }).finally(() => {
           this.remove.loading = false;
         })
-      }
-    },
+      },
 
-    watch: {
-      skillDialog: function (value) {
-        if (!value) {
-          this.editingSkill = null;
-        }
+      initEndorsement(skill) {
+        this.endorsedSkill = skill
+        this.dialogs.endorsementDialog = true
       }
     },
   }

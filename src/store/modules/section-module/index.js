@@ -1,5 +1,12 @@
 import axios from '../../../network/axios';
-import {ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE, BACKGROUND, BACKGROUND_TYPE, SKILL} from "../../../network/API";
+import {
+  ACCOMPLISHMENT,
+  ACCOMPLISHMENT_TYPE,
+  ADD_ALL_SKILLS,
+  BACKGROUND,
+  BACKGROUND_TYPE, ENDORSEMENT, GET_SKILLS,
+  SKILL
+} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -162,26 +169,20 @@ const actions = {
     }
   },
 
-  async getSkills(context, payload) {
+  async createSkills(context, payload) {
     try {
-      const url = payload ? `${SKILL}/${payload}` : SKILL;
-      let response = await axios.get(url);
-      console.log(response);
-      context.commit('setSkills', response.data);
+      let response = await axios.post(ADD_ALL_SKILLS, payload);
     } catch (e) {
-      console.log(e);
       throw Error(errors[e.response.status.toString()])
     }
   },
 
-  async editSkill(context, payload) {
+  async getSkills(context, payload) {
     try {
-      console.log(payload)
-      const id = payload.id;
-      delete payload.id;
-      delete  payload.profileId;
-      let response = await axios.put(`${SKILL}/${id}`, payload);
+      const url = payload ? `${GET_SKILLS}/${payload}` : GET_SKILLS;
+      let response = await axios.get(url);
       console.log(response);
+      context.commit('setSkills', response.data);
     } catch (e) {
       console.log(e);
       throw Error(errors[e.response.status.toString()])
@@ -199,7 +200,14 @@ const actions = {
     }
   },
 
-
+  async endorseSkill(context, payload) {
+    try {
+      // creation of an endorsement
+      let response = await axios.post(ENDORSEMENT, payload);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
 };
 
 const getters = {

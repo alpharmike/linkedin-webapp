@@ -3,7 +3,7 @@ import {
   ACCOMPLISHMENT_TYPE,
   BACKGROUND_TYPE,
   FORMER_NAME_VISIBILITY_TYPE,
-  INDUSTRY_TYPE, POST_VISIBILITY_TYPE
+  INDUSTRY_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
 } from "../../../network/API";
 import {errors} from "../../../network/errors";
 
@@ -11,6 +11,8 @@ const state = {
   industries: [],
   formerNameVisTypes: [],
   postVisTypes: [],
+  skillLevels: [],
+  relationKnowledgeTypes: [],
 };
 
 const mutations = {
@@ -45,6 +47,12 @@ const getters = {
   postVisTypes: (state) => {
     return state.postVisTypes;
   },
+  skillLevels: (state) => {
+    return state.skillLevels;
+  },
+  relationKnowledgeTypes: (state) => {
+    return state.relationKnowledgeTypes;
+  },
 };
 
 function getTypeAPI(type) {
@@ -55,6 +63,10 @@ function getTypeAPI(type) {
       return FORMER_NAME_VISIBILITY_TYPE
     case 'postVisTypes':
       return POST_VISIBILITY_TYPE;
+    case 'skillLevels':
+      return SKILL_LEVEL_TYPE;
+    case 'relationKnowledgeTypes':
+      return RELATION_KNOWLEDGE_TYPE;
   }
 }
 

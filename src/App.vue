@@ -65,7 +65,7 @@
 <script>
 
   import ProfileDropdown from "./components/Dropdown/ProfileDropdown";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
 
   export default {
     name: 'App',
@@ -75,6 +75,12 @@
     },
     data: () => ({
       //
-    })
+    }),
+
+    methods: {
+      ...mapActions({
+        getProfile: "profileModule/getProfile"
+      })
+    },
   }
 </script>

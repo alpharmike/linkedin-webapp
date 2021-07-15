@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {PROFILE, PROFILE_BY_USERNAME} from "../../../network/API";
+import {NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -38,7 +38,9 @@ const state = {
     urlToProfile: "",
     formerNameVisibilityType: "",
     phoneType: ""
-  }
+  },
+
+  numOfConnections: 0
 };
 
 const mutations = {
@@ -58,8 +60,9 @@ const mutations = {
 const actions = {
   async getProfile(context) {
     try {
-      console.log(axios.defaults.headers);
+      console.log(window.$token())
       let response = await axios.get(PROFILE);
+      // let numOfConn = await axios.get(NUM_OF_CONN);
       const payload = response.data;
       delete payload.password;
       context.commit('setProfile', payload);
@@ -89,7 +92,7 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
-  }
+  },
   /*async getAllUsers(context, filterKey) {
     try {
       let response = await axios.get(

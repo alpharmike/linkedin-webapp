@@ -73,6 +73,7 @@
   import {mapActions} from "vuex";
   import {enableSnackbar} from "../../utils/error_utils";
   import CustomAlert from "../Alerts/CustomAlert";
+  import axios from "../../network/axios";
 
   setInteractionMode('eager');
 
@@ -122,7 +123,9 @@
     },
 
     methods: {
-      ...mapActions("authModule", ["login"]),
+      ...mapActions({
+        login: "authModule/login"
+      }),
       submitLoginForm() {
         this.loading = true;
         this.$refs.loginObserver.validate().then(result => {
@@ -131,8 +134,8 @@
               ...this.userInfo
             }
             // Add API Code
-            this.login(payload).then(() => {
-              this.$router.replace({name: "Home"})
+            this.login(payload).then(async () => {
+              await this.$router.replace({name: "Home"})
             }).catch(err => {
               enableSnackbar(this.error, err.message, "error")
             }).finally(() => {

@@ -46,7 +46,7 @@
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.skills">
         <template v-slot:body>
-          <skill-form @close="dialogs.skills = false"/>
+          <skill-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.skills = false"/>
         </template>
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.about">
@@ -143,6 +143,8 @@
       async initTypes() {
         await this.setTypeItems("industries");
         await this.setTypeItems("formerNameVisTypes");
+        await this.setTypeItems("skillLevels");
+        await this.setTypeItems("relationKnowledgeTypes");
       },
 
       async getProfileBackgrounds(id) {
@@ -160,7 +162,6 @@
     },
 
     async created() {
-      console.log("here")
       this.loading = true;
       await this.getProfile();
       await this.initSubSections();

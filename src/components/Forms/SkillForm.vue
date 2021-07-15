@@ -55,6 +55,7 @@
 <script>
   import CustomCard from "../Cards/CustomCard";
   import {mapActions, mapGetters} from "vuex";
+  import {enableSnackbar} from "../../utils/error_utils";
 
 
   export default {
@@ -70,29 +71,29 @@
         skills: {
           selected: [],
         },
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
         submitLoading: false,
       }
     },
 
     methods: {
-      ...mapActions('sectionModule', ['createItem']),
+      ...mapActions('sectionModule', ['createSkills', "getSkills"]),
 
       submitForm() {
         this.submitLoading = true;
-        const payload = {
-          title: "skills",
-          data: []
-        }
-        this.skills.selected.forEach(skill => {
-          payload.data.push({
-            name: skill
-          })
-        })
-
-        this.createItem(payload).then(() => {
-
-        }).catch(error => {
-
+        let payload = [...this.skills.selected];
+        console.log(payload);
+        this.createSkills(payload).then(async () => {
+          this.$emit('close');
+          enableSnackbar(this.reqStatus, "Skills added successfully!", "info");
+          this.$emit('show-alert', this.reqStatus);
+          await this.getSkills();
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
         }).finally(() => {
           this.submitLoading = false;
         })
