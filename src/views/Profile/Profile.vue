@@ -125,7 +125,9 @@
         setTypeItems: "typeModule/setTypeItems",
         getBackgrounds: "sectionModule/getBackgrounds",
         getAcc: "sectionModule/getAcc",
-        getSkills: "sectionModule/getSkills"
+        getSkills: "sectionModule/getSkills",
+        getConnectionsSent: "networkModule/getConnectionsSent",
+        getConnectionsReceived: "networkModule/getConnectionsReceived"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -176,7 +178,8 @@
         await this.getProfileBackgrounds(this.visitingProfile.id);
         await this.getProfileAcc(this.visitingProfile.id);
         await this.getSkills(this.visitingProfile.id);
-        console.log(this.skills);
+        await this.getConnectionsSent(); // to check if I have sent conn request to the user
+        await this.getConnectionsReceived(); // to check if I have sent conn request to the user
         this.currProfile = this.visitingProfile;
       } else {
         await this.getProfileBackgrounds();

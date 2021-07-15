@@ -58,7 +58,6 @@ const mutations = {
 const actions = {
   async getProfile(context) {
     try {
-      console.log(window.$token())
       let response = await axios.get(PROFILE);
       let numOfConn = await axios.get(NUM_OF_CONN);
       const payload = response.data;
@@ -87,6 +86,8 @@ const actions = {
       console.log(payload)
       let response = await axios.get(`${PROFILE_BY_USERNAME}/${payload}`);
       const data = response.data;
+      let numOfConn = await axios.get(`${NUM_OF_CONN}/${data.id}`);
+      data.conn = numOfConn.data;
       await context.commit('setVisitingProfile', data);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])

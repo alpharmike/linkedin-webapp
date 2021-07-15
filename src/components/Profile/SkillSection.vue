@@ -129,6 +129,7 @@
       },
 
       deleteSkill() {
+        // TODO: ADD API
         this.remove.loading = true;
         this.removeSkill(this.remove.skillId).then(async () => {
           this.remove.loading = false;

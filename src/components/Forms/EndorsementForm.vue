@@ -104,7 +104,7 @@
             model: "skillLevel"
           },
           {
-            name: `How do you know about ${this.visitingProfile.firstName}’s ${this.skill.name} skills??`,
+            name: `How do you know about ${this.visitingProfile.firstName}’s ${this.skill.name} skills?`,
             rules: "required",
             required: true,
             type: "select",

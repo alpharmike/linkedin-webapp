@@ -1,7 +1,7 @@
 import axios from '../../../network/axios';
 import {
   ACCOMPLISHMENT_TYPE,
-  BACKGROUND_TYPE,
+  BACKGROUND_TYPE, CONNECT_TYPE,
   FORMER_NAME_VISIBILITY_TYPE,
   INDUSTRY_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
 } from "../../../network/API";
@@ -13,6 +13,7 @@ const state = {
   postVisTypes: [],
   skillLevels: [],
   relationKnowledgeTypes: [],
+  connectTypes: [],
 };
 
 const mutations = {
@@ -53,6 +54,9 @@ const getters = {
   relationKnowledgeTypes: (state) => {
     return state.relationKnowledgeTypes;
   },
+  connectTypes: (state) => {
+    return state.connectTypes;
+  },
 };
 
 function getTypeAPI(type) {
@@ -67,6 +71,8 @@ function getTypeAPI(type) {
       return SKILL_LEVEL_TYPE;
     case 'relationKnowledgeTypes':
       return RELATION_KNOWLEDGE_TYPE;
+    case 'connectTypes':
+      return CONNECT_TYPE;
   }
 }
 
