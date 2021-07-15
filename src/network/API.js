@@ -5,6 +5,7 @@ export const BACKGROUND_TYPE = '/background-type';
 export const ACCOMPLISHMENT_TYPE = '/accomplishment-type';
 export const INDUSTRY_TYPE = '/industry-type';
 export const FORMER_NAME_VISIBILITY_TYPE = '/former-name-visibility-type';
+export const POST_VISIBILITY_TYPE = '/show-post-type';
 export const BACKGROUND = '/background';
 export const ACCOMPLISHMENT = '/accomplishment';
 export const SKILL = '/skill';

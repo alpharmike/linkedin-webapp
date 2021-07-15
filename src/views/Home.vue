@@ -1,15 +1,41 @@
 <template>
-  <hello-world />
+  <div class="fill-height">
+    <v-container v-if="!loading" fluid>
+      <v-row justify="center" align="center">
+        <v-col cols="7">
+          <create-post-section />
+        </v-col>
+      </v-row>
+
+    </v-container>
+    <spinner v-else/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld'
+import CreatePostSection from "../components/Feed/CreatePostSection";
+import Spinner from "../components/Loaders/Spinner";
+import {mapActions} from "vuex";
 
 export default {
   name: 'Home',
 
   components: {
-    HelloWorld
+    Spinner,
+    CreatePostSection,
+  },
+  data() {
+    return {
+      loading: false,
+    }
+  },
+
+  methods: {
+    ...mapActions("typeModule", ["setTypeItems"])
+  },
+
+  async created() {
+    await this.setTypeItems("postVisTypes")
   }
 }
 </script>

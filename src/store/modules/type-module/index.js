@@ -2,15 +2,15 @@ import axios from '../../../network/axios';
 import {
   ACCOMPLISHMENT_TYPE,
   BACKGROUND_TYPE,
-  BACKGROUND_TYPES,
   FORMER_NAME_VISIBILITY_TYPE,
-  INDUSTRY_TYPE
+  INDUSTRY_TYPE, POST_VISIBILITY_TYPE
 } from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
   industries: [],
   formerNameVisTypes: [],
+  postVisTypes: [],
 };
 
 const mutations = {
@@ -42,6 +42,9 @@ const getters = {
   formerNameVisTypes: (state) => {
     return state.formerNameVisTypes;
   },
+  postVisTypes: (state) => {
+    return state.postVisTypes;
+  },
 };
 
 function getTypeAPI(type) {
@@ -50,6 +53,8 @@ function getTypeAPI(type) {
       return INDUSTRY_TYPE
     case 'formerNameVisTypes':
       return FORMER_NAME_VISIBILITY_TYPE
+    case 'postVisTypes':
+      return POST_VISIBILITY_TYPE;
   }
 }
 

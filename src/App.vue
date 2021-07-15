@@ -18,6 +18,15 @@
           fab
           plain
           tile
+          to="/feed"
+        >
+          <v-icon>mdi-home</v-icon>
+        </v-btn>
+        <v-btn
+          class="ma-2"
+          fab
+          plain
+          tile
           to="/network"
         >
           <v-icon>mdi-account-group</v-icon>

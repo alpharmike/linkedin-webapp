@@ -13,7 +13,7 @@
     props: {
       initials: {type: String, default: ''},
       size: {type: String, default: '48'},
-      fontClass: {type: String, default: 'white--text text-h5'}
+      fontClass: {type: String, default: 'white--text text-h5'},
     }
   }
 </script>
