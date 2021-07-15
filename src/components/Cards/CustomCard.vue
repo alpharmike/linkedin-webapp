@@ -1,6 +1,6 @@
 <template>
-  <v-card :loading="cardLoading" :disabled="disabled" elevation="5">
-    <v-card-title class="my-0 py-0 font-weight-bold">
+  <v-card :loading="cardLoading" :disabled="disabled" elevation="5" :color="color">
+    <v-card-title class="my-0 py-0 font-weight-bold" v-if="!noHeader">
       <v-row justify="space-between" class="align-center">
         <v-col class="justify-start align-center" :cols="!headerButton ? 12 : 11">
           <slot name="header">
@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-divider v-if="title" class="mb-2" />
+    <v-divider v-if="title && !noHeader" class="mb-2" />
     <v-card-text>
       <slot name="body"/>
     </v-card-text>
@@ -51,7 +51,9 @@
       cardLoading: {type: Boolean, default: false},
       btnColor: {type: String, default: 'primary'},
       disabled: {type: Boolean, default: false},
-      subSection: {type: Boolean, default: false}
+      subSection: {type: Boolean, default: false},
+      noHeader: {type: Boolean, default: false},
+      color: {type: String, default: ''}
     }
   }
 </script>

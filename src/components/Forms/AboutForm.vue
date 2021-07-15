@@ -6,7 +6,7 @@
           <v-col cols="12">
             <v-textarea
               label="Summary"
-              v-model="summary"
+              v-model="info.about"
               clearable
               outlined
               dense
@@ -40,7 +40,7 @@
         width="150"
         type="submit"
         :loading="submitLoading"
-        :disabled="submitLoading"
+        :disabled="submitLoading || info.about === ''"
         @click="submitForm"
         small
       >
@@ -52,24 +52,56 @@
 
 <script>
   import CustomCard from "../Cards/CustomCard";
+  import {mapActions, mapGetters} from "vuex";
+  import {enableSnackbar} from "../../utils/error_utils";
 
   export default {
     name: "AboutForm",
     components: {CustomCard},
+    computed: {
+      ...mapGetters({
+        profile: "profileModule/profile"
+      }),
+    },
     data() {
       return {
         // Set it to value from profile at mounted/created
-        summary: "",
+        info: {
+          about: "",
+        },
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
         submitLoading: false
       }
     },
 
     methods: {
+      ...mapActions({
+        editProfile: "profileModule/editProfile",
+        getProfile: "profileModule/getProfile",
+      }),
       submitForm() {
         this.submitLoading = true;
-
-
+        let payload = {...this.info};
+        this.editProfile(payload).then(async () => {
+          this.$emit('close');
+          enableSnackbar(this.reqStatus, "About section updated successfully!", "info");
+          this.$emit('show-alert', this.reqStatus);
+          await this.getProfile();
+          this.$emit('edited');
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.submitLoading = false;
+        })
       }
+    },
+
+    mounted() {
+      this.info = {...this.profile};
     }
   }
 </script>

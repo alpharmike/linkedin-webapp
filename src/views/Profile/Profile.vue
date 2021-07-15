@@ -9,7 +9,7 @@
             </v-col>
 
             <v-col cols="12">
-              <about-section :is-me="isMyProfile" @edit="dialogs.about = true"/>
+              <about-section :about="currProfile.about" :is-me="isMyProfile" @edit="dialogs.about = true"/>
             </v-col>
 
             <v-col cols="12">
@@ -46,7 +46,7 @@
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.about">
         <template v-slot:body>
-          <about-form @close="dialogs.about = false"/>
+          <about-form @edited="currProfile = {...profile}" @show-alert="(alert) => reqStatus = alert" @close="dialogs.about = false"/>
         </template>
       </custom-dialog>
 

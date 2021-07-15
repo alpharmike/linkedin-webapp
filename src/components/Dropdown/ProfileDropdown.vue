@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-menu
       bottom
-      min-width="200px"
+      min-width="200"
       rounded
       offset-y
     >
@@ -33,6 +33,14 @@
             <p class="text-caption mt-1">
               {{ profile.email }}
             </p>
+            <v-btn
+              depressed
+              rounded
+              text
+              :to="`/profile/${profile.username}`"
+            >
+              Profile
+            </v-btn>
             <v-divider class="my-3"></v-divider>
             <v-btn
               depressed
@@ -62,6 +70,7 @@
       ...mapActions("authModule", ["logout"]),
       async exitApp() {
         await this.logout();
+        await this.$router.replace({name: "Login"})
       }
     }
   }

@@ -17,5 +17,8 @@ new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  mounted: async function () {
+    await store.dispatch("profileModule/getProfile");
+  }
 }).$mount('#app')

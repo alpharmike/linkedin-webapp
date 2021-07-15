@@ -3,23 +3,47 @@
     <v-app-bar
       app
       color="primary"
-      dark
       v-if="isAuthenticated"
+      max-height="100"
     >
-
-      <profile-dropdown />
-
+      <v-row align="center">
+        <profile-dropdown class="ml-2"/>
+      </v-row>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-row align="center" justify="end" class="mx-2">
+        <v-btn
+          class="ma-2"
+          fab
+          plain
+          tile
+          to="/network"
+        >
+          <v-icon>mdi-account-group</v-icon>
+        </v-btn>
+
+        <v-btn
+          class="ma-2"
+          fab
+          plain
+          tile
+        >
+          <v-icon>mdi-message</v-icon>
+        </v-btn>
+
+        <v-badge
+          class="ma-2"
+          color="accent"
+          content="2"
+          transition="slide-x-transition"
+          style="cursor: pointer;"
+          dot
+        >
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
+      </v-row>
+
     </v-app-bar>
 
     <v-main>
@@ -30,16 +54,17 @@
 
 <script>
 
-import ProfileDropdown from "./components/Dropdown/ProfileDropdown";
-import {mapGetters} from "vuex";
-export default {
-  name: 'App',
-  components: {ProfileDropdown},
-  computed: {
-    ...mapGetters("authModule", ["isAuthenticated"])
-  },
-  data: () => ({
-    //
-  })
-}
+  import ProfileDropdown from "./components/Dropdown/ProfileDropdown";
+  import {mapGetters} from "vuex";
+
+  export default {
+    name: 'App',
+    components: {ProfileDropdown},
+    computed: {
+      ...mapGetters("authModule", ["isAuthenticated"])
+    },
+    data: () => ({
+      //
+    })
+  }
 </script>

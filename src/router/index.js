@@ -27,7 +27,13 @@ const routes = [
     name: 'Profile',
     meta: {requiresAuth: true},
     component: () => import('../views/Profile/Profile.vue')
-  }
+  },
+  {
+    path: '/network',
+    name: 'Network',
+    meta: {requiresAuth: true},
+    component: () => import('../views/Network/Network.vue')
+  },
 ]
 
 const router = new VueRouter({
