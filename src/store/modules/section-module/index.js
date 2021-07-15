@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE, BACKGROUND, BACKGROUND_TYPE} from "../../../network/API";
+import {ACCOMPLISHMENT, ACCOMPLISHMENT_TYPE, BACKGROUND, BACKGROUND_TYPE, SKILL} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -18,12 +18,23 @@ const state = {
     },
     {
       title: "Skills",
-      children: []
+      children: [
+        "SQL",
+        "Back-End Web Development",
+        "Artificial Intelligence",
+        "jQuery",
+        "Information Technology",
+        "Convolutional Neural Networks",
+        "Web Design",
+        "User Experience",
+        "Date Mining"
+      ]
     },
   ],
 
   backgrounds: [],
   accomplishments: [],
+  skills: [],
 };
 
 const mutations = {
@@ -41,6 +52,10 @@ const mutations = {
 
   setAcc(state, payload) {
     state.accomplishments = payload;
+  },
+
+  setSkills(state, payload) {
+    state.skills = payload;
   },
 };
 
@@ -147,6 +162,43 @@ const actions = {
     }
   },
 
+  async getSkills(context, payload) {
+    try {
+      const url = payload ? `${SKILL}/${payload}` : SKILL;
+      let response = await axios.get(url);
+      console.log(response);
+      context.commit('setSkills', response.data);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async editSkill(context, payload) {
+    try {
+      console.log(payload)
+      const id = payload.id;
+      delete payload.id;
+      delete  payload.profileId;
+      let response = await axios.put(`${SKILL}/${id}`, payload);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async removeSkill(context, payload) {
+    try {
+      // payload is the id of the background to be deleted
+      let response = await axios.delete(`${SKILL}/${payload}`);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
 
 };
 
@@ -171,6 +223,9 @@ const getters = {
   },
   accomplishments: (state) => {
     return state.accomplishments;
+  },
+  skills: (state) => {
+    return state.skills;
   }
 };
 

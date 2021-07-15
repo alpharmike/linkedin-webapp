@@ -1,8 +1,9 @@
 <template>
   <div>
-    <custom-card title="Skills & Endorsements" header-button header-button-icon="mdi-plus" @header-button-click="$emit('add')">
+    <custom-card title="Skills & Endorsements" header-button header-button-icon="mdi-plus"
+                 @header-button-click="$emit('add')">
       <template v-slot:body>
-        <v-list dense>
+        <v-list dense v-if="skills.length > 0">
           <v-list-group
             v-for="skill in skills"
             :key="skill.name + skill.id"
@@ -14,7 +15,7 @@
                   size="30"
                   class="primary"
                 >
-                  <span class="white--text">{{skill.endorsements.length}}</span>
+                  <span class="white--text"><!--{{skill.endorsements.length}}-->2</span>
                 </v-avatar>
               </v-row>
 
@@ -23,9 +24,11 @@
               <v-list-item-title>{{skill.name}}</v-list-item-title>
             </template>
 
-            <v-list-item class="ml-5" v-for="endorsement in skill.endorsements" :key="endorsement.id">
+            <!--<v-list-item class="ml-5" v-for="endorsement in skill.endorsements" :key="endorsement.id">
               <v-list-item-content>
-                <v-list-item-title>{{`Endorsed by ${endorsement.endorser.firstName} + " " + ${endorsement.endorser.lastName}`}}</v-list-item-title>
+                <v-list-item-title>{{`Endorsed by ${endorsement.endorser.firstName} + " " +
+                  ${endorsement.endorser.lastName}`}}
+                </v-list-item-title>
                 <v-list-item-subtitle>{{endorsement.skillLevel}}</v-list-item-subtitle>
               </v-list-item-content>
 
@@ -41,9 +44,13 @@
                   </v-btn>
                 </v-row>
               </v-list-item-action>
-            </v-list-item>
+            </v-list-item>-->
           </v-list-group>
         </v-list>
+
+        <span v-else>
+          No skill has been added yet!
+        </span>
       </template>
     </custom-card>
   </div>
@@ -51,9 +58,76 @@
 
 <script>
   import CustomCard from "../Cards/CustomCard";
+  import {mapActions, mapGetters} from "vuex";
+  import {enableSnackbar} from "../../utils/error_utils";
+
   export default {
     name: "SkillSection",
-    components: {CustomCard}
+    components: {CustomCard},
+
+    computed: {
+      ...mapGetters({
+        skillsSection: "sectionModule/skillsSection",
+        skills: "sectionModule/skills",
+      }),
+    },
+
+    props: {
+      isMe: {type: Boolean, default: true}
+    },
+
+    data() {
+      return {
+        skillsDialog: false,
+        editingSkill: null,
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
+        remove: {
+          loading: false,
+          dialog: false,
+          skillId: ''
+        }
+      }
+    },
+
+    methods: {
+      ...mapActions("sectionModule", ["removeSkill", "getSkills"]),
+      editSkill(skill) {
+        this.editingSkill = skill;
+        this.skillsDialog = true;
+      },
+
+      initRemoval(skill) {
+        this.remove.skillId = skill.id;
+        this.remove.dialog = true;
+      },
+
+      deleteSkill() {
+        this.remove.loading = true;
+        this.removeSkill(this.remove.skillId).then(async () => {
+          this.remove.loading = false;
+          this.remove.dialog = false;
+          this.remove.skillId = '';
+          enableSnackbar(this.reqStatus, "Skill deleted successfully!", "error")
+          await this.getSkills();
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.remove.loading = false;
+        })
+      }
+    },
+
+    watch: {
+      skillDialog: function (value) {
+        if (!value) {
+          this.editingSkill = null;
+        }
+      }
+    },
   }
 </script>
 

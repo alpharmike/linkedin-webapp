@@ -34,6 +34,12 @@ const routes = [
     meta: {requiresAuth: true},
     component: () => import('../views/Network/Network.vue')
   },
+  {
+    path: '/chatroom',
+    name: 'ChatRoom',
+    meta: {requiresAuth: true},
+    component: () => import('../views/ChatRoom/Chat.vue')
+  },
 ]
 
 const router = new VueRouter({

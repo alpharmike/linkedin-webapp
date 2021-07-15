@@ -28,6 +28,7 @@
           fab
           plain
           tile
+          to="/chatroom"
         >
           <v-icon>mdi-message</v-icon>
         </v-btn>

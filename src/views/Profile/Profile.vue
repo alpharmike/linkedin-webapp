@@ -20,6 +20,11 @@
               <accomplishment-section :is-me="isMyProfile" @edited="(alert) => reqStatus = alert"
                                       @add="() => openSectionDialog('accomplishments')"/>
             </v-col>
+
+            <v-col cols="12">
+              <skill-section :is-me="isMyProfile" @edited="(alert) => reqStatus = alert"
+                                      @add="() => openSectionDialog('skills')"/>
+            </v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -72,10 +77,12 @@
   import {mapActions, mapGetters} from "vuex";
   import Spinner from "../../components/Loaders/Spinner";
   import CustomAlert from "../../components/Alerts/CustomAlert";
+  import SkillSection from "../../components/Profile/SkillSection";
 
   export default {
     name: "Profile",
     components: {
+      SkillSection,
       CustomAlert,
       Spinner,
       AccomplishmentSection,
@@ -116,7 +123,8 @@
         setChildren: "sectionModule/setChildren",
         setTypeItems: "typeModule/setTypeItems",
         getBackgrounds: "sectionModule/getBackgrounds",
-        getAcc: "sectionModule/getAcc"
+        getAcc: "sectionModule/getAcc",
+        getSkills: "sectionModule/getSkills"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -165,10 +173,12 @@
         await this.getUserProfile(username);
         await this.getProfileBackgrounds(this.visitingProfile.id);
         await this.getProfileAcc(this.visitingProfile.id);
+        await this.getSkills(this.visitingProfile.id);
         this.currProfile = this.visitingProfile;
       } else {
         await this.getProfileBackgrounds();
         await this.getProfileAcc();
+        await this.getSkills();
         this.currProfile = {...this.profile};
         console.log(this.currProfile)
       }

@@ -7,6 +7,7 @@ export const INDUSTRY_TYPE = '/industry-type';
 export const FORMER_NAME_VISIBILITY_TYPE = '/former-name-visibility-type';
 export const BACKGROUND = '/background';
 export const ACCOMPLISHMENT = '/accomplishment';
+export const SKILL = '/skill';
 export const SIGN_UP = '/sign-up';
 export const LOGIN = '/login';
 export const PROFILE = '/profile';
