@@ -112,7 +112,7 @@
           this.remove.loading = false;
           this.remove.dialog = false;
           this.remove.backgroundId = '';
-          enableSnackbar(this.reqStatus, "Background deleted successfully!", "error")
+          enableSnackbar(this.reqStatus, "Background deleted successfully!", "info")
           await this.getBackgrounds();
         }).catch(err => {
           enableSnackbar(this.reqStatus, err.message, "error")

@@ -16,7 +16,7 @@
                     size="25"
                     class="primary"
                   >
-                    <span class="white--text"><!--{{skill.endorsements.length}}-->2</span>
+                    <span class="white--text">{{skill.endorsementList.length}}</span>
                   </v-avatar>
                 </v-col>
                 <v-col cols="2" align-self="center" align="center">
@@ -42,27 +42,13 @@
               <v-list-item-title>{{skill.name}}</v-list-item-title>
             </template>
 
-            <!--<v-list-item class="ml-5" v-for="endorsement in skill.endorsements" :key="endorsement.id">
+            <v-list-item class="ml-5" v-for="endorsement in skill.endorsementList" :key="endorsement.id">
               <v-list-item-content>
-                <v-list-item-title>{{`Endorsed by ${endorsement.endorser.firstName} + " " +
-                  ${endorsement.endorser.lastName}`}}
+                <v-list-item-title>{{`Endorsed by ${endorsement.profileJson.firstName}
+                  ${endorsement.profileJson.lastName}`}}
                 </v-list-item-title>
-                <v-list-item-subtitle>{{endorsement.skillLevel}}</v-list-item-subtitle>
               </v-list-item-content>
-
-              <v-list-item-action>
-
-
-                <v-row>
-                  <v-btn icon @click="() => {}">
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="() => {}">
-                    <v-icon color="error">mdi-delete</v-icon>
-                  </v-btn>
-                </v-row>
-              </v-list-item-action>
-            </v-list-item>-->
+            </v-list-item>
           </v-list-group>
         </v-list>
 
@@ -73,7 +59,8 @@
     </custom-card>
     <custom-dialog width="40%" :show.sync="dialogs.endorsementDialog">
       <template v-slot:body>
-        <endorsement-form :skill="endorsedSkill" @show-alert="(alert) => reqStatus = alert" @close="dialogs.endorsementDialog = false" />
+        <endorsement-form :skill="endorsedSkill" @show-alert="(alert) => reqStatus = alert"
+                          @close="dialogs.endorsementDialog = false"/>
       </template>
     </custom-dialog>
 
@@ -85,7 +72,8 @@
       @cancel="remove.dialog = false"
       @accept="deleteSkill"
     />
-    <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
+    <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message"
+                  :type="reqStatus.type"/>
   </div>
 </template>
 

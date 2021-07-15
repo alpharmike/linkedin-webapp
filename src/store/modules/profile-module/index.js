@@ -39,8 +39,6 @@ const state = {
     formerNameVisibilityType: "",
     phoneType: ""
   },
-
-  numOfConnections: 0
 };
 
 const mutations = {
@@ -62,9 +60,10 @@ const actions = {
     try {
       console.log(window.$token())
       let response = await axios.get(PROFILE);
-      // let numOfConn = await axios.get(NUM_OF_CONN);
+      let numOfConn = await axios.get(NUM_OF_CONN);
       const payload = response.data;
       delete payload.password;
+      payload.conn = numOfConn.data;
       context.commit('setProfile', payload);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])

@@ -94,6 +94,7 @@
     computed: {
       ...mapGetters("profileModule", ["profile", "visitingProfile"]),
       ...mapGetters("typeModule", ["industries"]),
+      ...mapGetters("sectionModule", ["skills"]),
     },
 
     data() {
@@ -175,11 +176,13 @@
         await this.getProfileBackgrounds(this.visitingProfile.id);
         await this.getProfileAcc(this.visitingProfile.id);
         await this.getSkills(this.visitingProfile.id);
+        console.log(this.skills);
         this.currProfile = this.visitingProfile;
       } else {
         await this.getProfileBackgrounds();
         await this.getProfileAcc();
         await this.getSkills();
+        console.log(this.skills);
         this.currProfile = {...this.profile};
         console.log(this.currProfile)
       }

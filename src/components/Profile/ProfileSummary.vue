@@ -21,7 +21,7 @@
             </v-col>
             <v-col cols="12">
               <a href="/register" style="text-decoration: none;">
-                <span class="text-subtitle-2 text--lighten-5">{{ /*profile.industry +*/ " Connections" }}</span>
+                <span class="text-subtitle-2 text--lighten-5">{{ profile.conn + " Connections" }}</span>
               </a>
             </v-col>
             <v-col cols="3" v-if="isMe">
