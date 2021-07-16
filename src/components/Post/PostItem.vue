@@ -15,9 +15,11 @@
       <v-row justify="space-between" align="center" class="py-1 px-4">
         <v-col cols="12" md="2" sm="2">
           <v-btn
+            v-if="actionsAllowed"
             small
             outlined
             color="primary lighten-2"
+            @click="dialogs.addCommentDialog = true"
           >
             Add Comment
           </v-btn>
@@ -25,6 +27,7 @@
         <v-col cols="12" md="3" sm="4">
           <v-row>
             <v-btn
+              v-if="actionsAllowed"
               icon
               color="red"
               @click="toggleLike"
@@ -35,12 +38,25 @@
             <v-btn
               icon
               color="primary lighten-4"
+              @click="dialogs.commentsDialog = true"
             >
               <v-icon>mdi-comment</v-icon>
             </v-btn>
           </v-row>
         </v-col>
       </v-row>
+
+      <custom-dialog :show.sync="dialogs.addCommentDialog" width="40%">
+        <template v-slot:body>
+          <comment-form :post="post" @close="dialogs.addCommentDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
+        </template>
+      </custom-dialog>
+      <custom-dialog :show.sync="dialogs.commentsDialog" width="60%">
+        <template v-slot:body>
+          <comments-section :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
+        </template>
+      </custom-dialog>
+      <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
 </template>
@@ -49,19 +65,32 @@
   import CustomCard from "../Cards/CustomCard";
   import {mapActions, mapGetters} from "vuex";
   import {enableSnackbar} from "../../utils/error_utils";
+  import CustomDialog from "../Dialogs/CustomDialog";
+  import CommentForm from "../Forms/CommentForm";
+  import CustomAlert from "../Alerts/CustomAlert";
+  import CommentsSection from "./CommentsSection";
 
   export default {
     name: "PostItem",
-    components: {CustomCard},
+    components: {CommentsSection, CustomAlert, CommentForm, CustomDialog, CustomCard},
     props: {
       post: {type: Object}
     },
 
     computed: {
       ...mapGetters({
-        profile: "profileModule/profile"
+        profile: "profileModule/profile",
+        peopleInNetwork: "networkModule/peopleInNetwork",
       }),
+
+      actionsAllowed() {
+        if (this.post.profileId === this.profile.id) return true;
+        // another user, in this case, check if the user in my network
+        const index = this.peopleInNetwork.findIndex(userProfile => userProfile.id === this.post.profileId);
+        return index >= 0;
+      },
       alreadyLiked() {
+        console.log(this.post)
         const index = this.post.likeJsons.findIndex(likeItem => likeItem.profileId === this.profile.id);
         console.log(index)
         return index >= 0;
@@ -70,6 +99,21 @@
       myPostLike() {
         const index = this.post.likeJsons.findIndex(likeItem => likeItem.profileId === this.profile.id);
         return this.post.likeJsons[index];
+      }
+    },
+
+    data() {
+      return {
+        dialogs: {
+          addCommentDialog: false,
+          commentsDialog: false,
+
+        },
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
       }
     },
 
@@ -82,8 +126,8 @@
         console.log(this.post);
         console.log(this.myPostLike);
         if (this.alreadyLiked) {
-          this.removePostLike(this.myPostLike.id).then(() => {
-            this.$emit('toggle-like');
+          this.removePostLike(this.myPostLike.id).then(async () => {
+            this.$emit('post-action');
           }).catch(err => {
             enableSnackbar(this.reqStatus, err.message, "error")
             this.$emit('error', this.reqStatus)
@@ -92,14 +136,14 @@
           const payload = {
             postId: this.post.id
           }
-          this.likePost(payload).then(() => {
-            this.$emit('toggle-like');
+          this.likePost(payload).then(async () => {
+            this.$emit('post-action');
           }).catch(err => {
             enableSnackbar(this.reqStatus, err.message, "error")
             this.$emit('error', this.reqStatus)
           })
         }
-      }
+      },
     }
   }
 </script>

@@ -13,7 +13,7 @@
             </v-col>
 
             <v-col cols="12">
-              <featured-section />
+              <featured-section :profile="currProfile" :is-me="isMyProfile" />
             </v-col>
 
             <v-col cols="12">
@@ -108,6 +108,7 @@
       ...mapGetters("profileModule", ["profile", "visitingProfile"]),
       ...mapGetters("typeModule", ["industries"]),
       ...mapGetters("sectionModule", ["skills"]),
+      ...mapGetters("postModule", ["posts"]),
     },
 
     data() {
@@ -127,6 +128,7 @@
         },
         loading: false,
         currProfile: {},
+        currPosts: {},
         isMyProfile: true,
       }
     },
@@ -142,7 +144,8 @@
         getSkills: "sectionModule/getSkills",
         getConnectionsSent: "networkModule/getConnectionsSent",
         getConnectionsReceived: "networkModule/getConnectionsReceived",
-        getPosts: "postModule/getPosts"
+        getPosts: "postModule/getPosts",
+        getPeopleInNetwork: "networkModule/getPeopleInNetwork"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -194,8 +197,10 @@
         await this.getProfileBackgrounds(this.visitingProfile.id);
         await this.getProfileAcc(this.visitingProfile.id);
         await this.getSkills(this.visitingProfile.id);
+        await this.getPosts(this.visitingProfile.id);
         await this.getConnectionsSent(); // to check if I have sent conn request to the user
         await this.getConnectionsReceived(); // to check if I have sent conn request to the user
+        await this.getPeopleInNetwork();
         this.currProfile = this.visitingProfile;
       } else {
         await this.getProfileBackgrounds();

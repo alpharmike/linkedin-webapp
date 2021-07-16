@@ -47,6 +47,8 @@
       >
         Submit
       </v-btn>
+
+      <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
 </template>
@@ -55,14 +57,18 @@
   import CustomCard from "../Cards/CustomCard";
   import {mapActions, mapGetters} from "vuex";
   import {enableSnackbar} from "../../utils/error_utils";
+  import CustomAlert from "../Alerts/CustomAlert";
 
   export default {
     name: "CommentForm",
-    components: {CustomCard},
+    components: {CustomAlert, CustomCard},
     computed: {
       ...mapGetters({
         profile: "profileModule/profile"
       }),
+    },
+    props: {
+      post: {type: Object, required: true}
     },
     data() {
       return {
@@ -81,18 +87,17 @@
 
     methods: {
       ...mapActions({
-        editProfile: "profileModule/editProfile",
-        getProfile: "profileModule/getProfile",
+        createComment: "postModule/createComment"
+
       }),
       submitForm() {
         this.submitLoading = true;
-        let payload = {...this.info};
-        this.editProfile(payload).then(async () => {
+        let payload = {...this.commentInfo, postId: this.post.id};
+        this.createComment(payload).then(async () => {
           this.$emit('close');
-          enableSnackbar(this.reqStatus, "About section updated successfully!", "info");
+          enableSnackbar(this.reqStatus, "Comment added successfully!", "info");
+          this.$emit('comment');
           this.$emit('show-alert', this.reqStatus);
-          await this.getProfile();
-          this.$emit('edited');
         }).catch(err => {
           enableSnackbar(this.reqStatus, err.message, "error")
         }).finally(() => {

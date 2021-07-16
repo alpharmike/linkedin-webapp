@@ -33,4 +33,5 @@ export const POST = '/post';
 export const LIKE_POST = '/post/like';
 export const REMOVE_POST_LIKE = '/post/like';
 export const CREATE_COMMENT = '/post/comment';
+export const NETWORK = '/network';
 

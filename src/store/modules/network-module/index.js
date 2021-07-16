@@ -1,5 +1,6 @@
 import axios from '../../../network/axios';
 import {
+  NETWORK,
   NUM_OF_CONN, PENDING_CONNECTION_REQUESTS,
   PROFILE,
   PROFILE_BY_USERNAME,
@@ -11,7 +12,8 @@ import {errors} from "../../../network/errors";
 const state = {
   connectionsReceived: [],
   connectionsSent: [],
-  pendingRequestsReceived: []
+  pendingRequestsReceived: [],
+  peopleInNetwork: []
 };
 
 const mutations = {
@@ -25,6 +27,10 @@ const mutations = {
 
   setPendingRequestsReceived(state, payload) {
     state.pendingRequestsReceived = payload;
+  },
+
+  setPeopleInNetwork(state, payload) {
+    state.peopleInNetwork = payload;
   }
 };
 
@@ -78,6 +84,16 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
+  },
+
+  async getPeopleInNetwork(context, payload) {
+    try {
+      let response = await axios.get(NETWORK);
+      console.log(response.data);
+      context.commit('setPeopleInNetwork', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
   }
 };
 
@@ -92,6 +108,9 @@ const getters = {
 
   pendingRequestsReceived: (state) => {
     return state.pendingRequestsReceived;
+  },
+  peopleInNetwork: (state) => {
+    return state.peopleInNetwork;
   },
 };
 

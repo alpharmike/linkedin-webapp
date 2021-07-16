@@ -3,7 +3,7 @@ import {errors} from "../../../network/errors";
 import {CREATE_COMMENT, LIKE_POST, POST, REMOVE_POST_LIKE} from "../../../network/API";
 
 const state = {
-  myPosts: [],
+  posts: [],
 };
 
 const mutations = {
@@ -21,10 +21,10 @@ const actions = {
     }
   },
 
-  async getPosts(context) {
+  async getPosts(context, payload) {
     try {
-      let response = await axios.get(POST);
-      context.commit('setPosts', response.data);
+      let response = await axios.get(payload ? `${POST}/${payload}` : POST);
+      await context.commit('setPosts', response.data);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
@@ -50,7 +50,7 @@ const actions = {
   async createComment(context, payload) {
     try {
       // payload is the like post id
-      let response = await axios.delete(`${CREATE_COMMENT}/${payload}`);
+      let response = await axios.post(CREATE_COMMENT, payload);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
@@ -60,7 +60,7 @@ const actions = {
 };
 
 const getters = {
-  myPosts: (state) => {
+  posts: (state) => {
     return state.myPosts;
   },
 };
