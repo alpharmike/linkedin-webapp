@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME, SEARCH_PROFILE} from "../../../network/API";
+import {FULL_PROFILE, NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME, SEARCH_PROFILE} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -58,7 +58,7 @@ const mutations = {
 const actions = {
   async getProfile(context) {
     try {
-      let response = await axios.get(PROFILE);
+      let response = await axios.get(FULL_PROFILE);
       let numOfConn = await axios.get(NUM_OF_CONN);
       const payload = response.data;
       delete payload.password;

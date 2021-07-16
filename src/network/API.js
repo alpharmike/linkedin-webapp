@@ -20,6 +20,7 @@ export const LANGUAGE = '/language';
 export const SIGN_UP = '/sign-up';
 export const LOGIN = '/login';
 export const PROFILE = '/profile';
+export const FULL_PROFILE = '/profile-json';
 export const PROFILE_BY_USERNAME = '/get-profile/username';
 export const SEARCH_PROFILE = '/search';
 export const NUM_OF_CONN = '/number-connection';

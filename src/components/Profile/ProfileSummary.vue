@@ -9,15 +9,31 @@
               {{ profile.firstName + " " + profile.lastName }}
             </span>
             </v-col>
-            <v-col cols="12" v-if="profile.headline">
-            <span class="text-body-1">
-              {{ profile.headline }}
-            </span>
+            <v-col cols="12">
+              <v-row justify="space-between">
+                <v-col cols="7" v-if="profile.headline">
+                  <span class="text-body-1">
+                  {{ profile.headline }}
+                  </span>
+                </v-col>
+                <v-col cols="5" v-if="profile.showCurrentPositionId && profile.currentPositionId">
+                  <span>{{profile.currentPosition.title}}</span>
+                </v-col>
+              </v-row>
             </v-col>
             <v-col cols="12">
-            <span class="text-subtitle-2">
-              {{ profile.locationInCountry }}
-            </span>
+              <v-col cols="12">
+                <v-row justify="space-between">
+                  <v-col cols="7">
+                    <span class="text-subtitle-2">
+                      {{ profile.locationInCountry }}
+                    </span>
+                  </v-col>
+                  <v-col cols="5" v-if="profile.showCurrentEducationId && profile.currentEducationId">
+                    <span>{{profile.currentEducation.title}}</span>
+                  </v-col>
+                </v-row>
+              </v-col>
             </v-col>
             <v-col cols="12">
               <a href="/register" style="text-decoration: none;">
