@@ -8,6 +8,7 @@
     >
       <v-row align="center">
         <profile-dropdown class="ml-2"/>
+        <search-bar />
       </v-row>
 
       <v-spacer></v-spacer>
@@ -66,10 +67,11 @@
 
   import ProfileDropdown from "./components/Dropdown/ProfileDropdown";
   import {mapActions, mapGetters} from "vuex";
+  import SearchBar from "./components/Inputs/SearchBar";
 
   export default {
     name: 'App',
-    components: {ProfileDropdown},
+    components: {SearchBar, ProfileDropdown},
     computed: {
       ...mapGetters("authModule", ["isAuthenticated"])
     },

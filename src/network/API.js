@@ -21,6 +21,7 @@ export const SIGN_UP = '/sign-up';
 export const LOGIN = '/login';
 export const PROFILE = '/profile';
 export const PROFILE_BY_USERNAME = '/get-profile/username';
+export const SEARCH_PROFILE = '/search';
 export const NUM_OF_CONN = '/number-connection';
 export const REQUEST_CONNECTION = '/send-pending-connection';
 export const REQUEST_CONNECTIONS_SENT = '/get-sender-connection'; // requests I have sent

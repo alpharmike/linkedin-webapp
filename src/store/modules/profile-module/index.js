@@ -1,5 +1,5 @@
 import axios from '../../../network/axios';
-import {NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME} from "../../../network/API";
+import {NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME, SEARCH_PROFILE} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -93,6 +93,18 @@ const actions = {
       throw Error(errors[e.response.status.toString()])
     }
   },
+
+  async searchProfiles(context, payload) {
+    try {
+      // filter profiles based on given filter and keyword
+      console.log(payload)
+      let response = await axios.post(SEARCH_PROFILE, payload);
+      console.log(response.data)
+      return response.data;
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  }
   /*async getAllUsers(context, filterKey) {
     try {
       let response = await axios.get(
