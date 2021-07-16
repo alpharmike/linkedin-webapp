@@ -23,6 +23,14 @@
                   clearable
                   :error-messages="errors"
                 ></v-select>
+                <v-checkbox
+                  class="my-0 py-0"
+                  v-else-if="field.type === 'checkbox'"
+                  v-model="profileInfo[field.model]"
+                  dense
+                  :label="field.name"
+                  hide-details
+                ></v-checkbox>
                 <custom-date-picker v-else-if="field.type === 'date'" :label="field.name" :required="field.required" v-model="profileInfo[field.model]" />
                 <v-textarea
                   v-else-if="field.type === 'textarea'"
@@ -113,7 +121,9 @@
       ...mapGetters({
         industries: "typeModule/industries",
         formerNameVisTypes: "typeModule/formerNameVisTypes",
-        profile: "profileModule/profile"
+        profile: "profileModule/profile",
+        currPositions: "sectionModule/currPositions",
+        currEducations: "sectionModule/currEducations",
       }),
       fields() {
         return [
@@ -155,6 +165,40 @@
             type: "textarea",
             rows: 2,
             model: "headline"
+          },
+          {
+            name: "Current Position",
+            rules: "",
+            required: false,
+            type: "select",
+            text: "title",
+            value: "id",
+            items: this.currPositions,
+            model: "currentPositionId"
+          },
+          {
+            name: "Show current company in my intro",
+            rules: "",
+            required: false,
+            type: "checkbox",
+            model: "showCurrentPositionId"
+          },
+          {
+            name: "Education",
+            rules: "",
+            required: false,
+            type: "select",
+            text: "title",
+            value: "id",
+            items: this.currEducations,
+            model: "currentEducationId"
+          },
+          {
+            name: "Show education in my intro",
+            rules: "",
+            required: false,
+            type: "checkbox",
+            model: "showCurrentEducationId"
           },
           {
             name: "Country",
@@ -212,7 +256,12 @@
           locationInCountry: "",
           address: "",
           industry: "",
-          dateOfBirth: ""
+          dateOfBirth: "",
+          currentPositionId: "",
+          currentEducationId: "",
+          showCurrentPositionId: false,
+          showCurrentEducationId: false,
+
         },
         reqStatus: {
           message: "",

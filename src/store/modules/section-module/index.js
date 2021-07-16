@@ -40,6 +40,8 @@ const state = {
   ],
 
   backgrounds: [],
+  currPositions: [],
+  currEducations: [],
   accomplishments: [],
   skills: [],
 };
@@ -55,6 +57,14 @@ const mutations = {
 
   setBackgrounds(state, payload) {
     state.backgrounds = payload;
+  },
+
+  setCurrPositions(state, payload) {
+    state.currPositions = payload;
+  },
+
+  setCurrEducations(state, payload) {
+    state.currEducations = payload;
   },
 
   setAcc(state, payload) {
@@ -92,7 +102,22 @@ const actions = {
       const url = payload ? `${BACKGROUND}/${payload}` : BACKGROUND;
       let response = await axios.get(url);
       console.log(response);
-      context.commit('setBackgrounds', response.data);
+      const data = response.data;
+      context.commit('setBackgrounds', data);
+
+      const positions = [];
+      const educations = [];
+      data.forEach(background => {
+        if (background.backgroundType === 1) {
+          positions.push(background)
+        } else if (background.backgroundType === 2) {
+          educations.push(background)
+        }
+      })
+
+      context.commit('setCurrPositions', positions);
+      context.commit('setCurrEducations', educations);
+
     } catch (e) {
       console.log(e);
       throw Error(errors[e.response.status.toString()])
@@ -228,6 +253,12 @@ const getters = {
   },
   backgrounds: (state) => {
     return state.backgrounds;
+  },
+  currPositions: (state) => {
+    return state.currPositions;
+  },
+  currEducations: (state) => {
+    return state.currEducations;
   },
   accomplishments: (state) => {
     return state.accomplishments;
