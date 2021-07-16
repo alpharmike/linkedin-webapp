@@ -106,13 +106,14 @@
   export default {
     name: "PostForm",
     components: {CustomAlert, CustomCard, ValidationObserver, ValidationProvider},
-    props: {
+    /*props: {
       edit: {type: Boolean, default: false},
       editingPost: {type: Object}
-    },
+    },*/
     computed: {
       ...mapGetters({
         postVisTypes: "typeModule/postVisTypes",
+        profile: "profileModule/profile"
       }),
       fields() {
         return [
@@ -163,19 +164,28 @@
 
     methods: {
       ...mapActions({
-        createAcc: "sectionModule/createAcc",
-        editAcc: "sectionModule/editAcc",
-        getAcc: "sectionModule/getAcc"
+        createPost: "postModule/createPost",
       }),
       submitForm() {
         this.submitLoading = true;
         this.$refs.postObserver.validate().then(result => {
           if (result) { // if data is validated and has no problem
             let payload = {
-              ...this.postInfo
+              ...this.postInfo,
+              profileId: this.profile.id
             }
             // Code for API nad store
-
+            this.createPost(payload).then(async () => {
+              this.$emit('close');
+              enableSnackbar(this.reqStatus, "Post created successfully!", "info");
+              this.$emit('show-alert', this.reqStatus);
+              // await this.getProfile();
+              // this.$emit('edited')
+            }).catch(err => {
+              enableSnackbar(this.reqStatus, err.message, "error")
+            }).finally(() => {
+              this.submitLoading = false;
+            })
           }
         }).catch(err => {
           this.submitLoading = false;
@@ -183,23 +193,6 @@
         })
       }
     },
-
-    watch: {
-      editingAccomplishment: function (newValue) {
-        this.currEditingPost = {...newValue};
-      },
-      currEditingPost: function (newValue) {
-        if (this.edit) {
-          this.postInfo = {...newValue};
-        }
-      }
-    },
-
-    created() {
-      if (this.edit) {
-        this.postInfo = {...this.editingPost};
-      }
-    }
   }
 </script>
 

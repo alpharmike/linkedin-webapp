@@ -13,6 +13,10 @@
             </v-col>
 
             <v-col cols="12">
+              <featured-section />
+            </v-col>
+
+            <v-col cols="12">
               <background-section :is-me="isMyProfile"  @edited="(alert) => reqStatus = alert" @add="() => openSectionDialog('background')"/>
             </v-col>
 
@@ -84,10 +88,12 @@
   import CustomAlert from "../../components/Alerts/CustomAlert";
   import SkillSection from "../../components/Profile/SkillSection";
   import LanguageForm from "../../components/Forms/LanguageForm";
+  import FeaturedSection from "../../components/Profile/FeaturedSection";
 
   export default {
     name: "Profile",
     components: {
+      FeaturedSection,
       LanguageForm,
       SkillSection,
       CustomAlert,
@@ -135,7 +141,8 @@
         getAcc: "sectionModule/getAcc",
         getSkills: "sectionModule/getSkills",
         getConnectionsSent: "networkModule/getConnectionsSent",
-        getConnectionsReceived: "networkModule/getConnectionsReceived"
+        getConnectionsReceived: "networkModule/getConnectionsReceived",
+        getPosts: "postModule/getPosts"
       }),
       openSectionDialog(section) {
         console.log(section)
@@ -194,6 +201,7 @@
         await this.getProfileBackgrounds();
         await this.getProfileAcc();
         await this.getSkills();
+        await this.getPosts();
         console.log(this.skills);
         this.currProfile = {...this.profile};
         console.log(this.currProfile)

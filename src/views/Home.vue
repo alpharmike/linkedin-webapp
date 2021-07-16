@@ -3,7 +3,7 @@
     <v-container v-if="!loading" fluid>
       <v-row justify="center" align="center">
         <v-col cols="7">
-          <create-post-section />
+          <create-post-section/>
         </v-col>
       </v-row>
 
@@ -13,33 +13,33 @@
 </template>
 
 <script>
-import CreatePostSection from "../components/Feed/CreatePostSection";
-import Spinner from "../components/Loaders/Spinner";
-import {mapActions} from "vuex";
+  import CreatePostSection from "../components/Feed/CreatePostSection";
+  import Spinner from "../components/Loaders/Spinner";
+  import {mapActions} from "vuex";
 
-export default {
-  name: 'Home',
+  export default {
+    name: 'Home',
 
-  components: {
-    Spinner,
-    CreatePostSection,
-  },
-  data() {
-    return {
-      loading: false,
+    components: {
+      Spinner,
+      CreatePostSection,
+    },
+    data() {
+      return {
+        loading: false,
+      }
+    },
+
+    methods: {
+      ...mapActions("typeModule", ["setTypeItems"]),
+      ...mapActions("profileModule", ["getProfile"])
+    },
+
+    async created() {
+      this.loading = true;
+      await this.getProfile();
+      await this.setTypeItems("postVisTypes")
+      this.loading = false;
     }
-  },
-
-  methods: {
-    ...mapActions("typeModule", ["setTypeItems"]),
-    ...mapActions("profileModule", ["getProfile"])
-  },
-
-  async created() {
-    this.loading = true;
-    await this.getProfile();
-    await this.setTypeItems("postVisTypes")
-    this.loading = false;
   }
-}
 </script>

@@ -5,6 +5,7 @@ import sectionModule from './modules/section-module'
 import typeModule from './modules/type-module'
 import profileModule from './modules/profile-module'
 import networkModule from './modules/network-module'
+import postModule from './modules/post-module'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     sectionModule,
     typeModule,
     profileModule,
-    networkModule
+    networkModule,
+    postModule
   }
 })
 

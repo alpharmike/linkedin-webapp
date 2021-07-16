@@ -86,6 +86,7 @@ const actions = {
       console.log(payload)
       let response = await axios.get(`${PROFILE_BY_USERNAME}/${payload}`);
       const data = response.data;
+      console.log(data)
       let numOfConn = await axios.get(`${NUM_OF_CONN}/${data.id}`);
       data.conn = numOfConn.data;
       await context.commit('setVisitingProfile', data);

@@ -1,15 +1,16 @@
 <template>
-  <custom-card title="About" :card-loading="submitLoading">
+  <custom-card title="Write your comment" :card-loading="submitLoading">
     <template v-slot:body>
       <v-form @submit.prevent="submitForm">
         <v-row>
           <v-col cols="12">
             <v-textarea
-              label="Summary"
-              v-model="info.about"
+              label="Write your comment"
+              v-model="commentInfo.body"
               clearable
               outlined
               dense
+              rows="2"
               auto-grow
             ></v-textarea>
           </v-col>
@@ -40,7 +41,7 @@
         width="150"
         type="submit"
         :loading="submitLoading"
-        :disabled="submitLoading || info.about === ''"
+        :disabled="submitLoading || commentInfo.body === ''"
         @click="submitForm"
         small
       >
@@ -56,7 +57,7 @@
   import {enableSnackbar} from "../../utils/error_utils";
 
   export default {
-    name: "AboutForm",
+    name: "CommentForm",
     components: {CustomCard},
     computed: {
       ...mapGetters({
@@ -66,8 +67,8 @@
     data() {
       return {
         // Set it to value from profile at mounted/created
-        info: {
-          about: "",
+        commentInfo: {
+          body: "",
         },
         reqStatus: {
           message: "",
