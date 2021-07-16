@@ -3,7 +3,7 @@ import {
   ACCOMPLISHMENT_TYPE,
   BACKGROUND_TYPE, CONNECT_TYPE,
   FORMER_NAME_VISIBILITY_TYPE,
-  INDUSTRY_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
+  INDUSTRY_TYPE, LANGUAGE_LEVEL_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
 } from "../../../network/API";
 import {errors} from "../../../network/errors";
 
@@ -14,6 +14,7 @@ const state = {
   skillLevels: [],
   relationKnowledgeTypes: [],
   connectTypes: [],
+  languageLevels: [],
 };
 
 const mutations = {
@@ -57,6 +58,9 @@ const getters = {
   connectTypes: (state) => {
     return state.connectTypes;
   },
+  languageLevels: (state) => {
+    return state.languageLevels;
+  },
 };
 
 function getTypeAPI(type) {
@@ -73,6 +77,8 @@ function getTypeAPI(type) {
       return RELATION_KNOWLEDGE_TYPE;
     case 'connectTypes':
       return CONNECT_TYPE;
+    case 'languageLevels':
+      return LANGUAGE_LEVEL_TYPE;
   }
 }
 

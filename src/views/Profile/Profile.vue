@@ -49,6 +49,11 @@
           <skill-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.skills = false"/>
         </template>
       </custom-dialog>
+      <custom-dialog :show.sync="dialogs.languages">
+        <template v-slot:body>
+          <language-form @show-alert="(alert) => reqStatus = alert" @close="dialogs.languages = false"/>
+        </template>
+      </custom-dialog>
       <custom-dialog :show.sync="dialogs.about">
         <template v-slot:body>
           <about-form @edited="currProfile = {...profile}" @show-alert="(alert) => reqStatus = alert" @close="dialogs.about = false"/>
@@ -78,10 +83,12 @@
   import Spinner from "../../components/Loaders/Spinner";
   import CustomAlert from "../../components/Alerts/CustomAlert";
   import SkillSection from "../../components/Profile/SkillSection";
+  import LanguageForm from "../../components/Forms/LanguageForm";
 
   export default {
     name: "Profile",
     components: {
+      LanguageForm,
       SkillSection,
       CustomAlert,
       Spinner,
@@ -104,6 +111,7 @@
           intro: false,
           accomplishments: false,
           skills: false,
+          languages: false,
           about: false
         },
         reqStatus: {
@@ -148,6 +156,7 @@
         await this.setTypeItems("formerNameVisTypes");
         await this.setTypeItems("skillLevels");
         await this.setTypeItems("relationKnowledgeTypes");
+        await this.setTypeItems("languageLevels");
       },
 
       async getProfileBackgrounds(id) {

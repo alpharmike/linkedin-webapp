@@ -4,7 +4,7 @@ import {
   ACCOMPLISHMENT_TYPE,
   ADD_ALL_SKILLS,
   BACKGROUND,
-  BACKGROUND_TYPE, ENDORSEMENT, GET_SKILLS,
+  BACKGROUND_TYPE, ENDORSEMENT, GET_SKILLS, LANGUAGE,
   SKILL
 } from "../../../network/API";
 import {errors} from "../../../network/errors";
@@ -35,6 +35,12 @@ const state = {
         "Web Design",
         "User Experience",
         "Date Mining"
+      ]
+    },
+    {
+      title: "Languages",
+      children: [
+
       ]
     },
   ],
@@ -142,6 +148,16 @@ const actions = {
     try {
       // payload is the id of te background to be deleted
       let response = await axios.delete(`${BACKGROUND}/${payload}`);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async addLanguage(context, payload) {
+    try {
+      let response = await axios.post(`${LANGUAGE}`, payload);
       console.log(response);
     } catch (e) {
       console.log(e);
