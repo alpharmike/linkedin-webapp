@@ -5,6 +5,7 @@
         <template v-for="comment in comments">
           <v-list-item
             :key="comment.body + comment.id"
+            :class="{'primary': comment.id === reply.commentId}"
           >
             <v-list-item-avatar>
               <user-avatar font-class="white--text" size="42" :initials="comment.profileJson.firstName[0] + comment.profileJson.lastName[0]" />
@@ -18,7 +19,7 @@
 
             <v-list-item-action>
               <v-row>
-                <v-btn @click="() => reply(comment)" icon color="primary lighten-4">
+                <v-btn @click="() => initReply(comment)" icon color="primary lighten-4">
                   <v-icon>mdi-reply</v-icon>
                 </v-btn>
                 <v-btn
@@ -34,6 +35,44 @@
           </v-list-item>
         </template>
       </v-list>
+    </template>
+    <template v-slot:actions v-if="reply.open">
+      <v-row class="my-2">
+        <v-col cols="12">
+          <v-textarea
+            label="Reply the comment"
+            v-model="reply.text"
+            clearable
+            outlined
+            dense
+            rows="2"
+            auto-grow
+          ></v-textarea>
+        </v-col>
+        <v-btn
+          class="mx-4 px-5 my-1"
+          color="primary"
+          rounded
+          :disabled="submitLoading"
+          @click="cancelReply"
+          outlined
+        >
+          Cancel
+        </v-btn>
+        <v-spacer/>
+        <v-btn
+          class="mx-4 px-5 my-1"
+          color="primary"
+          rounded
+          width="150"
+          type="submit"
+          :loading="submitLoading"
+          :disabled="submitLoading || reply.text === ''"
+          @click="submitReply"
+        >
+          Submit
+        </v-btn>
+      </v-row>
     </template>
   </custom-card>
 </template>
@@ -55,6 +94,17 @@
       ...mapGetters({
         profile: "profileModule/profile"
       })
+    },
+
+    data() {
+      return {
+        reply: {
+          text: "",
+          commentId: null,
+          open: false,
+        },
+        submitLoading: false
+      }
     },
 
     methods: {
@@ -96,8 +146,22 @@
         return comment.likeJsons[index];
       },
 
-      reply(comment) {
+      initReply(comment) {
+        this.reply.commentId = comment.id;
+        this.reply.open = true;
+      },
 
+      cancelReply() {
+        this.reply.commentId = null;
+        this.reply.open = false;
+      },
+
+      submitReply() {
+        this.submitLoading = true;
+        // CONNECT TO API
+
+
+        this.submitLoading = false;
       }
     }
   }
