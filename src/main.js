@@ -28,6 +28,7 @@ new Vue({
   mounted: async function () {
     if (store.getters["authModule/isAuthenticated"]) {
       await store.dispatch("profileModule/getProfile");
+      await store.dispatch("networkModule/getPeopleInNetwork");
     }
   },
 

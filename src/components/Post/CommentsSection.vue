@@ -127,7 +127,7 @@
           const payload = {
             commentId: comment.id
           }
-          this.likePost(payload).then(async () => {
+          this.likeComment(payload).then(async () => {
             this.$emit('comment-action');
           }).catch(err => {
             enableSnackbar(this.reqStatus, err.message, "error")

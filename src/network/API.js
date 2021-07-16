@@ -34,3 +34,4 @@ export const LIKE_POST = '/post/like';
 export const CREATE_COMMENT = '/post/comment';
 export const LIKE_COMMENT = '/post/comment/like';
 export const NETWORK = '/network';
+export const NETWORK_POST = '/post/network'; // posts of people in my network

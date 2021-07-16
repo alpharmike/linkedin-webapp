@@ -3,11 +3,11 @@
     <v-container v-if="!loading" fluid>
       <v-row justify="center">
         <v-col cols="8">
-          <invitations-card @respond="updateConnections" @error="(alert) => reqStatus = alert" />
+          <invitations-card @respond="updateConnections" @error="(alert) => reqStatus = alert"/>
         </v-col>
 
         <v-col cols="8">
-          <suggestions />
+          <suggestions/>
         </v-col>
       </v-row>
     </v-container>
@@ -22,13 +22,12 @@
   import Spinner from "../../components/Loaders/Spinner";
   import InvitationsCard from "../../components/Network/InvitationsCard";
   import Suggestions from "../../components/Network/Suggestions";
-  import {mapActions} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
   import CustomAlert from "../../components/Alerts/CustomAlert";
 
   export default {
     name: "Network",
     components: {CustomAlert, Suggestions, InvitationsCard, Spinner},
-
     data() {
       return {
         loading: false,

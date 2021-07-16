@@ -9,7 +9,17 @@
         <div class="text-h6">{{post.title}}</div>
         <div class="text-body-1">{{post.body}}</div>
         <v-card-subtitle class="pb-0 ma-0 pa-0">{{post.createdDate}}</v-card-subtitle>
+        <v-card-subtitle v-if="showAuthor" class="pb-0 ma-0 pa-0">{{`By ${post.profileJson.firstName} ${post.profileJson.lastName}`}}</v-card-subtitle>
+        <v-row class="mt-1">
+          <v-col cols="6" v-if="post.likeJsons.length > 0">
+            <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Liked by ${post.likeJsons.length} people`}}</v-card-subtitle>
+          </v-col>
+          <v-col cols="6" v-if="post.commentJsons.length > 0">
+            <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Commented by ${post.likeJsons.length} people`}}</v-card-subtitle>
+          </v-col>
+        </v-row>
       </v-card-text>
+
     </template>
     <template v-slot:actions>
       <v-row justify="space-between" align="center" class="py-1 px-4" v-if="actionsAllowed">
@@ -72,7 +82,8 @@
     name: "PostItem",
     components: {CommentsSection, CustomAlert, CommentForm, CustomDialog, CustomCard},
     props: {
-      post: {type: Object}
+      post: {type: Object},
+      showAuthor: {type: Boolean, default: false},
     },
 
     computed: {

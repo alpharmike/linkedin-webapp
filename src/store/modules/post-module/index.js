@@ -1,14 +1,33 @@
 import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
-import {CREATE_COMMENT, LIKE_COMMENT, LIKE_POST, POST} from "../../../network/API";
+import {CREATE_COMMENT, LIKE_COMMENT, LIKE_POST, NETWORK_POST, POST} from "../../../network/API";
 
 const state = {
   posts: [],
+  networkPosts: [],
+  networkLikedPosts: [],
+  networkCommentedPosts: []
 };
 
 const mutations = {
+  // for my profile or visiting profile
   setPosts(state, payload) {
     state.myPosts = payload;
+  },
+
+  // posts created by people in my network
+  setNetworkPosts(state, payload) {
+    state.networkPosts = payload;
+  },
+
+  // posts people in my network have liked
+  setNetworkLikedPosts(state, payload) {
+    state.networkLikedPosts = payload;
+  },
+
+  // posts people in my network have commented on
+  setNetworkCommentedPosts(state, payload) {
+    state.networkCommentedPosts = payload;
   },
 };
 
@@ -72,12 +91,26 @@ const actions = {
     }
   },
 
+  async getNetworkPosts(context) {
+    try {
+      let response = await axios.get(NETWORK_POST);
+      console.log(response.data)
+      await context.commit('setNetworkPosts', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  }
+
 
 };
 
 const getters = {
   posts: (state) => {
     return state.myPosts;
+  },
+
+  networkPosts: (state) => {
+    return state.networkPosts;
   },
 };
 
