@@ -159,7 +159,8 @@
     methods: {
       ...mapActions({
         setChildren: "sectionModule/setChildren",
-        requestConnection: "networkModule/requestConnection"
+        requestConnection: "networkModule/requestConnection",
+        getConnectionsSent: "networkModule/getConnectionsSent"
       }),
       async getSubSections(section) {
         /* Store */
@@ -176,6 +177,7 @@
         this.requestConnection(payload).then(async () => {
           this.connectLoading = false;
           enableSnackbar(this.reqStatus, "Connection request successfully sent!", "info")
+          await this.getConnectionsSent();
         }).catch(err => {
           enableSnackbar(this.reqStatus, err.message, "error")
         }).finally(() => {

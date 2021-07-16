@@ -31,7 +31,6 @@ export const RESPOND_REQUEST = '/accept-reject-connection'; // requests I have r
 export const PENDING_CONNECTION_REQUESTS = '/get-pending'; // requests I have received
 export const POST = '/post';
 export const LIKE_POST = '/post/like';
-export const REMOVE_POST_LIKE = '/post/like';
 export const CREATE_COMMENT = '/post/comment';
+export const LIKE_COMMENT = '/post/comment/like';
 export const NETWORK = '/network';
-

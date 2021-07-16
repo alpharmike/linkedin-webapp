@@ -12,10 +12,9 @@
       </v-card-text>
     </template>
     <template v-slot:actions>
-      <v-row justify="space-between" align="center" class="py-1 px-4">
+      <v-row justify="space-between" align="center" class="py-1 px-4" v-if="actionsAllowed">
         <v-col cols="12" md="2" sm="2">
           <v-btn
-            v-if="actionsAllowed"
             small
             outlined
             color="primary lighten-2"
@@ -27,7 +26,6 @@
         <v-col cols="12" md="3" sm="4">
           <v-row>
             <v-btn
-              v-if="actionsAllowed"
               icon
               color="red"
               @click="toggleLike"
@@ -53,7 +51,7 @@
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.commentsDialog" width="60%">
         <template v-slot:body>
-          <comments-section :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
+          <comments-section @comment-action="$emit('post-action')" :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
         </template>
       </custom-dialog>
       <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
