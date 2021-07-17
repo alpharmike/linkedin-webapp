@@ -3,7 +3,7 @@
     <template v-slot:body>
       <v-row justify="space-around">
         <v-col v-for="post in posts" cols="4" sm="5" :key="post.createdDate + post.id">
-          <post-item @post-action="$emit('post-action')" :show-author="showAuthor" @error="(alert) => reqStatus = alert" :post="post"/>
+          <post-item @post-action="$emit('post-action')" :show-author="showAuthor" @error="(alert) => reqStatus = alert" @show-alert="(alert) => reqStatus = alert" :post="post"/>
         </v-col>
       </v-row>
 

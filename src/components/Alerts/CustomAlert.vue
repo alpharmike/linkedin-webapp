@@ -17,7 +17,7 @@
     props: {
       type: {type: String, default: 'info'},
       value: {type: Boolean, default: false},
-      message: {type: String, default: ""}
+      message: {type: String, default: ""},
     },
 
   }

@@ -18,6 +18,7 @@
             <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Commented by ${post.likeJsons.length} people`}}</v-card-subtitle>
           </v-col>
         </v-row>
+        <v-card-subtitle v-if="post.sharedId" class="pb-0 my-2 pa-0">{{`Shared from ${post.sharedIdJson.profileJson.firstName} ${post.sharedIdJson.profileJson.lastName}`}}</v-card-subtitle>
       </v-card-text>
 
     </template>
@@ -33,7 +34,8 @@
             Add Comment
           </v-btn>
         </v-col>
-        <v-col cols="12" md="3" sm="4">
+        <v-spacer />
+        <v-col cols="12" md="5" sm="4">
           <v-row>
             <v-btn
               icon
@@ -50,6 +52,14 @@
             >
               <v-icon>mdi-comment</v-icon>
             </v-btn>
+            <v-btn
+              v-if="!isMyPost"
+              icon
+              color="primary lighten-4"
+              @click="share.dialog = true"
+            >
+              <v-icon>mdi-share</v-icon>
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
@@ -64,6 +74,14 @@
           <comments-section @comment-action="$emit('post-action')" :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
         </template>
       </custom-dialog>
+      <dialog-alert
+        title="Post Share"
+        msg="Are you sure you want to share the post?"
+        :show.sync="share.dialog"
+        :is-loading="share.loading"
+        @cancel="share.dialog = false"
+        @accept="sharePost"
+      />
       <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
     </template>
   </custom-card>
@@ -77,10 +95,11 @@
   import CommentForm from "../Forms/CommentForm";
   import CustomAlert from "../Alerts/CustomAlert";
   import CommentsSection from "./CommentsSection";
+  import DialogAlert from "../Alerts/DialogAlert";
 
   export default {
     name: "PostItem",
-    components: {CommentsSection, CustomAlert, CommentForm, CustomDialog, CustomCard},
+    components: {DialogAlert, CommentsSection, CustomAlert, CommentForm, CustomDialog, CustomCard},
     props: {
       post: {type: Object},
       showAuthor: {type: Boolean, default: false},
@@ -108,6 +127,10 @@
       myPostLike() {
         const index = this.post.likeJsons.findIndex(likeItem => likeItem.profileId === this.profile.id);
         return this.post.likeJsons[index];
+      },
+
+      isMyPost() {
+        return this.post.profileId === this.profile.id;
       }
     },
 
@@ -117,6 +140,10 @@
           addCommentDialog: false,
           commentsDialog: false,
 
+        },
+        share: {
+          dialog: false,
+          loading: false
         },
         reqStatus: {
           message: "",
@@ -129,7 +156,8 @@
     methods: {
       ...mapActions({
         likePost: "postModule/likePost",
-        removePostLike: "postModule/removePostLike"
+        removePostLike: "postModule/removePostLike",
+        createPost: "postModule/createPost"
       }),
       toggleLike() {
         console.log(this.post);
@@ -153,6 +181,30 @@
           })
         }
       },
+
+      sharePost() {
+        this.share.loading = true;
+        let payload = {
+          profileId: this.profile.id,
+          sharedId: this.post.id,
+          showPostType: this.post.showPostType,
+          body: this.post.body,
+          title: this.post.title,
+        }
+        // Code for API nad store
+        this.createPost(payload).then(async () => {
+          this.share.loading = false;
+          this.$emit('close');
+          enableSnackbar(this.reqStatus, "Post shared successfully!", "info");
+          this.$emit('show-alert', this.reqStatus);
+          // await this.getProfile();
+          // this.$emit('edited')
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.share.loading = false;
+        })
+      }
     }
   }
 </script>
