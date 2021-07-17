@@ -5,23 +5,24 @@
         <v-col cols="10">
           <v-tabs
             v-model="tab"
+            @change="onTabChange"
             centered
           >
             <v-tabs-slider></v-tabs-slider>
 
             <v-tab href="#chats">
+              <v-icon class="mx-1">mdi-chat</v-icon>
               Chat
-              <v-icon>mdi-chat</v-icon>
             </v-tab>
 
             <v-tab href="#unread">
+              <v-icon class="mx-1">mdi-email-mark-as-unread </v-icon>
               Unread
-              <v-icon>mdi-email-mark-as-unread </v-icon>
             </v-tab>
 
             <v-tab href="#archive">
+              <v-icon class="mx-1">mdi-archive</v-icon>
               Archive
-              <v-icon>mdi-archive</v-icon>
             </v-tab>
           </v-tabs>
 
@@ -29,7 +30,13 @@
             <v-tab-item
               value="chats"
             >
-              <chat-section :chats="allChats" />
+              <chat-section section="chats" :chats="allChats" />
+            </v-tab-item>
+
+            <v-tab-item
+              value="unread"
+            >
+              <chat-section section="unread" :chats="unreadChats" />
             </v-tab-item>
           </v-tabs-items>
         </v-col>
@@ -74,7 +81,8 @@
     computed: {
       ...mapGetters({
         curChat: "chatModule/currChat",
-        allChats: "chatModule/chats"
+        allChats: "chatModule/chats",
+        unreadChats: "chatModule/unreadChats"
       })
     },
 
@@ -87,8 +95,23 @@
 
     methods: {
       ...mapActions({
-        getAllChats: "chatModule/getAllChats"
-      })
+        getAllChats: "chatModule/getAllChats",
+        getUnreadChats: "chatModule/getUnreadChats"
+      }),
+
+      async onTabChange(newTab) {
+        this.loading = true;
+        console.log(newTab)
+        if (newTab === 'chats') {
+          await this.getAllChats();
+        } else if (newTab ==='unread') {
+          console.log("here")
+          await this.getUnreadChats();
+        } else if (newTab === 'archive') {
+
+        }
+        this.loading = false;
+      }
     },
 
     async created() {

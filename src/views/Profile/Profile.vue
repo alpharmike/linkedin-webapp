@@ -207,6 +207,7 @@
         await this.getProfileBackgrounds();
         await this.getProfileAcc();
         await this.getSkills();
+        console.log("IN PROFILE")
         await this.getPosts();
         await this.getPeopleInNetwork();
         console.log(this.skills);

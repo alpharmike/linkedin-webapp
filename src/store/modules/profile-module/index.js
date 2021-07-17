@@ -114,7 +114,7 @@ const actions = {
         console.log("asda")
         let response = await axios.post(SEARCH_SORTED, payload);
         console.log(response.data)
-        return response.data;
+        return sanitizeSearchResult(response.data);
       }
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
@@ -162,6 +162,13 @@ const getters = {
   }
 };
 
+function sanitizeSearchResult(data) {
+  const result = [];
+  data.forEach(profile => {
+    result.push({mutualConnectionsCount: profile.mutualConnectionsCount, ...profile.person});
+  })
+  return result;
+}
 
 export default {
   namespaced: true,

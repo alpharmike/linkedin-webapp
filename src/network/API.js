@@ -43,4 +43,6 @@ export const CHAT_TOKEN = '/chat-token';
 export const CHAT_MESSAGES = '/chat-messages';
 export const CHAT = '/chat-json';
 export const ALL_CHATS = '/chats-json';
+export const CHAT_UNREAD = '/chat-unread';
+export const GET_CHATS_UNREAD = '/chats/unread';
 export const MESSAGE = '/message';

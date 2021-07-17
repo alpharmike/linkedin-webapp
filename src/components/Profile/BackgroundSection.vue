@@ -43,7 +43,7 @@
     </custom-dialog>
     <dialog-alert
       title="Background Removal"
-      msg="Are you sure you wan to remove the selected background?"
+      msg="Are you sure you want to remove the selected background?"
       :show.sync="remove.dialog"
       :is-loading="remove.loading"
       @cancel="remove.dialog = false"

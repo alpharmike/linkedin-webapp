@@ -66,7 +66,7 @@
 
     <dialog-alert
       title="Skill Removal"
-      msg="Are you sure you wan to remove the selected skill?"
+      msg="Are you sure you want to remove the selected skill?"
       :show.sync="remove.dialog"
       :is-loading="remove.loading"
       @cancel="remove.dialog = false"

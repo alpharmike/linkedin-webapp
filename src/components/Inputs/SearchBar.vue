@@ -46,6 +46,7 @@
             <v-list-item-content>
               <v-list-item-title>{{data.item.firstName + " " + data.item.lastName}}</v-list-item-title>
               <v-list-item-subtitle>{{'@' + data.item.username}}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="findEnabledFilter().model === 'sortedName'">{{`${data.item.mutualConnectionsCount} mutual connections`}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </template>

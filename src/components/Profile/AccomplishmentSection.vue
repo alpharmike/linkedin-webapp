@@ -51,7 +51,7 @@
     </custom-dialog>
     <dialog-alert
       title="Accomplishment Removal"
-      msg="Are you sure you wan to remove the selected accomplishment?"
+      msg="Are you sure you want to remove the selected accomplishment?"
       :show.sync="remove.dialog"
       :is-loading="remove.loading"
       @cancel="remove.dialog = false"

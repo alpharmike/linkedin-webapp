@@ -19,7 +19,7 @@ const state = {
 const mutations = {
   // for my profile or visiting profile
   setPosts(state, payload) {
-    state.myPosts = payload;
+    state.posts = payload;
   },
 
   // posts created by people in my network
@@ -49,6 +49,7 @@ const actions = {
 
   async getPosts(context, payload) {
     try {
+      console.log(payload)
       let response = await axios.get(payload ? `${POST}/${payload}` : POST);
       await context.commit('setPosts', response.data);
     } catch (e) {
@@ -133,7 +134,7 @@ const actions = {
 
 const getters = {
   posts: (state) => {
-    return state.myPosts;
+    return state.posts;
   },
 
   networkPosts: (state) => {

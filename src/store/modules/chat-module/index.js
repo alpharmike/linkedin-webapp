@@ -1,11 +1,13 @@
 import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
-import {ALL_CHATS, CHAT, CHAT_MESSAGES, CHAT_TOKEN, MESSAGE} from "../../../network/API";
+import {ALL_CHATS, CHAT, CHAT_MESSAGES, CHAT_TOKEN, CHAT_UNREAD, GET_CHATS_UNREAD, MESSAGE} from "../../../network/API";
 
 const state = {
   chats: [],
   currChat: null,
   chatMessages: [],
+  unreadChats: [],
+  archivedChats: []
 };
 
 const mutations = {
@@ -24,6 +26,10 @@ const mutations = {
 
   resetChat(state) {
     state.currChat = null;
+  },
+
+  setUnreadChats(state, payload) {
+    state.unreadChats = payload;
   }
 };
 
@@ -60,6 +66,16 @@ const actions = {
     }
   },
 
+  async getUnreadChats(context) {
+    try {
+      let response = await axios.get(GET_CHATS_UNREAD);
+      console.log(response.data)
+      context.commit('setUnreadChats', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
   async setCurrChat(context, payload) {
     context.commit('setCurrentChat', payload)
   },
@@ -86,6 +102,16 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
+  },
+
+  async toggleUnreadStatus(context, payload) {
+    try {
+      // payload is the chat id
+      let response = await axios.put(`${CHAT_UNREAD}/${payload}`);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
   }
 };
 
@@ -96,6 +122,14 @@ const getters = {
 
   currChat: (state) => {
     return state.currChat;
+  },
+
+  unreadChats: (state) => {
+    return state.unreadChats;
+  },
+
+  archivedChats: (state) => {
+    return state.archivedChats;
   }
 };
 

@@ -3,7 +3,7 @@
     <template v-slot:body>
       <v-row>
         <v-col cols="4">
-          <chat-list :chats="chats" />
+          <chat-list @toggle="(chatId) => onToggle(chatId)" :chats="chats" />
         </v-col>
         <v-col cols="8" v-if="currChat">
           <message-list @send-message="fetchChat" />
@@ -28,16 +28,30 @@
       })
     },
     props: {
-      chats: {type: Array}
+      chats: {type: Array},
+      section: {type: String}
     },
 
     methods: {
       ...mapActions({
-        getChat: "chatModule/getChat"
+        getChat: "chatModule/getChat",
+        getAllChats: "chatModule/getAllChats",
+        getUnreadChats: "chatModule/getUnreadChats",
+        resetChat: "chatModule/resetChat"
       }),
 
       async fetchChat() {
         await this.getChat(this.currChat.id);
+      },
+
+      async onToggle(chatId) {
+        if (this.section === 'chats') {
+          await this.getAllChats();
+        } else if (this.section === 'unread') {
+          await this.getUnreadChats();
+        } else if (this.section === 'archive') {
+          await this.getAllChats();
+        }
       }
     }
   }
