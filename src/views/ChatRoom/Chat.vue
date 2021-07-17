@@ -38,6 +38,12 @@
             >
               <chat-section section="unread" :chats="unreadChats" />
             </v-tab-item>
+
+            <v-tab-item
+              value="archive"
+            >
+              <chat-section section="archive" :chats="archivedChats" />
+            </v-tab-item>
           </v-tabs-items>
         </v-col>
       </v-row>
@@ -82,7 +88,8 @@
       ...mapGetters({
         curChat: "chatModule/currChat",
         allChats: "chatModule/chats",
-        unreadChats: "chatModule/unreadChats"
+        unreadChats: "chatModule/unreadChats",
+        archivedChats: "chatModule/archivedChats",
       })
     },
 
@@ -96,7 +103,8 @@
     methods: {
       ...mapActions({
         getAllChats: "chatModule/getAllChats",
-        getUnreadChats: "chatModule/getUnreadChats"
+        getUnreadChats: "chatModule/getUnreadChats",
+        getArchivedChats: "chatModule/getArchivedChats",
       }),
 
       async onTabChange(newTab) {
@@ -108,7 +116,7 @@
           console.log("here")
           await this.getUnreadChats();
         } else if (newTab === 'archive') {
-
+          await this.getArchivedChats();
         }
         this.loading = false;
       }

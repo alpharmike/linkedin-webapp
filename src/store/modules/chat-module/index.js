@@ -1,6 +1,15 @@
 import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
-import {ALL_CHATS, CHAT, CHAT_MESSAGES, CHAT_TOKEN, CHAT_UNREAD, GET_CHATS_UNREAD, MESSAGE} from "../../../network/API";
+import {
+  ALL_CHATS,
+  CHAT, CHAT_ARCHIVE,
+  CHAT_MESSAGES,
+  CHAT_TOKEN,
+  CHAT_UNREAD,
+  GET_CHATS_ARCHIVED,
+  GET_CHATS_UNREAD,
+  MESSAGE
+} from "../../../network/API";
 
 const state = {
   chats: [],
@@ -30,7 +39,11 @@ const mutations = {
 
   setUnreadChats(state, payload) {
     state.unreadChats = payload;
-  }
+  },
+
+  setArchivedChats(state, payload) {
+    state.archivedChats = payload;
+  },
 };
 
 const actions = {
@@ -76,6 +89,16 @@ const actions = {
     }
   },
 
+  async getArchivedChats(context) {
+    try {
+      let response = await axios.get(GET_CHATS_ARCHIVED);
+      console.log(response.data)
+      context.commit('setArchivedChats', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
   async setCurrChat(context, payload) {
     context.commit('setCurrentChat', payload)
   },
@@ -108,6 +131,16 @@ const actions = {
     try {
       // payload is the chat id
       let response = await axios.put(`${CHAT_UNREAD}/${payload}`);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async toggleArchiveStatus(context, payload) {
+    try {
+      // payload is the chat id
+      let response = await axios.put(`${CHAT_ARCHIVE}/${payload}`);
       console.log(response.data)
     } catch (e) {
       throw Error(errors[e.response.status.toString()])

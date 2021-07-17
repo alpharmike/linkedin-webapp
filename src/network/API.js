@@ -44,5 +44,7 @@ export const CHAT_MESSAGES = '/chat-messages';
 export const CHAT = '/chat-json';
 export const ALL_CHATS = '/chats-json';
 export const CHAT_UNREAD = '/chat-unread';
+export const CHAT_ARCHIVE = '/chat-archive';
 export const GET_CHATS_UNREAD = '/chats/unread';
+export const GET_CHATS_ARCHIVED = '/chats/archived';
 export const MESSAGE = '/message';

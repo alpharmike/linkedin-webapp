@@ -19,8 +19,9 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-row>
-                <v-btn icon color="primary lighten-4">
-                  <v-icon>mdi-archive</v-icon>
+                <v-btn @click.stop="() => initToggleArchived(chat)" icon color="primary lighten-4">
+                  <v-icon v-if="chat.isArchive">mdi-package-up</v-icon>
+                  <v-icon v-else>mdi-archive</v-icon>
                 </v-btn>
                 <v-btn
                   icon
@@ -44,6 +45,14 @@
         @cancel="cancelUnread"
         @accept="toggleUnread"
       />
+      <dialog-alert
+        title="Toggle Archive"
+        msg="Are you sure you want to toggle the selected chat's archive status?"
+        :show.sync="archivedStatus.dialog"
+        :is-loading="archivedStatus.loading"
+        @cancel="cancelArchived"
+        @accept="toggleArchive"
+      />
 
       <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
 
@@ -59,7 +68,6 @@
   import {enableSnackbar} from "../../utils/error_utils";
   import CustomAlert from "../Alerts/CustomAlert";
   // import UserAvatar from "../Avatars/UserAvatar";
-
   export default {
     name: "ChatList",
     components: {
@@ -89,14 +97,20 @@
           loading: false,
           dialog: false,
           chat: null,
-        }
+        },
+        archivedStatus: {
+          loading: false,
+          dialog: false,
+          chat: null,
+        },
       }
     },
 
     methods: {
       ...mapActions({
         setCurrChat: "chatModule/setCurrChat",
-        toggleUnreadStatus: "chatModule/toggleUnreadStatus"
+        toggleUnreadStatus: "chatModule/toggleUnreadStatus",
+        toggleArchiveStatus: "chatModule/toggleArchiveStatus",
       }),
       async setCurrentChat(chat) {
         await this.setCurrChat(chat)
@@ -118,14 +132,43 @@
         })
       },
 
+      toggleArchive() {
+        this.archivedStatus.loading = true;
+        this.toggleArchiveStatus(this.archivedStatus.chat.id).then(async () => {
+          this.archivedStatus.loading = false;
+          this.archivedStatus.dialog = false;
+          enableSnackbar(this.reqStatus, "Chat archive status toggled successfully!", "info");
+          const chatId = this.archivedStatus.chat.id;
+          this.$emit('toggle', chatId);
+          this.archivedStatus.chat = null;
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.archivedStatus.loading = false;
+        })
+      },
+
       initToggleUnread(chat) {
         this.unreadStatus.chat = {...chat};
         this.unreadStatus.dialog = true;
       },
 
       cancelUnread() {
+        this.unreadStatus.dialog = false;
         this.unreadStatus.chat = null;
-      }
+      },
+
+      initToggleArchived(chat) {
+        this.archivedStatus.chat = {...chat};
+        this.archivedStatus.dialog = true;
+      },
+
+      cancelArchived() {
+        this.archivedStatus.dialog = false;
+        this.archivedStatus.chat = null;
+      },
+
+
     }
   }
 </script>

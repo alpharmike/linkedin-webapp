@@ -37,6 +37,7 @@
         getChat: "chatModule/getChat",
         getAllChats: "chatModule/getAllChats",
         getUnreadChats: "chatModule/getUnreadChats",
+        getArchivedChats: "chatModule/getArchivedChats",
         resetChat: "chatModule/resetChat"
       }),
 
@@ -50,7 +51,7 @@
         } else if (this.section === 'unread') {
           await this.getUnreadChats();
         } else if (this.section === 'archive') {
-          await this.getAllChats();
+          await this.getArchivedChats();
         }
       }
     }
