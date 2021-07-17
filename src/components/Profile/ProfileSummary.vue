@@ -36,9 +36,9 @@
               </v-col>
             </v-col>
             <v-col cols="12">
-              <a href="/register" style="text-decoration: none;">
-                <span class="text-subtitle-2 text--lighten-5">{{ profile.conn + " Connections" }}</span>
-              </a>
+              <div @click="connectionsDialog = true" style="text-decoration: none; cursor: pointer;">
+                <span class="text-subtitle-2 primary--text text--lighten-5">{{ profile.conn + " Connections" }}</span>
+              </div>
             </v-col>
             <v-col cols="3" v-if="isMe">
               <add-section-dropdown @choose-section="getSubSections" />
@@ -98,6 +98,12 @@
         </v-col>
       </v-row>
 
+      <custom-dialog :show.sync="connectionsDialog">
+        <template v-slot:body>
+          <connections-list :connections="connections" />
+        </template>
+      </custom-dialog>
+
       <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message"
                     :type="reqStatus.type"/>
     </template>
@@ -110,15 +116,19 @@
   import {mapActions, mapGetters} from "vuex";
   import {enableSnackbar} from "../../utils/error_utils";
   import CustomAlert from "../Alerts/CustomAlert";
+  import CustomDialog from "../Dialogs/CustomDialog";
+  import ConnectionsList from "./ConnectionsList";
 
   export default {
     name: "ProfileSummary",
-    components: {CustomAlert, AddSectionDropdown, CustomCard},
+    components: {ConnectionsList, CustomDialog, CustomAlert, AddSectionDropdown, CustomCard},
     computed: {
       ...mapGetters({
         myProfile: "profileModule/profile",
         connectionsSent: "networkModule/connectionsSent",
         connectionsReceived: "networkModule/connectionsReceived",
+        peopleInNetwork: "networkModule/peopleInNetwork",
+        peopleInOtherNetwork: "networkModule/peopleInOtherNetwork"
       }),
 
       hasAlreadyRequested() {
@@ -145,6 +155,14 @@
         return index >= 0;
       },
 
+      connections() {
+        if (this.profile.id === this.myProfile.id) {
+          return this.peopleInNetwork;
+        } else {
+          return this.peopleInOtherNetwork;
+        }
+      }
+
     },
     props: {
       profile: {type: Object, required: true},
@@ -166,6 +184,7 @@
         },
         connectLoading: false,
         messageLoading: false,
+        connectionsDialog: false,
       }
     },
 

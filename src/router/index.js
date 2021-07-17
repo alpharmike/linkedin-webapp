@@ -53,6 +53,8 @@ router.beforeEach((to, from, next) => {
     next({name: "Home"})
   } else if (to.meta.requiresAuth && !store.getters["authModule/isAuthenticated"]) {
     next({name: "Login"})
+  } else if ((to.name === 'Login' || to.name === 'Registration') && store.getters["authModule/isAuthenticated"]) {
+    next({name: "home"});
   } else {
     next();
   }

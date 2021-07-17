@@ -164,17 +164,6 @@
 
         let filter = this.findEnabledFilter();
         this.applyFilter(filter);
-        /*this.filteredUsers = [
-          {
-            username: "Erfan",
-            firstName: "Erfan",
-            lastName: "Moeini",
-          }
-        ]*/
-        /*this.getAllUsers(event).then(users => {
-          console.log(users)
-          this.filteredUsers = users
-        })*/
       },
 
       applyFilter(enabledFilter) {

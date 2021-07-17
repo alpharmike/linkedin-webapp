@@ -14,6 +14,7 @@ const state = {
   connectionsSent: [],
   pendingRequestsReceived: [],
   peopleInNetwork: [],
+  peopleInOtherNetwork: [],
   networkSuggestions: []
 };
 
@@ -32,6 +33,10 @@ const mutations = {
 
   setPeopleInNetwork(state, payload) {
     state.peopleInNetwork = payload;
+  },
+
+  setPeopleInOtherNetwork(state, payload) {
+    state.peopleInOtherNetwork = payload;
   },
 
   setNetworkSuggestions(state, payload) {
@@ -93,9 +98,13 @@ const actions = {
 
   async getPeopleInNetwork(context, payload) {
     try {
-      let response = await axios.get(NETWORK);
+      let response = await axios.get(payload ? `${NETWORK}/${payload}` : NETWORK);
       console.log(response.data);
-      context.commit('setPeopleInNetwork', response.data);
+      if (payload) {
+        context.commit('setPeopleInOtherNetwork', response.data); // my network
+      } else {
+        context.commit('setPeopleInNetwork', response.data); // other profile network
+      }
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
@@ -109,7 +118,7 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
-  }
+  },
 };
 
 const getters = {
@@ -126,6 +135,9 @@ const getters = {
   },
   peopleInNetwork: (state) => {
     return state.peopleInNetwork;
+  },
+  peopleInOtherNetwork: (state) => {
+    return state.peopleInOtherNetwork;
   },
   networkSuggestions: (state) => {
     return state.networkSuggestions;

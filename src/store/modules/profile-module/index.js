@@ -1,5 +1,12 @@
 import axios from '../../../network/axios';
-import {FULL_PROFILE, NUM_OF_CONN, PROFILE, PROFILE_BY_USERNAME, SEARCH_PROFILE} from "../../../network/API";
+import {
+  FULL_PROFILE,
+  NUM_OF_CONN,
+  PROFILE,
+  PROFILE_BY_USERNAME,
+  SEARCH_PROFILE,
+  SEARCH_SORTED
+} from "../../../network/API";
 import {errors} from "../../../network/errors";
 
 const state = {
@@ -99,9 +106,16 @@ const actions = {
     try {
       // filter profiles based on given filter and keyword
       console.log(payload)
-      let response = await axios.post(SEARCH_PROFILE, payload);
-      console.log(response.data)
-      return response.data;
+      if (payload.filter !== 'sortedName') {
+        let response = await axios.post(SEARCH_PROFILE, payload);
+        console.log(response.data)
+        return response.data;
+      } else {
+        console.log("asda")
+        let response = await axios.post(SEARCH_SORTED, payload);
+        console.log(response.data)
+        return response.data;
+      }
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }

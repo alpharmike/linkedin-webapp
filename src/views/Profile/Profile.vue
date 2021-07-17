@@ -201,12 +201,14 @@
         await this.getConnectionsSent(); // to check if I have sent conn request to the user
         await this.getConnectionsReceived(); // to check if I have sent conn request to the user
         await this.getPeopleInNetwork();
+        this.getPeopleInNetwork(this.visitingProfile.id);
         this.currProfile = this.visitingProfile;
       } else {
         await this.getProfileBackgrounds();
         await this.getProfileAcc();
         await this.getSkills();
         await this.getPosts();
+        await this.getPeopleInNetwork();
         console.log(this.skills);
         this.currProfile = {...this.profile};
         console.log(this.currProfile)

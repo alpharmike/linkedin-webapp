@@ -15,7 +15,7 @@
             <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Liked by ${post.likeJsons.length} people`}}</v-card-subtitle>
           </v-col>
           <v-col cols="6" v-if="post.commentJsons.length > 0">
-            <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Commented by ${post.likeJsons.length} people`}}</v-card-subtitle>
+            <v-card-subtitle class="pb-0 ma-0 pa-0 grey--text">{{ `Commented by ${post.commentJsons.length} people`}}</v-card-subtitle>
           </v-col>
         </v-row>
         <v-card-subtitle v-if="post.sharedId" class="pb-0 my-2 pa-0">{{`Shared from ${post.sharedIdJson.profileJson.firstName} ${post.sharedIdJson.profileJson.lastName}`}}</v-card-subtitle>

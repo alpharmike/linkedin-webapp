@@ -23,6 +23,7 @@ export const PROFILE = '/profile';
 export const FULL_PROFILE = '/profile-json';
 export const PROFILE_BY_USERNAME = '/get-profile/username';
 export const SEARCH_PROFILE = '/search';
+export const SEARCH_SORTED = '/search-sortedName'; // search based on names sorted by number of mutual connections
 export const NUM_OF_CONN = '/number-connection';
 export const REQUEST_CONNECTION = '/send-pending-connection';
 export const REQUEST_CONNECTIONS_SENT = '/get-sender-connection'; // requests I have sent
