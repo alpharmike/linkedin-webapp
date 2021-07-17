@@ -71,7 +71,7 @@
       </custom-dialog>
       <custom-dialog :show.sync="dialogs.commentsDialog" width="60%">
         <template v-slot:body>
-          <comments-section @comment-action="$emit('post-action')" :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
+          <comments-section item-type="comment" @comment-action="$emit('post-action')" :comments="post.commentJsons" @close="dialogs.commentsDialog = false" @show-alert="(alert) => reqStatus = alert" @comment="$emit('post-action')" />
         </template>
       </custom-dialog>
       <dialog-alert
@@ -195,6 +195,7 @@
         this.createPost(payload).then(async () => {
           this.share.loading = false;
           this.$emit('close');
+          this.share.dialog = false;
           enableSnackbar(this.reqStatus, "Post shared successfully!", "info");
           this.$emit('show-alert', this.reqStatus);
           // await this.getProfile();
