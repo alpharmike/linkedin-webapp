@@ -72,6 +72,18 @@
               >
                 Connect
               </v-btn>
+              <v-btn
+                v-if="alreadyInNetwork"
+                color="primary lighten-1"
+                dark
+                rounded
+                outlined
+                :loading="messageLoading"
+                :disabled="connectLoading || messageLoading"
+                @click="startChat"
+              >
+                Message
+              </v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -152,7 +164,8 @@
           type: "",
           status: false
         },
-        connectLoading: false
+        connectLoading: false,
+        messageLoading: false,
       }
     },
 
@@ -160,7 +173,8 @@
       ...mapActions({
         setChildren: "sectionModule/setChildren",
         requestConnection: "networkModule/requestConnection",
-        getConnectionsSent: "networkModule/getConnectionsSent"
+        getConnectionsSent: "networkModule/getConnectionsSent",
+        createChat: "chatModule/createChat"
       }),
       async getSubSections(section) {
         /* Store */
@@ -182,6 +196,18 @@
           enableSnackbar(this.reqStatus, err.message, "error")
         }).finally(() => {
           this.connectLoading = false;
+        })
+      },
+
+      startChat() {
+        this.messageLoading = true;
+        this.createChat(this.profile.id).then(() => {
+          this.messageLoading = false;
+          this.$router.push({name: 'ChatRoom'});
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.messageLoading = false;
         })
       }
     }

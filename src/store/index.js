@@ -6,6 +6,7 @@ import typeModule from './modules/type-module'
 import profileModule from './modules/profile-module'
 import networkModule from './modules/network-module'
 import postModule from './modules/post-module'
+import chatModule from './modules/chat-module'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     typeModule,
     profileModule,
     networkModule,
-    postModule
+    postModule,
+    chatModule
   }
 })
 

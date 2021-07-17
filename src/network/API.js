@@ -38,3 +38,6 @@ export const NETWORK_POST = '/post/network'; // posts of people in my network
 export const NETWORK_COMMENTED_POST = '/post/network-comment'; // posts which have been commented by people in my network
 export const NETWORK_LIKED_POST = '/post/network-like'; // posts which have been commented by people in my network
 export const NETWORK_SUGGESTION = '/people-you-might-know'; // posts which have been commented by people in my network
+export const CHAT_TOKEN = '/chat-token';
+export const CHAT_MESSAGES = '/chat-messages';
+export const ALL_CHATS = '/chats-json';

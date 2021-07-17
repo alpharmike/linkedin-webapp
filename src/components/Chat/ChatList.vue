@@ -1,79 +1,85 @@
 <template>
-  <custom-card title="Chats">
+  <custom-card no-header color="secondary darken-1">
     <template v-slot:body>
-      <v-tabs
-        v-model="tab"
-        centered
-      >
-        <v-tabs-slider></v-tabs-slider>
-
-        <v-tab href="#tab-1">
-          Chat
-          <v-icon>mdi-chat</v-icon>
-        </v-tab>
-
-        <v-tab href="#tab-2">
-          Unread
-          <v-icon>mdi-email-mark-as-unread </v-icon>
-        </v-tab>
-
-        <v-tab href="#tab-3">
-          Archive
-          <v-icon>mdi-archive</v-icon>
-        </v-tab>
-      </v-tabs>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item
-          v-for="i in 3"
-          :key="i"
-          :value="'tab-' + i"
-        >
-          <v-card flat>
-            <v-card-text>{{ text }}</v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-
-
-      <!--All with same type-->
-      <!--<v-list three-line>
-        <template v-for="(item, index) in items">
+      <v-list three-line dense rounded>
+        <template v-for="chat in chats">
           <v-list-item
-            v-else
-            :key="item.title"
+            :key="`${chat.id}-${chat.myProfileId}-${chat.otherProfileId}`"
+            dense
+            ripple
+            @click="() => setCurrentChat(chat)"
           >
             <v-list-item-avatar>
-              <user-avatar/>
+              <user-avatar font-class="white--text" size="42" :initials="chat.otherProfile.firstName[0] + chat.otherProfile.lastName[0]" />
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title v-html="item.title"></v-list-item-title>
-              <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+              <v-list-item-title>{{`${chat.otherProfile.firstName} ${chat.otherProfile.lastName}`}}</v-list-item-title>
+              <v-list-item-subtitle>{{'@' + chat.otherProfile.username}}</v-list-item-subtitle>
             </v-list-item-content>
+            <!--<v-list-item-action v-if="itemType === 'comment'">
+              <v-row>
+                <v-btn v-if="!isMyComment(comment)" @click="() => initReply(comment)" icon color="primary lighten-4">
+                  <v-icon>mdi-reply</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  color="red"
+                  @click="() => toggleLike(comment)"
+                >
+                  <v-icon v-if="alreadyLiked(comment)">mdi-heart</v-icon>
+                  <v-icon v-else>mdi-heart-outline</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  color="primary"
+                  v-if="comment.commentJsonsChild && comment.commentJsonsChild.length > 0"
+                  @click="() => initViewReplies(comment)"
+                >
+                  <v-icon>mdi-eye</v-icon>
+                </v-btn>
+              </v-row>
+            </v-list-item-action>-->
           </v-list-item>
         </template>
-      </v-list>-->
+      </v-list>
     </template>
   </custom-card>
 </template>
 
 <script>
   import CustomCard from "../Cards/CustomCard";
+  import {mapActions, mapGetters} from "vuex";
   import UserAvatar from "../Avatars/UserAvatar";
+  // import UserAvatar from "../Avatars/UserAvatar";
 
   export default {
-    name: "Chat",
-    components: {UserAvatar, CustomCard},
+    name: "ChatList",
+    components: {
+      UserAvatar,
+      /*UserAvatar, */CustomCard},
+    props: {
+      chats: {type: Array}
+    },
     computed: {
-      chats() {
-
-      }
+      ...mapGetters({
+        curChat: "chatModule/currChat",
+        allChats: "chatModule/chats"
+      })
     },
 
     data() {
       return {
         tab: 1
+      }
+    },
+
+    methods: {
+      ...mapActions({
+        setCurrChat: "chatModule/setCurrChat"
+      }),
+      async setCurrentChat(chat) {
+        await this.setCurrChat(chat)
       }
     }
   }

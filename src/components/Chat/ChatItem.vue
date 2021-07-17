@@ -3,9 +3,12 @@
 </template>
 
 <script>
-    export default {
-        name: "ChatItem"
+  export default {
+    name: "ChatItem",
+    props: {
+      chat: {type: Object}
     }
+  }
 </script>
 
 <style scoped>
