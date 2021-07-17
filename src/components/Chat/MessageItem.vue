@@ -1,10 +1,13 @@
 <template>
-  <v-card
-    :class="[color, side]"
-    class="pa-2 chat-bubble mb-2 no-shadow"
-  >
-    <slot></slot>
-  </v-card>
+  <v-row :justify="isMe ? 'end' : 'start'">
+    <v-card
+      :class="[color]"
+      class="pa-2 chat-bubble mb-2 no-shadow"
+      max-width="250"
+    >
+      <slot></slot>
+    </v-card>
+  </v-row>
 </template>
 <script>
   export default {

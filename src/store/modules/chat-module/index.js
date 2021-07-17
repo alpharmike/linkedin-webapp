@@ -1,6 +1,6 @@
 import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
-import {ALL_CHATS, CHAT_MESSAGES, CHAT_TOKEN} from "../../../network/API";
+import {ALL_CHATS, CHAT, CHAT_MESSAGES, CHAT_TOKEN, MESSAGE} from "../../../network/API";
 
 const state = {
   chats: [],
@@ -33,7 +33,8 @@ const actions = {
       // payload is the id of the other profile
       let response = await axios.post(`${CHAT_TOKEN}/${payload}`);
       console.log(response.data);
-      context.commit('setCurrentChat', response.data);
+      return response.data
+      // context.commit('setCurrentChat', response.data);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
@@ -65,8 +66,27 @@ const actions = {
 
   async resetChat(context) {
     context.commit('resetChat')
-  }
+  },
 
+  async createMessage(context, payload) {
+    try {
+      let response = await axios.post(`${MESSAGE}/${payload.chatId}`, payload);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async getChat(context, payload) {
+    try {
+      // payload is the chat id
+      let response = await axios.get(`${CHAT}/${payload}`);
+      console.log(response.data)
+      context.commit('setCurrentChat', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  }
 };
 
 const getters = {

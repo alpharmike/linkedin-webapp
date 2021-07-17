@@ -40,4 +40,6 @@ export const NETWORK_LIKED_POST = '/post/network-like'; // posts which have been
 export const NETWORK_SUGGESTION = '/people-you-might-know'; // posts which have been commented by people in my network
 export const CHAT_TOKEN = '/chat-token';
 export const CHAT_MESSAGES = '/chat-messages';
+export const CHAT = '/chat-json';
 export const ALL_CHATS = '/chats-json';
+export const MESSAGE = '/message';

@@ -174,7 +174,8 @@
         setChildren: "sectionModule/setChildren",
         requestConnection: "networkModule/requestConnection",
         getConnectionsSent: "networkModule/getConnectionsSent",
-        createChat: "chatModule/createChat"
+        createChat: "chatModule/createChat",
+        getChat: "chatModule/getChat"
       }),
       async getSubSections(section) {
         /* Store */
@@ -201,9 +202,10 @@
 
       startChat() {
         this.messageLoading = true;
-        this.createChat(this.profile.id).then(() => {
+        this.createChat(this.profile.id).then(async (chat) => {
           this.messageLoading = false;
-          this.$router.push({name: 'ChatRoom'});
+          await this.getChat(chat.id);
+          await this.$router.push({name: 'ChatRoom'});
         }).catch(err => {
           enableSnackbar(this.reqStatus, err.message, "error")
         }).finally(() => {

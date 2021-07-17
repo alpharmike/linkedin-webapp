@@ -6,7 +6,7 @@
           <chat-list :chats="chats" />
         </v-col>
         <v-col cols="8" v-if="currChat">
-          <message-list />
+          <message-list @send-message="fetchChat" />
         </v-col>
       </v-row>
     </template>
@@ -16,7 +16,7 @@
 <script>
   import CustomCard from "../Cards/CustomCard";
   import ChatList from "./ChatList";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
   import MessageList from "./MessageList";
 
   export default {
@@ -29,6 +29,16 @@
     },
     props: {
       chats: {type: Array}
+    },
+
+    methods: {
+      ...mapActions({
+        getChat: "chatModule/getChat"
+      }),
+
+      async fetchChat() {
+        await this.getChat(this.currChat.id);
+      }
     }
   }
 </script>

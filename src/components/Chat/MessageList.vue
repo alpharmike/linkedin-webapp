@@ -5,6 +5,7 @@
         v-for="message in currChat.messageJsons"
         :key="message.id"
         :is-me="isMyMessage(message)"
+        class="mx-2"
       >
         <div>
           <span class="mb-0">{{message.body}}</span>
@@ -16,7 +17,7 @@
       <v-row class="mt-5" align="center">
         <v-col cols="10">
           <v-textarea
-            label="Reply the comment"
+            label="Type a message"
             v-model="message.text"
             clearable
             outlined
@@ -48,7 +49,8 @@
 <script>
   import CustomCard from "../Cards/CustomCard";
   import MessageItem from "./MessageItem";
-  import {mapGetters} from "vuex";
+  import {mapActions, mapGetters} from "vuex";
+  import {enableSnackbar} from "../../utils/error_utils";
 
   export default {
     name: "MessageList",
@@ -69,17 +71,45 @@
         message: {
           text: "",
           loading: false,
-        }
+        },
+
+        reqStatus: {
+          message: "",
+          type: "",
+          status: false
+        },
       }
     },
 
     methods: {
+      ...mapActions({
+        createMessage: "chatModule/createMessage"
+      }),
       isMyMessage(message) {
         return this.profile.id === message.senderId;
       },
 
       sendMessage() {
+        this.message.loading = true;
+        const payload = {
+          chatId: this.currChat.id,
+          body: this.message.text
+        }
 
+        this.createMessage(payload).then(async () => {
+          this.message.loading = false;
+          this.$emit('send-message');
+          this.clearMessage();
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.message.loading = false;
+        })
+      },
+
+      clearMessage() {
+        this.message.text = "";
+        this.message.loading = false;
       }
     }
   }
