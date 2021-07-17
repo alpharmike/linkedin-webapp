@@ -1,6 +1,6 @@
 import axios from '../../../network/axios';
 import {
-  NETWORK,
+  NETWORK, NETWORK_SUGGESTION,
   NUM_OF_CONN, PENDING_CONNECTION_REQUESTS,
   PROFILE,
   PROFILE_BY_USERNAME,
@@ -13,7 +13,8 @@ const state = {
   connectionsReceived: [],
   connectionsSent: [],
   pendingRequestsReceived: [],
-  peopleInNetwork: []
+  peopleInNetwork: [],
+  networkSuggestions: []
 };
 
 const mutations = {
@@ -31,7 +32,11 @@ const mutations = {
 
   setPeopleInNetwork(state, payload) {
     state.peopleInNetwork = payload;
-  }
+  },
+
+  setNetworkSuggestions(state, payload) {
+    state.networkSuggestions = payload;
+  },
 };
 
 const actions = {
@@ -94,6 +99,16 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
+  },
+
+  async getNetworkSuggestions(context, payload) {
+    try {
+      let response = await axios.get(NETWORK_SUGGESTION);
+      console.log(response.data);
+      context.commit('setNetworkSuggestions', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
   }
 };
 
@@ -111,6 +126,9 @@ const getters = {
   },
   peopleInNetwork: (state) => {
     return state.peopleInNetwork;
+  },
+  networkSuggestions: (state) => {
+    return state.networkSuggestions;
   },
 };
 

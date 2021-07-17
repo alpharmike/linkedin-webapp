@@ -44,6 +44,9 @@
       ...mapActions({
         getPendingRequestsReceived: "networkModule/getPendingRequestsReceived",
         setTypeItems: "typeModule/setTypeItems",
+        getNetworkSuggestions: "networkModule/getNetworkSuggestions",
+        getConnectionsSent: "networkModule/getConnectionsSent",
+        getConnectionsReceived: "networkModule/getConnectionsReceived"
       }),
 
       async initTypes() {
@@ -60,6 +63,9 @@
       this.loading = true;
       await this.getPendingRequestsReceived();
       await this.initTypes();
+      await this.getConnectionsSent();
+      await this.getConnectionsReceived();
+      await this.getNetworkSuggestions();
       this.loading = false;
     }
   }

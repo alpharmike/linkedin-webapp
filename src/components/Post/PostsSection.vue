@@ -1,7 +1,7 @@
 <template>
   <custom-card :title="title">
     <template v-slot:body>
-      <v-row>
+      <v-row justify="space-around">
         <v-col v-for="post in posts" cols="4" sm="5" :key="post.createdDate + post.id">
           <post-item @post-action="$emit('post-action')" :show-author="showAuthor" @error="(alert) => reqStatus = alert" :post="post"/>
         </v-col>

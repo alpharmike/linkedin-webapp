@@ -1,6 +1,13 @@
 import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
-import {CREATE_COMMENT, LIKE_COMMENT, LIKE_POST, NETWORK_POST, POST} from "../../../network/API";
+import {
+  CREATE_COMMENT,
+  LIKE_COMMENT,
+  LIKE_POST,
+  NETWORK_COMMENTED_POST, NETWORK_LIKED_POST,
+  NETWORK_POST,
+  POST
+} from "../../../network/API";
 
 const state = {
   posts: [],
@@ -99,7 +106,27 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
-  }
+  },
+
+  async getNetworkCommentedPosts(context) {
+    try {
+      let response = await axios.get(NETWORK_COMMENTED_POST);
+      console.log(response.data)
+      await context.commit('setNetworkCommentedPosts', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async getNetworkLikedPosts(context) {
+    try {
+      let response = await axios.get(NETWORK_LIKED_POST);
+      console.log(response.data)
+      await context.commit('setNetworkLikedPosts', response.data);
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
 
 
 };
@@ -111,6 +138,14 @@ const getters = {
 
   networkPosts: (state) => {
     return state.networkPosts;
+  },
+
+  networkCommentedPosts: (state) => {
+    return state.networkCommentedPosts;
+  },
+
+  networkLikedPosts: (state) => {
+    return state.networkLikedPosts;
   },
 };
 

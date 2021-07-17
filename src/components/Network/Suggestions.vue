@@ -2,8 +2,8 @@
   <custom-card title="People you may know">
     <template v-slot:body>
       <v-row>
-        <v-col v-for="i in 12" cols="4" :key="i * 10">
-          <suggestion-card :user-info="profile" />
+        <v-col v-for="suggestedProfile in networkSuggestions" :key="suggestedProfile.username" cols="4">
+          <suggestion-card :user-info="suggestedProfile" />
         </v-col>
       </v-row>
     </template>
@@ -20,7 +20,8 @@
     components: {SuggestionCard, CustomCard},
     computed: {
       ...mapGetters({
-        profile: "profileModule/profile"
+        profile: "profileModule/profile",
+        networkSuggestions: "networkModule/networkSuggestions"
       })
     }
   }

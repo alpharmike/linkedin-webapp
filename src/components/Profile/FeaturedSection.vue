@@ -1,7 +1,7 @@
 <template>
   <custom-card title="Featured" :card-loading="loading">
     <template v-slot:body>
-      <v-row>
+      <v-row justify="space-around">
         <v-col v-for="post in posts" cols="4" sm="5" :key="post.createdDate + post.id">
           <post-item @post-action="fetchPosts" @error="(alert) => reqStatus = alert" :post="post"/>
         </v-col>

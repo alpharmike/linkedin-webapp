@@ -6,14 +6,14 @@
           <create-post-section/>
         </v-col>
         <v-col cols="7">
-          <posts-section @post-action="fetchNetworkPosts" show-author :posts="networkPosts" title="Network Posts" related-to="network" />
-        </v-col>
-        <!--<v-col cols="7">
-          <create-post-section/>
+          <posts-section @post-action="() => fetchNetworkPosts('network')" show-author :posts="networkPosts" title="Network Posts" related-to="network" />
         </v-col>
         <v-col cols="7">
-          <create-post-section/>
-        </v-col>-->
+          <posts-section @post-action="() => fetchNetworkPosts('network-commented')" show-author :posts="networkCommentedPosts" title="Commented Posts" related-to="network-commented" />
+        </v-col>
+        <v-col cols="7">
+          <posts-section @post-action="() => fetchNetworkPosts('network-liked')" show-author :posts="networkLikedPosts" title="Liked Posts" related-to="network-liked" />
+        </v-col>
       </v-row>
 
     </v-container>
@@ -36,7 +36,9 @@
     },
     computed: {
       ...mapGetters({
-        networkPosts: "postModule/networkPosts"
+        networkPosts: "postModule/networkPosts",
+        networkCommentedPosts: "postModule/networkCommentedPosts",
+        networkLikedPosts: "postModule/networkLikedPosts"
       })
     },
     data() {
@@ -48,11 +50,17 @@
     methods: {
       ...mapActions("typeModule", ["setTypeItems"]),
       ...mapActions("profileModule", ["getProfile"]),
-      ...mapActions("postModule", ["getNetworkPosts"]),
+      ...mapActions("postModule", ["getNetworkPosts", "getNetworkCommentedPosts", "getNetworkLikedPosts"]),
       ...mapActions("networkModule", ["getPeopleInNetwork"]),
 
-      async fetchNetworkPosts() {
-        await this.getNetworkPosts();
+      async fetchNetworkPosts(relatedTo) {
+        if (relatedTo === 'network') {
+          await this.getNetworkPosts();
+        } else if (relatedTo === 'network-commented') {
+          await this.getNetworkCommentedPosts();
+        } else if (relatedTo === 'network-liked') {
+          await this.getNetworkLikedPosts();
+        }
       }
     },
 
@@ -62,6 +70,8 @@
       await this.setTypeItems("postVisTypes");
       await this.getPeopleInNetwork();
       await this.getNetworkPosts();
+      await this.getNetworkCommentedPosts();
+      await this.getNetworkLikedPosts();
       this.loading = false;
     }
   }

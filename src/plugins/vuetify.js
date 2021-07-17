@@ -11,6 +11,10 @@ export default new Vuetify({
     themes: {
       dark: {
         primary: colors.indigo.darken3
+      },
+
+      light: {
+        secondary: colors.shades.lighten1
       }
     },
     icons: {
