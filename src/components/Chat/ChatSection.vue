@@ -2,10 +2,10 @@
   <custom-card no-header>
     <template v-slot:body>
       <v-row>
-        <v-col cols="4">
+        <v-col cols="5">
           <chat-list @toggle="(chatId) => onToggle(chatId)" :chats="chats" />
         </v-col>
-        <v-col cols="8" v-if="currChat">
+        <v-col cols="7" v-if="currChat">
           <message-list @send-message="fetchChat" />
         </v-col>
       </v-row>

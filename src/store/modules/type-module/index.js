@@ -3,7 +3,7 @@ import {
   ACCOMPLISHMENT_TYPE,
   BACKGROUND_TYPE, CONNECT_TYPE,
   FORMER_NAME_VISIBILITY_TYPE,
-  INDUSTRY_TYPE, LANGUAGE_LEVEL_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
+  INDUSTRY_TYPE, LANGUAGE_LEVEL_TYPE, NOTIFICATION_TYPE, POST_VISIBILITY_TYPE, RELATION_KNOWLEDGE_TYPE, SKILL_LEVEL_TYPE
 } from "../../../network/API";
 import {errors} from "../../../network/errors";
 
@@ -79,6 +79,9 @@ function getTypeAPI(type) {
       return CONNECT_TYPE;
     case 'languageLevels':
       return LANGUAGE_LEVEL_TYPE;
+    case 'notificationTypes':
+      return NOTIFICATION_TYPE;
+
   }
 }
 

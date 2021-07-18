@@ -7,6 +7,7 @@ import profileModule from './modules/profile-module'
 import networkModule from './modules/network-module'
 import postModule from './modules/post-module'
 import chatModule from './modules/chat-module'
+import notificationModule from './modules/notification-module'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     profileModule,
     networkModule,
     postModule,
-    chatModule
+    chatModule,
+    notificationModule
   }
 })
 

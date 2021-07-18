@@ -43,16 +43,25 @@
           <v-icon>mdi-message</v-icon>
         </v-btn>
 
-        <v-badge
+        <v-btn
           class="ma-2"
-          color="accent"
-          content="2"
-          transition="slide-x-transition"
-          style="cursor: pointer;"
-          dot
+          fab
+          plain
+          tile
+          to="/notification"
         >
-          <v-icon>mdi-bell</v-icon>
-        </v-badge>
+          <v-badge
+            class="ma-2"
+            color="accent"
+            content="2"
+            transition="slide-x-transition"
+            style="cursor: pointer;"
+            dot
+          >
+            <v-icon>mdi-bell</v-icon>
+          </v-badge>
+        </v-btn>
+
       </v-row>
 
     </v-app-bar>

@@ -40,6 +40,12 @@ const routes = [
     meta: {requiresAuth: true},
     component: () => import('../views/ChatRoom/Chat.vue')
   },
+  {
+    path: '/notification',
+    name: 'Notification',
+    meta: {requiresAuth: true},
+    component: () => import('../views/Notification/Notification.vue')
+  },
 ]
 
 const router = new VueRouter({

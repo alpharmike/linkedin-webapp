@@ -135,7 +135,7 @@
           this.remove.loading = false;
           this.remove.dialog = false;
           this.remove.skillId = '';
-          enableSnackbar(this.reqStatus, "Skill deleted successfully!", "error")
+          enableSnackbar(this.reqStatus, "Skill deleted successfully!", "info")
           await this.getSkills();
         }).catch(err => {
           enableSnackbar(this.reqStatus, err.message, "error")

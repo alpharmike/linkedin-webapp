@@ -2,7 +2,7 @@ import axios from '../../../network/axios';
 import {errors} from "../../../network/errors";
 import {
   ALL_CHATS,
-  CHAT, CHAT_ARCHIVE,
+  CHAT, CHAT_ARCHIVE, CHAT_BASE,
   CHAT_MESSAGES,
   CHAT_TOKEN,
   CHAT_UNREAD,
@@ -145,7 +145,17 @@ const actions = {
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
-  }
+  },
+
+  async removeChat(context, payload) {
+    try {
+      // payload is the chat id
+      let response = await axios.delete(`${CHAT_BASE}/${payload}`);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
 };
 
 const getters = {

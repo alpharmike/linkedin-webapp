@@ -25,11 +25,14 @@
                 </v-btn>
                 <v-btn
                   icon
-                  color="red"
+                  color="accent darken-1"
                   @click.stop="() => initToggleUnread(chat)"
                 >
                   <v-icon v-if="chat.markUnread">mdi-eye</v-icon>
                   <v-icon v-else>mdi-eye-off</v-icon>
+                </v-btn>
+                <v-btn icon @click.stop="() => initChatRemoval(chat)">
+                  <v-icon color="error">mdi-delete</v-icon>
                 </v-btn>
               </v-row>
             </v-list-item-action>
@@ -52,6 +55,15 @@
         :is-loading="archivedStatus.loading"
         @cancel="cancelArchived"
         @accept="toggleArchive"
+      />
+
+      <dialog-alert
+        title="Chat Removal"
+        msg="Are you sure you want to remove the selected chat?"
+        :show.sync="remove.dialog"
+        :is-loading="remove.loading"
+        @cancel="cancelRemoval"
+        @accept="deleteChat"
       />
 
       <custom-alert v-model="reqStatus.status" @input="reqStatus.status = !reqStatus.status" :message="reqStatus.message" :type="reqStatus.type" />
@@ -103,6 +115,11 @@
           dialog: false,
           chat: null,
         },
+        remove: {
+          loading: false,
+          dialog: false,
+          chat: null,
+        }
       }
     },
 
@@ -111,6 +128,7 @@
         setCurrChat: "chatModule/setCurrChat",
         toggleUnreadStatus: "chatModule/toggleUnreadStatus",
         toggleArchiveStatus: "chatModule/toggleArchiveStatus",
+        removeChat: "chatModule/removeChat"
       }),
       async setCurrentChat(chat) {
         await this.setCurrChat(chat)
@@ -148,6 +166,22 @@
         })
       },
 
+      deleteChat() {
+        this.remove.loading = true;
+        this.removeChat(this.remove.chat.id).then(async () => {
+          this.remove.loading = false;
+          this.remove.dialog = false;
+          enableSnackbar(this.reqStatus, "Chat removed successfully!", "info");
+          const chatId = this.remove.chat.id;
+          this.$emit('toggle', chatId);
+          this.remove.chat = null;
+        }).catch(err => {
+          enableSnackbar(this.reqStatus, err.message, "error")
+        }).finally(() => {
+          this.remove.loading = false;
+        })
+      },
+
       initToggleUnread(chat) {
         this.unreadStatus.chat = {...chat};
         this.unreadStatus.dialog = true;
@@ -166,6 +200,16 @@
       cancelArchived() {
         this.archivedStatus.dialog = false;
         this.archivedStatus.chat = null;
+      },
+
+      initChatRemoval(chat) {
+        this.remove.chat = {...chat};
+        this.remove.dialog = true;
+      },
+
+      cancelRemoval() {
+        this.remove.dialog = false;
+        this.remove.chat = null;
       },
 
 
