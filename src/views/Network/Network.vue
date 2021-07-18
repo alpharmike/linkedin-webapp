@@ -2,13 +2,20 @@
   <div class="fill-height">
     <v-container v-if="!loading" fluid>
       <v-row justify="center">
+        <v-col cols="4">
+          <user-info-card />
+        </v-col>
         <v-col cols="8">
-          <invitations-card @respond="updateConnections" @error="(alert) => reqStatus = alert"/>
+          <v-row>
+            <v-col cols="12">
+              <invitations-card @respond="updateConnections" @error="(alert) => reqStatus = alert"/>
+            </v-col>
+            <v-col cols="12">
+              <suggestions/>
+            </v-col>
+          </v-row>
         </v-col>
 
-        <v-col cols="8">
-          <suggestions/>
-        </v-col>
       </v-row>
     </v-container>
     <spinner v-else/>
@@ -24,10 +31,11 @@
   import Suggestions from "../../components/Network/Suggestions";
   import {mapActions, mapGetters} from "vuex";
   import CustomAlert from "../../components/Alerts/CustomAlert";
+  import UserInfoCard from "../../components/Cards/UserInfoCard";
 
   export default {
     name: "Network",
-    components: {CustomAlert, Suggestions, InvitationsCard, Spinner},
+    components: {UserInfoCard, CustomAlert, Suggestions, InvitationsCard, Spinner},
     data() {
       return {
         loading: false,

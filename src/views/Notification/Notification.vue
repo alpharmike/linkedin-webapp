@@ -1,8 +1,15 @@
 <template>
   <v-container v-if="!loading" fluid>
-    <v-row justify="center">
+    <v-row>
+      <v-col cols="4">
+        <user-info-card/>
+      </v-col>
       <v-col cols="8">
-        <notification-list />
+        <v-row justify="center">
+          <v-col cols="12">
+            <notification-list/>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -13,10 +20,11 @@
   import {mapActions} from "vuex";
   import Spinner from "../../components/Loaders/Spinner";
   import NotificationList from "../../components/Notification/NotificationList";
+  import UserInfoCard from "../../components/Cards/UserInfoCard";
 
   export default {
     name: "Notification",
-    components: {NotificationList, Spinner},
+    components: {UserInfoCard, NotificationList, Spinner},
     methods: {
       ...mapActions({
         getNotifications: "notificationModule/getNotifications",

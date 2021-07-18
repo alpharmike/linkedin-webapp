@@ -2,7 +2,7 @@
   <div class="fill-height">
     <v-container v-if="!loading" fluid>
       <v-row>
-        <v-col cols="7">
+        <v-col cols="8">
           <v-row justify="space-between">
             <v-col cols="12">
               <ProfileSummary :is-me="isMyProfile" :profile="currProfile" @section-selected="openSectionDialog"/>
@@ -30,6 +30,9 @@
                                       @add="() => openSectionDialog('skills')"/>
             </v-col>
           </v-row>
+        </v-col>
+        <v-col cols="4">
+          <user-info-card />
         </v-col>
       </v-row>
 
@@ -89,10 +92,12 @@
   import SkillSection from "../../components/Profile/SkillSection";
   import LanguageForm from "../../components/Forms/LanguageForm";
   import FeaturedSection from "../../components/Profile/FeaturedSection";
+  import UserInfoCard from "../../components/Cards/UserInfoCard";
 
   export default {
     name: "Profile",
     components: {
+      UserInfoCard,
       FeaturedSection,
       LanguageForm,
       SkillSection,
