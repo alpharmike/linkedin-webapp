@@ -3,7 +3,7 @@
     <template v-slot:body>
       <v-row justify="center" class="my-1">
         <div>
-          <user-avatar size="60" initials="EM"/>
+          <user-avatar size="60" :initials="profile.firstName[0] + profile.lastName[0]" />
         </div>
       </v-row>
 

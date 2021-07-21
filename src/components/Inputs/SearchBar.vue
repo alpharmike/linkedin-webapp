@@ -108,12 +108,12 @@
         keyword: "",
         filters: [
           {
-            name: "Name / Username ",
+            name: "Name / Username",
             model: "name",
             value: true
           },
           {
-            name: "Name / Username (Sorted by connection) ",
+            name: "Name / Username (Sorted by connection)",
             model: "sortedName",
             value: false
           },

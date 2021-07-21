@@ -3,7 +3,7 @@ import {errors} from "../../../network/errors";
 import {
   ALL_CHATS,
   CHAT, CHAT_ARCHIVE, CHAT_BASE,
-  CHAT_MESSAGES,
+  CHAT_MESSAGES, CHAT_SEARCH_USER,
   CHAT_TOKEN,
   CHAT_UNREAD,
   GET_CHATS_ARCHIVED,
@@ -151,6 +151,17 @@ const actions = {
     try {
       // payload is the chat id
       let response = await axios.delete(`${CHAT_BASE}/${payload}`);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async searchChatUser(context, payload) {
+    try {
+      // payload is the user's name or username
+      let response = await axios.get(`${CHAT_SEARCH_USER}/${payload}`);
+      context.commit('setChats', response.data);
       console.log(response.data)
     } catch (e) {
       throw Error(errors[e.response.status.toString()])

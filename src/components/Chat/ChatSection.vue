@@ -3,9 +3,11 @@
     <template v-slot:body>
       <v-row>
         <v-col cols="5">
+          <chat-search-bar class="mt-7 ml-4 mr-2" @search-chat="(keyword) => filterChats(keyword)" />
           <chat-list @toggle="(chatId) => onToggle(chatId)" :chats="chats" />
         </v-col>
         <v-col cols="7" v-if="currChat">
+          <message-search-bar @search-message="(keyword) => filterMessages(currChat, keyword)" />
           <message-list @send-message="fetchChat" />
         </v-col>
       </v-row>
@@ -18,10 +20,12 @@
   import ChatList from "./ChatList";
   import {mapActions, mapGetters} from "vuex";
   import MessageList from "./MessageList";
+  import ChatSearchBar from "./ChatSearchBar";
+  import MessageSearchBar from "./ChatSearchBar";
 
   export default {
     name: "ChatSection",
-    components: {MessageList, ChatList, CustomCard},
+    components: {MessageSearchBar, ChatSearchBar, MessageList, ChatList, CustomCard},
     computed: {
       ...mapGetters({
         currChat: "chatModule/currChat",
@@ -38,7 +42,8 @@
         getAllChats: "chatModule/getAllChats",
         getUnreadChats: "chatModule/getUnreadChats",
         getArchivedChats: "chatModule/getArchivedChats",
-        resetChat: "chatModule/resetChat"
+        resetChat: "chatModule/resetChat",
+        searchChatUser: "chatModule/searchChatUser"
       }),
 
       async fetchChat() {
@@ -53,6 +58,18 @@
         } else if (this.section === 'archive') {
           await this.getArchivedChats();
         }
+      },
+
+      async filterChats(keyword) {
+        if (!keyword || keyword === '') {
+          await this.onToggle();
+        } else {
+          await this.searchChatUser(keyword);
+        }
+      },
+
+      filterMessages(currChat, keyword) {
+
       }
     }
   }
