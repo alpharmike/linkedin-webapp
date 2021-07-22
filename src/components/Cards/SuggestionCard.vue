@@ -11,6 +11,9 @@
         <v-col cols="12">
           <span class="text-subtitle-2 grey--text">{{userInfo.headline}}</span>
         </v-col>
+        <v-col cols="12">
+          <span class="text-subtitle-2 grey--text">Mutual Connections: {{userInfo.mutualConnectionsCount}}</span>
+        </v-col>
       </v-row>
     </template>
 

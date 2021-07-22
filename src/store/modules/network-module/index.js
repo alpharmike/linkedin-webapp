@@ -113,8 +113,9 @@ const actions = {
   async getNetworkSuggestions(context, payload) {
     try {
       let response = await axios.get(NETWORK_SUGGESTION);
-      console.log(response.data);
-      context.commit('setNetworkSuggestions', response.data);
+      let adjustedSuggestions = adjustSuggestions(response.data);
+      context.commit('setNetworkSuggestions', adjustedSuggestions);
+      console.log(adjustedSuggestions);
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
     }
@@ -150,6 +151,18 @@ function findConnectionsByType(connections, type, side) {
     if (conn.typeName === type) {
       result.push(conn[side]);
     }
+  })
+
+  return result;
+}
+
+function adjustSuggestions(suggestions) {
+  const result = [];
+  suggestions.forEach(suggestion => {
+    result.push({
+      mutualConnectionsCount: suggestion.mutualConnectionsCount,
+      ...(suggestion.person)
+    })
   })
 
   return result;
