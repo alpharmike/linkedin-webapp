@@ -13,9 +13,9 @@
 </template>
 
 <script>
-    export default {
-        name: "SearchMessageBar"
-    }
+  export default {
+    name: "MessageSearchBar"
+  }
 </script>
 
 <style scoped>

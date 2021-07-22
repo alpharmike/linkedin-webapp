@@ -7,7 +7,7 @@
           <chat-list @toggle="(chatId) => onToggle(chatId)" :chats="chats" />
         </v-col>
         <v-col cols="7" v-if="currChat">
-          <message-search-bar @search-message="(keyword) => filterMessages(currChat, keyword)" />
+          <message-search-bar @search-message="(keyword) => filterMessages(keyword)" />
           <message-list @send-message="fetchChat" />
         </v-col>
       </v-row>
@@ -21,7 +21,7 @@
   import {mapActions, mapGetters} from "vuex";
   import MessageList from "./MessageList";
   import ChatSearchBar from "./ChatSearchBar";
-  import MessageSearchBar from "./ChatSearchBar";
+  import MessageSearchBar from "./MessageSearchBar";
 
   export default {
     name: "ChatSection",
@@ -43,7 +43,8 @@
         getUnreadChats: "chatModule/getUnreadChats",
         getArchivedChats: "chatModule/getArchivedChats",
         resetChat: "chatModule/resetChat",
-        searchChatUser: "chatModule/searchChatUser"
+        searchChatUser: "chatModule/searchChatUser",
+        searchChatMessage: "chatModule/searchChatMessage"
       }),
 
       async fetchChat() {
@@ -64,12 +65,25 @@
         if (!keyword || keyword === '') {
           await this.onToggle();
         } else {
-          await this.searchChatUser(keyword);
+          const payload = {
+            keyword: keyword,
+            chatType: this.section
+          }
+          await this.searchChatUser(payload);
         }
       },
 
-      filterMessages(currChat, keyword) {
-
+      async filterMessages(keyword) {
+        if (!keyword || keyword === '') {
+          // get the chat with all its messages
+          await this.fetchChat();
+        } else {
+          const payload = {
+            chatId: this.currChat.id,
+            keyword: keyword,
+          }
+          await this.searchChatMessage(payload);
+        }
       }
     }
   }

@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: "MessageSearchBar",
+    name: "ChatSearchBar",
   }
 </script>
 

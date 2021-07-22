@@ -3,7 +3,7 @@ import {errors} from "../../../network/errors";
 import {
   ALL_CHATS,
   CHAT, CHAT_ARCHIVE, CHAT_BASE,
-  CHAT_MESSAGES, CHAT_SEARCH_USER,
+  CHAT_MESSAGES, CHAT_SEARCH_MESSAGE, CHAT_SEARCH_USER,
   CHAT_TOKEN,
   CHAT_UNREAD,
   GET_CHATS_ARCHIVED,
@@ -159,9 +159,20 @@ const actions = {
 
   async searchChatUser(context, payload) {
     try {
-      // payload is the user's name or username
-      let response = await axios.get(`${CHAT_SEARCH_USER}/${payload}`);
-      context.commit('setChats', response.data);
+      // payload is the user's name or username and the chat type (chats, unread, archive)
+      let response = await axios.post(CHAT_SEARCH_USER, payload);
+      const chatCommitment = payload.chatType === 'unread' ? 'setUnreadChats' : payload.chatType === 'archive' ? 'setArchivedChats' : 'setChats';
+      context.commit(chatCommitment, response.data);
+      console.log(response.data)
+    } catch (e) {
+      throw Error(errors[e.response.status.toString()])
+    }
+  },
+
+  async searchChatMessage(context, payload) {
+    try {
+      let response = await axios.post(`${CHAT_SEARCH_MESSAGE}/${payload.chatId}`, payload);
+      context.commit('setCurrentChat', response.data);
       console.log(response.data)
     } catch (e) {
       throw Error(errors[e.response.status.toString()])
