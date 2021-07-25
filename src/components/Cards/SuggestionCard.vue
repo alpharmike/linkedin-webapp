@@ -6,7 +6,7 @@
           <user-avatar :initials="userInfo.firstName[0] + userInfo.lastName[0]" />
         </v-col>
         <v-col cols="12">
-          <span class="text-body-1 white--text">{{userInfo.firstName + " " + userInfo.lastName}}</span>
+          <span class="text-body-1">{{userInfo.firstName + " " + userInfo.lastName}}</span>
         </v-col>
         <v-col cols="12">
           <span class="text-subtitle-2 grey--text">{{userInfo.headline}}</span>

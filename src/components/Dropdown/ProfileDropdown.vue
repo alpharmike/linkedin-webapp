@@ -33,6 +33,16 @@
             <p class="text-caption mt-1">
               {{ profile.email }}
             </p>
+            <v-divider class="my-2"></v-divider>
+            <v-row justify="center">
+              <v-switch
+                dense
+                v-model="$vuetify.theme.dark"
+                inset
+                label="Dark theme"
+              ></v-switch>
+            </v-row>
+            <v-divider class="my-1"></v-divider>
             <v-btn
               depressed
               rounded
